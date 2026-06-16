@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "card_id": "ahmet.yilmaz",
+  "type": "person",
+  "handle": "ahmet-yilmaz",
+  "verified": true,
+  "verification_method": ["email"],
+  "name": {
+    "full": "Ahmet Yılmaz",
+    "given": "Ahmet",
+    "family": "Yılmaz",
+    "title": "Satış Müdürü"
+  },
+  "organization_ref": "acme.com.tr",
+  "contact": {
+    "phone": "+905xxxxxxxxx",
+    "email": "ahmet@acme.com.tr",
+    "whatsapp": "+905xxxxxxxxx"
+  },
+  "description": {
+    "summary": "B2B satış ve kurumsal müşteri ilişkileri."
+  },
+  "actions": [
+    { "type": "vcard", "label": "Rehbere kaydet", "value": "ahmet@acme.com.tr" },
+    {
+      "type": "calendar",
+      "label": "Toplantı planla",
+      "url": "https://cal.example.com/ahmet"
+    },
+    { "type": "email", "label": "E-posta", "value": "ahmet@acme.com.tr" }
+  ],
+  "updated_at": "2026-06-01T00:00:00Z",
+  "human_url": "https://card.digitalcard.tr/ahmet-yilmaz",
+  "registry_url": "https://api.digitalcard.tr/v1/cards/ahmet-yilmaz"
+}

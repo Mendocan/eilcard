@@ -1,0 +1,11 @@
+**/node_modules
+**/.next
+**/dist
+**/.git
+**/.env
+**/.env.local
+**/*.tsbuildinfo
+.cursor
+agent-tools
+agent-transcripts
+*.md

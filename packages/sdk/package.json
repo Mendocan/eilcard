@@ -1,0 +1,27 @@
+{
+  "name": "@digitalcard/sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for Dijital Kart — resolve canonical organization/person profiles for agents",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "keywords": ["digital-card", "agent", "schema.org", "llms", "resolve"],
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.0"
+  }
+}

@@ -1,0 +1,350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://digitalcard.tr/schema/v1.0.schema.json",
+  "title": "Digital Card",
+  "description": "Dijital Kart v1.0 — canonical organization/person profile for agents",
+  "type": "object",
+  "oneOf": [
+    { "$ref": "#/$defs/organizationCard" },
+    { "$ref": "#/$defs/personCard" }
+  ],
+  "$defs": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "cardId": {
+      "type": "string",
+      "description": "Canonical identifier — usually domain (org) or unique handle (person)",
+      "minLength": 1,
+      "maxLength": 253,
+      "examples": ["sinyalle.com", "ahmet.yilmaz"]
+    },
+    "isoDateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 32
+    },
+    "verificationMethod": {
+      "type": "string",
+      "enum": ["dns", "email", "tls", "trade_registry", "public_record"]
+    },
+    "actionType": {
+      "type": "string",
+      "enum": ["call", "email", "link", "vcard", "calendar", "whatsapp", "app"]
+    },
+    "legalType": {
+      "type": "string",
+      "enum": [
+        "technology_company",
+        "smb",
+        "enterprise",
+        "public_institution",
+        "university",
+        "ngo",
+        "individual"
+      ]
+    },
+    "organizationName": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["official"],
+      "properties": {
+        "official": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "short": { "type": "string", "maxLength": 64 },
+        "alternate": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 256 },
+          "maxItems": 10
+        }
+      }
+    },
+    "personName": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["full"],
+      "properties": {
+        "full": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "given": { "type": "string", "maxLength": 128 },
+        "family": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 128 }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "phone": { "$ref": "#/$defs/phone" },
+        "email": { "$ref": "#/$defs/email" },
+        "website": { "$ref": "#/$defs/url" },
+        "whatsapp": { "$ref": "#/$defs/phone" }
+      }
+    },
+    "organizationContact": {
+      "allOf": [
+        { "$ref": "#/$defs/contact" },
+        {
+          "anyOf": [
+            { "required": ["email"] },
+            { "required": ["website"] },
+            { "required": ["phone"] }
+          ]
+        }
+      ]
+    },
+    "personContact": {
+      "allOf": [
+        { "$ref": "#/$defs/contact" },
+        {
+          "anyOf": [
+            { "required": ["email"] },
+            { "required": ["phone"] }
+          ]
+        }
+      ]
+    },
+    "legal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["country"],
+      "properties": {
+        "country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$",
+          "description": "ISO 3166-1 alpha-2"
+        },
+        "type": { "$ref": "#/$defs/legalType" },
+        "tax_id": { "type": "string", "maxLength": 64 },
+        "trade_registry": { "type": "string", "maxLength": 64 }
+      }
+    },
+    "description": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tagline": { "type": "string", "maxLength": 280 },
+        "summary": { "type": "string", "maxLength": 2000 }
+      }
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,62}[a-z0-9]$",
+          "maxLength": 64
+        },
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "description": { "type": "string", "maxLength": 500 },
+        "url": { "$ref": "#/$defs/url" }
+      }
+    },
+    "apps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "play_store": { "$ref": "#/$defs/url" },
+        "app_store": { "$ref": "#/$defs/url" },
+        "web_app": { "$ref": "#/$defs/url" }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "label"],
+      "properties": {
+        "type": { "$ref": "#/$defs/actionType" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "value": {
+          "type": "string",
+          "description": "Phone, email, URL, or app identifier depending on type"
+        },
+        "url": { "$ref": "#/$defs/url" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "calendar" } } },
+          "then": { "required": ["url"] }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "enum": ["call", "email", "link", "whatsapp", "app"] }
+            }
+          },
+          "then": { "required": ["value"] }
+        }
+      ]
+    },
+    "sameAs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/url" },
+      "maxItems": 20,
+      "uniqueItems": true
+    },
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-_]{0,30}[a-z0-9]$"
+        },
+        "label": { "type": "string", "maxLength": 64 },
+        "active_links": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 64 },
+          "maxItems": 20
+        }
+      }
+    },
+    "cardMeta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/schemaVersion" },
+        "card_id": { "$ref": "#/$defs/cardId" },
+        "handle": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,62}[a-z0-9]$",
+          "maxLength": 64,
+          "description": "Registry handle — e.g. sinyalle"
+        },
+        "verified": { "type": "boolean", "default": false },
+        "verification_method": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/verificationMethod" },
+          "uniqueItems": true
+        },
+        "updated_at": { "$ref": "#/$defs/isoDateTime" },
+        "created_at": { "$ref": "#/$defs/isoDateTime" },
+        "human_url": { "$ref": "#/$defs/url" },
+        "registry_url": { "$ref": "#/$defs/url" },
+        "same_as": { "$ref": "#/$defs/sameAs" }
+      },
+      "required": ["schema_version", "card_id", "updated_at"]
+    },
+    "organizationCard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "card_id", "type", "name", "contact", "updated_at"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/schemaVersion" },
+        "card_id": { "$ref": "#/$defs/cardId" },
+        "type": { "const": "organization" },
+        "handle": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,62}[a-z0-9]$",
+          "maxLength": 64
+        },
+        "verified": { "type": "boolean", "default": false },
+        "verification_method": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/verificationMethod" },
+          "uniqueItems": true
+        },
+        "name": { "$ref": "#/$defs/organizationName" },
+        "legal": { "$ref": "#/$defs/legal" },
+        "contact": { "$ref": "#/$defs/organizationContact" },
+        "description": { "$ref": "#/$defs/description" },
+        "products": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/product" },
+          "maxItems": 50
+        },
+        "apps": { "$ref": "#/$defs/apps" },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/action" },
+          "maxItems": 20
+        },
+        "logo_url": { "$ref": "#/$defs/url" },
+        "same_as": { "$ref": "#/$defs/sameAs" },
+        "updated_at": { "$ref": "#/$defs/isoDateTime" },
+        "created_at": { "$ref": "#/$defs/isoDateTime" },
+        "human_url": { "$ref": "#/$defs/url" },
+        "registry_url": { "$ref": "#/$defs/url" }
+      },
+      "if": {
+        "properties": { "verified": { "const": true } }
+      },
+      "then": {
+        "required": ["verification_method"],
+        "properties": {
+          "verification_method": { "minItems": 1 }
+        }
+      }
+    },
+    "personCard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "card_id", "type", "name", "contact", "updated_at"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/schemaVersion" },
+        "card_id": { "$ref": "#/$defs/cardId" },
+        "type": { "const": "person" },
+        "handle": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,62}[a-z0-9]$",
+          "maxLength": 64
+        },
+        "verified": { "type": "boolean", "default": false },
+        "verification_method": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/verificationMethod" },
+          "uniqueItems": true
+        },
+        "name": { "$ref": "#/$defs/personName" },
+        "organization_ref": {
+          "type": "string",
+          "description": "card_id of linked organization — domain or handle",
+          "minLength": 1,
+          "maxLength": 253
+        },
+        "contact": { "$ref": "#/$defs/personContact" },
+        "description": { "$ref": "#/$defs/description" },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/action" },
+          "maxItems": 20
+        },
+        "modes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/mode" },
+          "maxItems": 10,
+          "description": "Context modes — post-MVP feature"
+        },
+        "photo_url": { "$ref": "#/$defs/url" },
+        "same_as": { "$ref": "#/$defs/sameAs" },
+        "updated_at": { "$ref": "#/$defs/isoDateTime" },
+        "created_at": { "$ref": "#/$defs/isoDateTime" },
+        "human_url": { "$ref": "#/$defs/url" },
+        "registry_url": { "$ref": "#/$defs/url" }
+      },
+      "if": {
+        "properties": { "verified": { "const": true } }
+      },
+      "then": {
+        "required": ["verification_method"],
+        "properties": {
+          "verification_method": { "minItems": 1 }
+        }
+      }
+    }
+  }
+}

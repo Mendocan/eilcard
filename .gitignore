@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.next/
+.env
+.env.local
+.env.production
+.env.prod
+*.tsbuildinfo
+drizzle/meta/
+.DS_Store
+Thumbs.db
+
+# Internal planning — keep local, do not publish
+digital.md
+saha-analizi.md
+is-plani.md
+faz.md
+pilot-sektor.md
+teknik-stack.md
+.cursor/
+schema/examples/organization.sinyalle.json
