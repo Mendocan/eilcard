@@ -40,6 +40,13 @@ export default async function DocsAgentsPage() {
           {a.intro}
         </p>
 
+        <section className="mt-10 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+          <h2 className="text-lg font-semibold">{a.templatesIntroTitle}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.templatesIntroBody}
+          </p>
+        </section>
+
         <div className="mt-8 rounded-2xl border border-amber-200/80 bg-amber-50/60 p-5 text-sm text-amber-950 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-100">
           <p className="font-medium">{a.discoveryNoteTitle}</p>
           <p className="mt-2 leading-relaxed whitespace-pre-line">{discoveryNote}</p>
@@ -60,6 +67,85 @@ export default async function DocsAgentsPage() {
         </section>
 
         <section className="mt-12">
+          <h2 className="text-xl font-semibold">{a.pythonTitle}</h2>
+
+          <h3 className="mt-8 text-lg font-semibold">{a.pythonNativeTitle}</h3>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.pythonNativeBody}
+          </p>
+          <div className="mt-4">
+            <CodeSnippet
+              code={snippets.pythonNative}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+
+          <h3 className="mt-10 text-lg font-semibold">{a.pythonLangchainTitle}</h3>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.pythonLangchainBody}
+          </p>
+          <div className="mt-4">
+            <CodeSnippet
+              code={snippets.pythonLangchainTool}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+
+          <h3 className="mt-10 text-lg font-semibold">{a.pythonAgentLoopTitle}</h3>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.pythonAgentLoopBody}
+          </p>
+          <div className="mt-4">
+            <CodeSnippet
+              code={snippets.pythonAgentLoop}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="text-lg font-semibold">{a.sdkTitle}</h2>
+          <div className="mt-4">
+            <CodeSnippet
+              code={snippets.sdkResolve}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="text-lg font-semibold">{a.langchainJsTitle}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.langchainJsBody}
+          </p>
+          <div className="mt-4">
+            <CodeSnippet
+              code={snippets.langchainJsTool}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="text-lg font-semibold">{a.sdkAgentToolTitle}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.sdkAgentToolBody}
+          </p>
+          <div className="mt-4">
+            <CodeSnippet
+              code={snippets.sdkAgentTool}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+        </section>
+
+        <section className="mt-12">
           <h2 className="text-lg font-semibold">{a.curlTitle}</h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
             {a.curlBody}
@@ -72,17 +158,6 @@ export default async function DocsAgentsPage() {
             />
             <CodeSnippet
               code={snippets.curlResolve}
-              copyLabel={a.copy}
-              copiedLabel={a.copied}
-            />
-          </div>
-        </section>
-
-        <section className="mt-12">
-          <h2 className="text-lg font-semibold">{a.sdkTitle}</h2>
-          <div className="mt-4">
-            <CodeSnippet
-              code={snippets.sdkResolve}
               copyLabel={a.copy}
               copiedLabel={a.copied}
             />
@@ -143,12 +218,30 @@ export default async function DocsAgentsPage() {
           </div>
         </section>
 
+        <p className="mt-12 leading-relaxed text-[var(--color-text-muted)]">
+          {a.adoptionOutro}
+        </p>
+
         <div className="mt-12 flex flex-wrap gap-4 text-sm font-medium">
           <Link
             href="/docs"
             className="text-[var(--color-accent)] transition hover:opacity-80"
           >
             {a.backDocs}
+          </Link>
+          <a
+            href="/openapi.yaml"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--color-accent)] transition hover:opacity-80"
+          >
+            {a.openapiLink}
+          </a>
+          <Link
+            href="/playground"
+            className="text-[var(--color-text-muted)] transition hover:text-[var(--color-text)]"
+          >
+            {m.playground.landingLink}
           </Link>
           <Link
             href="/"

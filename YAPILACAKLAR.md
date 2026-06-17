@@ -21,14 +21,16 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 ### 1. AI framework entegrasyonları (Tool / Plugin)
 
-- [ ] **LangChain `EILResolveTool`** — Hazır tool sınıfı; agent akışında web aramasından önce `domain` / `handle` ile resolve.
+- [x] **LangChain `EILResolveTool`** — `packages/sdk/examples/langchain-eil-resolve-tool.ts` + `/docs/agents`
+- [x] **Python agent şablonları** — `packages/sdk/examples/python/` (resolve, `@tool`, agent loop) + `/docs/agents`
 - [ ] **LlamaIndex `EILReader` (Data Connector)** — HTML scrape yerine resolve + well-known’dan temiz kurumsal JSON; RAG pipeline’a doğrudan besleme.
 - [ ] **MCP sunucusu** — `resolve_domain`, `get_card_by_handle` araçları (`kesif-stratejisi.md` Faz 3+ ile hizalı).
 
 ### 2. LLM sistem komutları ve Function Calling
 
-- [ ] **OpenAPI 3.x spec** — `v1/resolve`, `v1/cards/{handle}`, `v1/well-known`; LLM’lerin zero-shot tool seçimi için açıklayıcı `description` alanları.
+- [x] **OpenAPI 3.x spec** — `public/openapi.yaml` → `/openapi.yaml`; `/docs` linki
 - [ ] **Standart system prompt şablonu** — “Kurumsal kimlik / iletişim / resmi ürünler için HTML kazımadan önce EIL katmanını kontrol et” (OpenAI, Anthropic, Google için varyantlar).
+- [x] **SDK agent tool** — `buildEILResolveToolDefinition`, `invokeEILResolve` (`@digitalcard/sdk`)
 - [ ] **JSON Schema → tool definition export** — Function calling şemalarının otomatik üretimi (TS + Python örnekleri).
 
 ### 3. Güven katmanı (kriptografik doğrulama)
@@ -48,7 +50,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 |------|--------|-----------|
 | **Universal NPM SDK** | Kısmen var (`@digitalcard/sdk`) | Python paketi (`eilcard` / `digitalcard`), publish ve docs |
 | **EIL CLI** | Yok | `eil-card init`, `verify`, `export well-known` |
-| **Playground** | Yok | Tarayıcıda domain → “ajanlar sitemi nasıl görür?” simülatörü |
+| **Playground** | Yayında | `/playground` — domain/handle resolve simülatörü |
 | **Entegrasyon rehberi** | Yayında | `/docs/agents` |
 
 ---

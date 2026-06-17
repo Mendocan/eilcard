@@ -1,4 +1,9 @@
 export { DigitalCard, DigitalCardClient } from './client.js';
+export {
+  buildEILResolveToolDefinition,
+  invokeEILResolve,
+} from './agent-tool.js';
+export type { EILResolveToolInput } from './agent-tool.js';
 export { toSchemaOrg, toVCard, toLlmsTxtSection } from './bridges.js';
 export type { SchemaOrgDocument } from './bridges.js';
 export {

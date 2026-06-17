@@ -117,6 +117,12 @@ export function LandingPage({ locale, m }: Props) {
             >
               {m.whitepaper.landingLink}
             </Link>
+            <Link
+              href="/playground"
+              className="inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
+            >
+              {m.playground.landingLink}
+            </Link>
           </div>
         </div>
       </section>

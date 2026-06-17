@@ -40,12 +40,28 @@ export default async function DocsPage() {
           {d.intro}
         </p>
 
-        <Link
-          href="/docs/agents"
-          className="mt-6 inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
-        >
-          {d.agentsLink}
-        </Link>
+        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+          <Link
+            href="/docs/agents"
+            className="inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
+          >
+            {d.agentsLink}
+          </Link>
+          <a
+            href="/openapi.yaml"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
+          >
+            {d.openapiLink}
+          </a>
+          <Link
+            href="/playground"
+            className="inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
+          >
+            {d.playgroundLink}
+          </Link>
+        </div>
 
         <section className="mt-12">
           <h2 className="text-lg font-semibold">{d.sdkTitle}</h2>
@@ -176,6 +192,12 @@ export default async function DocsPage() {
               className="inline-flex items-center rounded-lg border border-[var(--color-border)] px-4 py-2.5 text-sm font-medium transition hover:border-[var(--color-border-strong)]"
             >
               {d.whitepaperLink}
+            </Link>
+            <Link
+              href="/playground"
+              className="inline-flex items-center rounded-lg border border-[var(--color-border)] px-4 py-2.5 text-sm font-medium transition hover:border-[var(--color-border-strong)]"
+            >
+              {d.playgroundLink}
             </Link>
             <Link
               href="/insights/ai-agent-field-note"

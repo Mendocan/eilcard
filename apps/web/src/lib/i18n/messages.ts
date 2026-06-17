@@ -124,6 +124,7 @@ const en = {
     docs: "Docs",
     insights: "Insights",
     whitepaper: "Whitepaper",
+    playground: "Playground",
     github: "GitHub",
     copyright: "© 2026 EIL Card",
   },
@@ -247,25 +248,46 @@ const en = {
     backHome: "← Back to home",
     agentsLink: "Agent integration guide →",
     whitepaperLink: "EIL whitepaper (v1.0) →",
+    openapiLink: "OpenAPI 3.1 spec →",
+    playgroundLink: "Agent playground →",
   },
   docsAgents: {
     metaTitle: "Agent integration — EIL Card",
     metaDescription:
-      "System prompts, function calling, and copy-paste templates for OpenAI, Anthropic, and Gemini — resolve entity identity before HTML scraping.",
+      "Official Python and TypeScript templates for LangChain, OpenAI, Anthropic, and Gemini — verify entity identity via @digitalcard/sdk before workflows or payments.",
     eyebrow: "Agent integration",
-    title: "Integrate agents with EIL",
+    title: "AI agent integration templates",
     intro:
-      "Consumer chat UIs still default to web search. These templates wire resolve() and domain well-known into tool-calling agents so they read verified JSON first.",
+      "AI agents need a reliable way to verify the identity and structured data of real-world entities before executing workflows, processing payments, or pulling context. These are the official copy-paste templates to plug EIL Card into Python and TypeScript agent stacks.",
+    templatesIntroTitle: "Standard integration surface",
+    templatesIntroBody:
+      "All examples use the public registry API (GET /api/v1/resolve?domain=…) or domain well-known. Full runnable files live in the repo under packages/sdk/examples/python/ and packages/sdk/examples/langchain-eil-resolve-tool.ts. Install @digitalcard/sdk for TypeScript.",
     discoveryNoteTitle: "Live test tip",
     discoveryNoteBody:
       "Google AI Mode and some crawlers may block {apiBase}/api/... URLs. For live tests, prefer:\n{pilotWellKnown}",
     systemPromptTitle: "Recommended system prompt",
     systemPromptBody:
       "Add to Custom GPT, Claude project instructions, or your agent orchestrator. Tells the model to check EIL before scraping.",
+    pythonTitle: "Python — native resolve",
+    pythonNativeTitle: "Zero-dependency helper",
+    pythonNativeBody:
+      "Resolve verified EIL Card JSON with requests only. Copy packages/sdk/examples/python/resolve_eil_card.py or paste below.",
+    pythonLangchainTitle: "LangChain — @tool decorator",
+    pythonLangchainBody:
+      "Expose verify_entity_identity to GPT-4o, Claude, or any tool-calling model. Uses langchain_core.tools and the registry resolve endpoint.",
+    pythonAgentLoopTitle: "Sample agent loop (OpenAI + LangChain)",
+    pythonAgentLoopBody:
+      "End-to-end AgentExecutor that calls verify_entity_identity before answering. Requires langchain, langchain-openai, and OPENAI_API_KEY.",
+    sdkTitle: "TypeScript — @digitalcard/sdk",
+    langchainJsTitle: "LangChain (JavaScript / TypeScript)",
+    langchainJsBody:
+      "DynamicStructuredTool wrapper around DigitalCard.resolve(). Copy packages/sdk/examples/langchain-eil-resolve-tool.ts into your agent project.",
+    sdkAgentToolTitle: "SDK agent tool (framework-agnostic)",
+    sdkAgentToolBody:
+      "buildEILResolveToolDefinition() and invokeEILResolve() work with any function-calling runtime without LangChain.",
     curlTitle: "curl (pilot domain)",
     curlBody:
       "Prefer the entity's domain well-known URL — some AI browsers block registry /api/ URLs.",
-    sdkTitle: "TypeScript SDK",
     openaiTitle: "OpenAI — function tool definition",
     openaiBody:
       "Paste into Assistants API tools or Custom GPT Actions schema. Implement the handler with fetch to /api/v1/resolve.",
@@ -276,10 +298,44 @@ const en = {
     geminiBody:
       "Use in Gemini API tools or paste the prompt below in AI Mode for a grounded test.",
     geminiPromptTitle: "Gemini AI Mode prompt (copy-paste)",
+    adoptionOutro:
+      "These templates include the @tool decorators and structured dependency patterns the global AI developer community expects — fork the repo, npm install @digitalcard/sdk, and wire verify_entity_identity into your agent in minutes.",
     copy: "Copy code",
     copied: "Copied",
     backDocs: "← API documentation",
     backHome: "← Back to home",
+    openapiLink: "OpenAPI 3.1 spec →",
+  },
+  playground: {
+    metaTitle: "Agent playground — EIL Card",
+    metaDescription:
+      "Simulate how an agent resolves entity identity — domain or handle to verified JSON in milliseconds.",
+    eyebrow: "Playground",
+    title: "How agents see your entity",
+    intro:
+      "Enter a domain or registry handle to run the same resolve() path agents use — registry API first, with timing and domain well-known check.",
+    modeDomain: "By domain",
+    modeHandle: "By handle",
+    domainPlaceholder: "sinyalle.com",
+    handlePlaceholder: "sinyal24",
+    resolveButton: "Resolve",
+    resolving: "Resolving…",
+    resolveFailed: "Could not reach the registry.",
+    elapsed: "Elapsed",
+    agentView: "Agent summary",
+    fieldName: "Official name",
+    fieldVerified: "verified",
+    fieldHandle: "handle",
+    fieldSource: "meta.source",
+    fieldProducts: "products",
+    rawJson: "Full JSON response",
+    wellKnownTitle: "Domain well-known (server check)",
+    wellKnownOk: "Returns application/json",
+    wellKnownFail: "Not available or not JSON",
+    linkAgents: "Agent integration guide →",
+    linkDocs: "API documentation →",
+    backHome: "← Back to home",
+    landingLink: "Try the agent playground →",
   },
   whyAgents: {
     title: "Why agents need a verified layer",
@@ -700,6 +756,7 @@ const tr: Messages = {
     docs: "Dokümantasyon",
     insights: "İçgörüler",
     whitepaper: "Whitepaper",
+    playground: "Playground",
     github: "GitHub",
     copyright: "© 2026 EIL Card",
   },
@@ -823,25 +880,46 @@ const tr: Messages = {
     backHome: "← Ana sayfaya dön",
     agentsLink: "Agent entegrasyon rehberi →",
     whitepaperLink: "EIL whitepaper'ı (v1.0) →",
+    openapiLink: "OpenAPI 3.1 spec →",
+    playgroundLink: "Agent playground →",
   },
   docsAgents: {
     metaTitle: "Agent entegrasyonu — EIL Card",
     metaDescription:
-      "OpenAI, Anthropic ve Gemini için sistem prompt'ları, function calling ve kopyala-yapıştır şablonları — HTML taramadan önce resolve.",
+      "LangChain, OpenAI, Anthropic ve Gemini için resmi Python ve TypeScript şablonları — iş akışı veya ödeme öncesi @digitalcard/sdk ile kimlik doğrulama.",
     eyebrow: "Agent entegrasyonu",
-    title: "Agent'ları EIL ile entegre edin",
+    title: "AI agent entegrasyon şablonları",
     intro:
-      "Tüketici sohbet arayüzleri hâlâ web aramasına döner. Bu şablonlar resolve() ve domain well-known'u tool-calling agent'lara bağlar; önce doğrulanmış JSON okunur.",
+      "AI agent'ların iş akışı çalıştırmadan, ödeme işlemeden veya bağlam çekmeden önce gerçek dünya varlıklarının kimliğini ve yapılandırılmış verisini doğrulaması gerekir. EIL Card'ı Python ve TypeScript agent yığınlarına bağlamak için resmi kopyala-yapıştır şablonları.",
+    templatesIntroTitle: "Standart entegrasyon yüzeyi",
+    templatesIntroBody:
+      "Tüm örnekler public registry API'sini (GET /api/v1/resolve?domain=…) veya domain well-known kullanır. Çalıştırılabilir dosyalar: packages/sdk/examples/python/ ve packages/sdk/examples/langchain-eil-resolve-tool.ts. TypeScript için npm install @digitalcard/sdk.",
     discoveryNoteTitle: "Canlı test ipucu",
     discoveryNoteBody:
       "Google AI Modu ve bazı crawler'lar {apiBase}/api/... URL'lerini engelleyebilir. Canlı testlerde şunu tercih edin:\n{pilotWellKnown}",
     systemPromptTitle: "Önerilen sistem prompt'u",
     systemPromptBody:
       "Custom GPT, Claude proje talimatları veya agent orchestrator'a ekleyin. Modele EIL'i taramadan önce kontrol ettirir.",
+    pythonTitle: "Python — native resolve",
+    pythonNativeTitle: "Sıfır bağımlılık helper",
+    pythonNativeBody:
+      "Yalnızca requests ile doğrulanmış EIL Card JSON çözümleyin. packages/sdk/examples/python/resolve_eil_card.py dosyasını kopyalayın veya alttakini yapıştırın.",
+    pythonLangchainTitle: "LangChain — @tool dekoratörü",
+    pythonLangchainBody:
+      "verify_entity_identity aracını GPT-4o, Claude veya herhangi bir tool-calling modele açın. langchain_core.tools ve registry resolve endpoint kullanır.",
+    pythonAgentLoopTitle: "Örnek agent döngüsü (OpenAI + LangChain)",
+    pythonAgentLoopBody:
+      "Yanıtlamadan önce verify_entity_identity çağıran uçtan uca AgentExecutor. langchain, langchain-openai ve OPENAI_API_KEY gerekir.",
+    sdkTitle: "TypeScript — @digitalcard/sdk",
+    langchainJsTitle: "LangChain (JavaScript / TypeScript)",
+    langchainJsBody:
+      "DigitalCard.resolve() etrafında DynamicStructuredTool sarmalayıcısı. packages/sdk/examples/langchain-eil-resolve-tool.ts dosyasını projenize kopyalayın.",
+    sdkAgentToolTitle: "SDK agent tool (framework bağımsız)",
+    sdkAgentToolBody:
+      "buildEILResolveToolDefinition() ve invokeEILResolve() LangChain olmadan her function-calling runtime ile çalışır.",
     curlTitle: "curl (pilot domain)",
     curlBody:
       "Kurumun domain well-known URL'sini tercih edin — bazı AI tarayıcıları registry /api/ URL'lerini engeller.",
-    sdkTitle: "TypeScript SDK",
     openaiTitle: "OpenAI — function tool tanımı",
     openaiBody:
       "Assistants API tools veya Custom GPT Actions şemasına yapıştırın. Handler'da /api/v1/resolve'a fetch kullanın.",
@@ -852,10 +930,44 @@ const tr: Messages = {
     geminiBody:
       "Gemini API tools içinde kullanın veya AI Modu'nda test için alttaki prompt'u yapıştırın.",
     geminiPromptTitle: "Gemini AI Modu prompt'u (kopyala-yapıştır)",
+    adoptionOutro:
+      "Bu şablonlar küresel AI geliştirici topluluğunun aradığı @tool dekoratörleri ve yapılandırılmış bağımlılık şemalarını içerir — repoyu fork edin, npm install @digitalcard/sdk yapın ve verify_entity_identity aracını dakikalar içinde agent'ınıza bağlayın.",
     copy: "Kodu kopyala",
     copied: "Kopyalandı",
     backDocs: "← API dokümantasyonu",
     backHome: "← Ana sayfaya dön",
+    openapiLink: "OpenAPI 3.1 spec →",
+  },
+  playground: {
+    metaTitle: "Agent playground — EIL Card",
+    metaDescription:
+      "Agent'ın varlık kimliğini nasıl çözdüğünü simüle edin — domain veya handle ile doğrulanmış JSON, milisaniyeler içinde.",
+    eyebrow: "Playground",
+    title: "Agent kurumunuzu nasıl görür?",
+    intro:
+      "Domain veya registry handle girin — agent'ların kullandığı resolve() yolunu çalıştırın: registry API, süre ölçümü ve domain well-known kontrolü.",
+    modeDomain: "Domain ile",
+    modeHandle: "Handle ile",
+    domainPlaceholder: "sinyalle.com",
+    handlePlaceholder: "sinyal24",
+    resolveButton: "Resolve",
+    resolving: "Çözümleniyor…",
+    resolveFailed: "Registry'ye ulaşılamadı.",
+    elapsed: "Süre",
+    agentView: "Agent özeti",
+    fieldName: "Resmi ad",
+    fieldVerified: "verified",
+    fieldHandle: "handle",
+    fieldSource: "meta.source",
+    fieldProducts: "ürün sayısı",
+    rawJson: "Tam JSON yanıtı",
+    wellKnownTitle: "Domain well-known (sunucu kontrolü)",
+    wellKnownOk: "application/json döndürüyor",
+    wellKnownFail: "Yok veya JSON değil",
+    linkAgents: "Agent entegrasyon rehberi →",
+    linkDocs: "API dokümantasyonu →",
+    backHome: "← Ana sayfaya dön",
+    landingLink: "Agent playground'u deneyin →",
   },
   whyAgents: {
     title: "Agent'lar neden doğrulanmış bir katmana ihtiyaç duyar",

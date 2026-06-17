@@ -1,0 +1,333 @@
+openapi: 3.1.0
+info:
+  title: EIL Card Registry API
+  version: 1.0.0
+  description: |
+    Public read API for Entity Identity Layer (EIL) Card — resolve verified organization
+    or person JSON for AI agents. Prefer `GET /api/v1/resolve?domain=` or the entity's
+    `/.well-known/digital-card` before HTML scraping.
+
+    SDK: `@digitalcard/sdk` — `DigitalCard.resolve({ domain | handle })`
+  contact:
+    name: EIL Card
+    url: https://eilcard.com/docs
+  license:
+    name: MIT
+    url: https://github.com/Mendocan/eilcard
+
+servers:
+  - url: https://eilcard.com
+    description: Production registry
+
+tags:
+  - name: resolve
+    description: Primary agent discovery — domain or handle to canonical card JSON
+  - name: cards
+    description: Card resources and agent discovery exports
+  - name: discovery
+    description: Registry mirrors and site-level discovery files
+
+paths:
+  /api/v1/resolve:
+    get:
+      tags: [resolve]
+      operationId: resolveEntity
+      summary: Resolve entity by domain or handle
+      description: |
+        Returns `{ card, meta }` when found in the registry. Use this before web search
+        when you need official organization identity, contact, or products.
+        SDK tries registry first, then `https://{domain}/.well-known/digital-card` on 404.
+      parameters:
+        - name: domain
+          in: query
+          description: Verified domain (e.g. sinyalle.com). Do not include protocol or path.
+          schema:
+            type: string
+            example: sinyalle.com
+        - name: handle
+          in: query
+          description: Registry handle (e.g. sinyal24). Mutually exclusive with domain.
+          schema:
+            type: string
+            example: sinyal24
+      responses:
+        "200":
+          description: Card resolved from registry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResolveResponse"
+        "400":
+          description: Missing domain and handle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No registry record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    head:
+      tags: [resolve]
+      operationId: resolveEntityHead
+      summary: Check if domain or handle exists in registry
+      parameters:
+        - name: domain
+          in: query
+          schema:
+            type: string
+        - name: handle
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Record exists
+        "404":
+          description: Not found
+
+  /api/v1/well-known:
+    get:
+      tags: [discovery]
+      operationId: wellKnownMirror
+      summary: Registry mirror of domain digital-card JSON
+      description: |
+        Unwrapped card JSON (no `{ card }` wrapper) for nginx proxy to
+        `/.well-known/digital-card` on the entity domain.
+      parameters:
+        - name: domain
+          in: query
+          required: true
+          schema:
+            type: string
+            example: sinyalle.com
+      responses:
+        "200":
+          description: Digital card JSON
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Card"
+        "404":
+          description: Card not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/v1/cards/{handle}:
+    get:
+      tags: [cards]
+      operationId: getCardByHandle
+      summary: Fetch card JSON by registry handle
+      parameters:
+        - name: handle
+          in: path
+          required: true
+          schema:
+            type: string
+            example: sinyal24
+      responses:
+        "200":
+          description: Card found
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [card]
+                properties:
+                  card:
+                    $ref: "#/components/schemas/Card"
+        "404":
+          description: Card not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/v1/cards/{handle}/agent-card.json:
+    get:
+      tags: [cards]
+      operationId: getAgentCard
+      summary: A2A-style agent card template
+      description: Identity and product skills generated from the digital card.
+      parameters:
+        - name: handle
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Agent card JSON
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: Card not found
+
+  /api/v1/cards/{handle}/llms.txt:
+    get:
+      tags: [cards]
+      operationId: getCardLlmsTxt
+      summary: llms.txt section for agent discovery
+      parameters:
+        - name: handle
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Plain text llms section
+          content:
+            text/plain:
+              schema:
+                type: string
+        "404":
+          description: Card not found
+
+  /api/v1/cards/{handle}/schema.json:
+    get:
+      tags: [cards]
+      operationId: getCardSchemaOrg
+      summary: schema.org JSON-LD export
+      parameters:
+        - name: handle
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: JSON-LD document
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: Card not found
+
+  /llms.txt:
+    get:
+      tags: [discovery]
+      operationId: getRegistryLlmsTxt
+      summary: EIL Card registry agent discovery index
+      responses:
+        "200":
+          description: Registry llms.txt
+          content:
+            text/plain:
+              schema:
+                type: string
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+
+    ResolveMeta:
+      type: object
+      properties:
+        source:
+          type: string
+          enum: [registry, well-known]
+        resolved_at:
+          type: string
+          format: date-time
+
+    ResolveResponse:
+      type: object
+      required: [card, meta]
+      properties:
+        card:
+          $ref: "#/components/schemas/Card"
+        meta:
+          $ref: "#/components/schemas/ResolveMeta"
+
+    Card:
+      type: object
+      description: EIL Digital Card schema v1.0 (organization or person)
+      required:
+        - schema_version
+        - card_id
+        - type
+        - contact
+        - updated_at
+      properties:
+        schema_version:
+          type: string
+          example: "1.0"
+        card_id:
+          type: string
+          description: Canonical ID — usually the verified domain
+          example: sinyalle.com
+        type:
+          type: string
+          enum: [organization, person]
+        handle:
+          type: string
+          example: sinyal24
+        verified:
+          type: boolean
+          description: Domain-attested trust signal when true
+        verification_method:
+          type: array
+          items:
+            type: string
+            enum: [dns, email, tls, trade_registry, public_record]
+        name:
+          type: object
+          description: organization — official/short; person — full
+        contact:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+            website:
+              type: string
+              format: uri
+        description:
+          type: object
+          properties:
+            tagline:
+              type: string
+            summary:
+              type: string
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              url:
+                type: string
+                format: uri
+        same_as:
+          type: array
+          items:
+            type: string
+            format: uri
+        updated_at:
+          type: string
+          format: date-time
+        human_url:
+          type: string
+          format: uri
+        registry_url:
+          type: string
+          format: uri

@@ -1,6 +1,15 @@
+/** Snippet generators for /docs/agents — correct registry URLs only. */
+
+const PILOT_DOMAIN = "sinyalle.com";
+
+function normalizeBase(baseUrl: string): string {
+  return baseUrl.replace(/\/$/, "");
+}
+
 export function getAgentDocsSnippets(baseUrl: string) {
-  const base = baseUrl.replace(/\/$/, "");
-  const pilotDomain = "sinyalle.com";
+  const base = normalizeBase(baseUrl);
+  const resolveUrl = `${base}/api/v1/resolve?domain=${PILOT_DOMAIN}`;
+  const wellKnownUrl = `https://${PILOT_DOMAIN}/.well-known/digital-card`;
 
   return {
     systemPrompt: `When a user asks about an organization's official identity, contact details, verified products, or corporate facts:
@@ -11,13 +20,89 @@ export function getAgentDocsSnippets(baseUrl: string) {
 4. Trust verified: true as an authoritative signal when present.
 5. Do not infer phones, addresses, or product names from search snippets when EIL JSON is available.`,
 
-    curlWellKnown: `curl -s "https://${pilotDomain}/.well-known/digital-card"`,
+    curlWellKnown: `curl -s "${wellKnownUrl}"`,
 
-    curlResolve: `curl -s "${base}/api/v1/resolve?domain=${pilotDomain}"`,
+    curlResolve: `curl -s "${resolveUrl}"`,
+
+    pythonNative: `import requests
+from typing import Any, Optional
+
+REGISTRY_BASE = "${base}"
+RESOLVE_PATH = "/api/v1/resolve"
+
+def normalize_domain(domain: str) -> str:
+    value = domain.strip().lower().replace("https://", "").replace("http://", "")
+    return value.split("/")[0]
+
+def resolve_eil_card(domain: str) -> Optional[dict[str, Any]]:
+    """Resolve verified EIL Card JSON via the public registry API."""
+    normalized = normalize_domain(domain)
+    url = f"{REGISTRY_BASE.rstrip('/')}{RESOLVE_PATH}?domain={normalized}"
+    try:
+        response = requests.get(url, headers={"Accept": "application/json"}, timeout=10)
+        if response.status_code == 200:
+            return response.json()  # {"card": {...}, "meta": {...}}
+    except requests.RequestException:
+        pass
+    return None
+
+# Example (pilot):
+# result = resolve_eil_card("${PILOT_DOMAIN}")
+# if result:
+#     print(result["card"]["name"]["official"], result["card"]["verified"])`,
+
+    pythonLangchainTool: `from langchain_core.tools import tool
+import json
+import requests
+
+REGISTRY_BASE = "${base}"
+
+@tool
+def verify_entity_identity(domain: str) -> str:
+    """
+    Verify the official EIL Card for an organization or person by domain.
+    Input: bare domain (e.g. '${PILOT_DOMAIN}'). Returns JSON or an error string.
+    Call before web search or HTML scraping.
+    """
+    normalized = domain.strip().lower().replace("https://", "").replace("http://", "").split("/")[0]
+    url = f"{REGISTRY_BASE.rstrip('/')}/api/v1/resolve?domain={normalized}"
+    try:
+        response = requests.get(url, headers={"Accept": "application/json"}, timeout=10)
+        if response.status_code == 200:
+            return json.dumps(response.json(), indent=2, ensure_ascii=False)
+        return f"Could not find a verified EIL identity layer for domain: {domain}"
+    except Exception as e:
+        return f"Error resolving entity identity layer: {e}"
+
+# tools = [verify_entity_identity]`,
+
+    pythonAgentLoop: `from langchain.agents import AgentExecutor, create_openai_tools_agent
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_openai import ChatOpenAI
+# from your_project.eil_tool import verify_entity_identity
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You have the EIL Card tool. Verify entity identity before web search."),
+    MessagesPlaceholder(variable_name="chat_history"),
+    ("human", "{input}"),
+    MessagesPlaceholder(variable_name="agent_scratchpad"),
+])
+
+llm = ChatOpenAI(model="gpt-4o", temperature=0)
+tools = [verify_entity_identity]
+
+agent = create_openai_tools_agent(llm, tools, prompt)
+executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+response = executor.invoke({
+    "input": "Check if ${PILOT_DOMAIN} has a verified EIL identity layer and summarize who they are.",
+    "chat_history": [],
+})
+print(response["output"])`,
 
     sdkResolve: `import { DigitalCard } from '@digitalcard/sdk'
 
-const { card, meta } = await DigitalCard.resolve({ domain: '${pilotDomain}' })
+const { card, meta } = await DigitalCard.resolve({ domain: '${PILOT_DOMAIN}' })
 
 console.log(card.name.official)
 console.log(card.verified)
@@ -101,19 +186,48 @@ return { card, meta }`,
       2
     ),
 
-    geminiPrompt: `Read entity identity for ${pilotDomain} using EIL Card.
+    geminiPrompt: `Read entity identity for ${PILOT_DOMAIN} using EIL Card.
 Do not use HTML search. Fetch:
-https://${pilotDomain}/.well-known/digital-card
+${wellKnownUrl}
 Summarize verified, handle, official name, and products.`,
+
+    langchainJsTool: `// npm install @digitalcard/sdk @langchain/core zod
+// packages/sdk/examples/langchain-eil-resolve-tool.ts
+import { DynamicStructuredTool } from '@langchain/core/tools'
+import { z } from 'zod'
+import { DigitalCard } from '@digitalcard/sdk'
+
+export function createEILResolveTool() {
+  return new DynamicStructuredTool({
+    name: 'resolve_entity_identity',
+    description: 'Resolve EIL Card before HTML scraping.',
+    schema: z.object({
+      domain: z.string().optional(),
+      handle: z.string().optional(),
+    }),
+    func: async ({ domain, handle }) => {
+      const result = await DigitalCard.resolve(
+        domain ? { domain } : { handle: handle! }
+      )
+      return JSON.stringify(result, null, 2)
+    },
+  })
+}`,
+
+    sdkAgentTool: `import { buildEILResolveToolDefinition, invokeEILResolve } from '@digitalcard/sdk'
+
+const tool = buildEILResolveToolDefinition('${base}')
+const result = await invokeEILResolve({ domain: '${PILOT_DOMAIN}' })
+console.log(result.card.verified, result.meta.source)`,
   };
 }
 
 export function formatDiscoveryNote(
   template: string,
   baseUrl: string,
-  pilotDomain = "sinyalle.com"
+  pilotDomain = PILOT_DOMAIN
 ): string {
-  const base = baseUrl.replace(/\/$/, "");
+  const base = normalizeBase(baseUrl);
   return template
     .replace("{apiBase}", base)
     .replace("{pilotWellKnown}", `https://${pilotDomain}/.well-known/digital-card`);

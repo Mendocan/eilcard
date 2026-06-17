@@ -151,7 +151,7 @@ const whitepaperEn = {
   ctaSecondary: "Read agent integration guide",
   ctaDocs: "API documentation",
   backHome: "← Back to home",
-  landingLink: "Read the EIL whitepaper (v1.0) →",
+    landingLink: "Read the EIL whitepaper (v1.0) →",
 };
 
 const whitepaperTr = {
