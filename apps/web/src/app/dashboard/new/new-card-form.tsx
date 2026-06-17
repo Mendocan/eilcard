@@ -134,7 +134,7 @@ export function NewCardForm({ m, maxOrgCards, atCardLimit }: Props) {
               id="handle"
               type="text"
               required
-              pattern="^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+              pattern="^[a-z0-9][a-z0-9\-]*[a-z0-9]$"
               minLength={2}
               maxLength={50}
               value={handle}
