@@ -9,6 +9,7 @@ import {
   registryAgentCardUrl,
   registryWellKnownUrl,
 } from "@/lib/well-known";
+import { buildLlmsTxtPatch } from "@/lib/llms-patch";
 
 type CheckResult = {
   status: string;
@@ -27,6 +28,7 @@ type CheckResult = {
 type Props = {
   handle: string;
   domain: string | null;
+  entityName: string;
   appUrl: string;
   m: Messages["dashboard"];
 };
@@ -40,7 +42,7 @@ function statusClass(status: string) {
   return "text-[var(--color-text-muted)]";
 }
 
-export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
+export function DiscoveryPanel({ handle, domain, entityName, appUrl, m }: Props) {
   const [check, setCheck] = useState<CheckResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
@@ -96,6 +98,10 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
     "";
   const staticSnippet =
     check?.nginx_static_snippet ?? setup?.nginx_static_snippet ?? "";
+  const llmsPatch =
+    domain && entityName
+      ? buildLlmsTxtPatch(base, domain, handle, entityName)
+      : null;
 
   return (
     <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 sm:col-span-2">
@@ -344,6 +350,30 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
               <li>{schemaUrl}</li>
             </ul>
           </div>
+
+          {llmsPatch && (
+            <div className="rounded-lg border border-[var(--color-primary)]/30 bg-[var(--color-bg)] p-4">
+              <p className="mb-1 text-sm font-medium">
+                {m.discoveryLlmsPatchTitle}
+              </p>
+              <p className="mb-2 text-sm text-[var(--color-text-muted)]">
+                {m.discoveryLlmsPatchIntro}
+              </p>
+              <p className="mb-2 text-xs text-[var(--color-text-muted)]">
+                {m.discoveryLlmsPatchPath.replace("{domain}", domain!)}
+              </p>
+              <pre className="overflow-x-auto rounded-lg bg-[var(--color-surface)] p-3 text-xs whitespace-pre-wrap">
+                {llmsPatch}
+              </pre>
+              <button
+                type="button"
+                onClick={() => copyText("llmspatch", llmsPatch)}
+                className="mt-2 rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--color-surface)]"
+              >
+                {copied === "llmspatch" ? m.discoveryCopied : m.discoveryCopy}
+              </button>
+            </div>
+          )}
 
           <p className="text-xs text-[var(--color-text-muted)]">
             {m.discoveryAgentCardNote}

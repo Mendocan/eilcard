@@ -40,6 +40,13 @@ export default async function DocsPage() {
           {d.intro}
         </p>
 
+        <Link
+          href="/docs/agents"
+          className="mt-6 inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
+        >
+          {d.agentsLink}
+        </Link>
+
         <section className="mt-12">
           <h2 className="text-lg font-semibold">{d.sdkTitle}</h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">

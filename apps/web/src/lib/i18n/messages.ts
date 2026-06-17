@@ -223,6 +223,38 @@ const en = {
     ctaPrimary: "Create your card",
     ctaSecondary: "Read the field note",
     backHome: "← Back to home",
+    agentsLink: "Agent integration guide →",
+  },
+  docsAgents: {
+    metaTitle: "Agent integration — EIL Card",
+    metaDescription:
+      "System prompts, function calling, and copy-paste templates for OpenAI, Anthropic, and Gemini — resolve entity identity before HTML scraping.",
+    eyebrow: "Agent integration",
+    title: "Integrate agents with EIL",
+    intro:
+      "Consumer chat UIs still default to web search. These templates wire resolve() and domain well-known into tool-calling agents so they read verified JSON first.",
+    discoveryNoteTitle: "Live test tip",
+    systemPromptTitle: "Recommended system prompt",
+    systemPromptBody:
+      "Add to Custom GPT, Claude project instructions, or your agent orchestrator. Tells the model to check EIL before scraping.",
+    curlTitle: "curl (pilot domain)",
+    curlBody:
+      "Prefer the entity's domain well-known URL — some AI browsers block registry /api/ URLs.",
+    sdkTitle: "TypeScript SDK",
+    openaiTitle: "OpenAI — function tool definition",
+    openaiBody:
+      "Paste into Assistants API tools or Custom GPT Actions schema. Implement the handler with fetch to /api/v1/resolve.",
+    openaiHandlerTitle: "Tool handler (Node.js)",
+    anthropicTitle: "Anthropic — tool use schema",
+    anthropicBody: "Pass to messages.create tools array in the Claude API.",
+    geminiTitle: "Gemini — function declaration",
+    geminiBody:
+      "Use in Gemini API tools or paste the prompt below in AI Mode for a grounded test.",
+    geminiPromptTitle: "Gemini AI Mode prompt (copy-paste)",
+    copy: "Copy code",
+    copied: "Copied",
+    backDocs: "← API documentation",
+    backHome: "← Back to home",
   },
   whyAgents: {
     title: "Why agents need a verified layer",
@@ -404,6 +436,10 @@ const en = {
       "Optional A2A discovery at /.well-known/agent-card.json — proxies to EIL; updates when you edit the card.",
     discoveryAgentCardNote:
       "The agent-card.json template lists skills from your products. Replace url with your live A2A JSON-RPC endpoint when you deploy an agent server.",
+    discoveryLlmsPatchTitle: "llms.txt patch (append to your site)",
+    discoveryLlmsPatchIntro:
+      "If you already have /llms.txt, append this EIL section so crawlers and agents find canonical identity without scraping HTML.",
+    discoveryLlmsPatchPath: "Target: https://{domain}/llms.txt",
   },
   admin: {
     title: "Admin",
@@ -734,6 +770,38 @@ const tr: Messages = {
     ctaPrimary: "Kartınızı oluşturun",
     ctaSecondary: "Field note'u okuyun",
     backHome: "← Ana sayfaya dön",
+    agentsLink: "Agent entegrasyon rehberi →",
+  },
+  docsAgents: {
+    metaTitle: "Agent entegrasyonu — EIL Card",
+    metaDescription:
+      "OpenAI, Anthropic ve Gemini için sistem prompt'ları, function calling ve kopyala-yapıştır şablonları — HTML taramadan önce resolve.",
+    eyebrow: "Agent entegrasyonu",
+    title: "Agent'ları EIL ile entegre edin",
+    intro:
+      "Tüketici sohbet arayüzleri hâlâ web aramasına döner. Bu şablonlar resolve() ve domain well-known'u tool-calling agent'lara bağlar; önce doğrulanmış JSON okunur.",
+    discoveryNoteTitle: "Canlı test ipucu",
+    systemPromptTitle: "Önerilen sistem prompt'u",
+    systemPromptBody:
+      "Custom GPT, Claude proje talimatları veya agent orchestrator'a ekleyin. Modele EIL'i taramadan önce kontrol ettirir.",
+    curlTitle: "curl (pilot domain)",
+    curlBody:
+      "Kurumun domain well-known URL'sini tercih edin — bazı AI tarayıcıları registry /api/ URL'lerini engeller.",
+    sdkTitle: "TypeScript SDK",
+    openaiTitle: "OpenAI — function tool tanımı",
+    openaiBody:
+      "Assistants API tools veya Custom GPT Actions şemasına yapıştırın. Handler'da /api/v1/resolve'a fetch kullanın.",
+    openaiHandlerTitle: "Tool handler (Node.js)",
+    anthropicTitle: "Anthropic — tool use şeması",
+    anthropicBody: "Claude API messages.create tools dizisine verin.",
+    geminiTitle: "Gemini — function declaration",
+    geminiBody:
+      "Gemini API tools içinde kullanın veya AI Modu'nda test için alttaki prompt'u yapıştırın.",
+    geminiPromptTitle: "Gemini AI Modu prompt'u (kopyala-yapıştır)",
+    copy: "Kodu kopyala",
+    copied: "Kopyalandı",
+    backDocs: "← API dokümantasyonu",
+    backHome: "← Ana sayfaya dön",
   },
   whyAgents: {
     title: "Agent'lar neden doğrulanmış bir katmana ihtiyaç duyar",
@@ -915,6 +983,10 @@ const tr: Messages = {
       "Opsiyonel A2A keşfi: /.well-known/agent-card.json — EIL'e proxy; kartı düzenleyince güncellenir.",
     discoveryAgentCardNote:
       "agent-card.json şablonu ürünlerinizi skill olarak listeler. Canlı A2A JSON-RPC sunucunuz olduğunda url alanını güncelleyin.",
+    discoveryLlmsPatchTitle: "llms.txt yaması (sitenize ekleyin)",
+    discoveryLlmsPatchIntro:
+      "Zaten /llms.txt dosyanız varsa bu EIL bölümünü sonuna ekleyin; crawler ve agent'lar canonical kimliği HTML taramadan bulsun.",
+    discoveryLlmsPatchPath: "Hedef: https://{domain}/llms.txt",
   },
   admin: {
     title: "Admin",

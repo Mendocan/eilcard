@@ -141,6 +141,7 @@ export default async function CardDetailPage({ params }: Props) {
         <DiscoveryPanel
           handle={card.handle}
           domain={card.domain}
+          entityName={name ?? card.handle}
           appUrl={appUrl ?? "https://eilcard.com"}
           m={d}
         />
