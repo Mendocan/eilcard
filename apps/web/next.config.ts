@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   outputFileTracingRoot: process.cwd() + "/../../",
   transpilePackages: ["@digitalcard/schema"],
+  serverExternalPackages: ["ioredis"],
   async headers() {
     return [
       {

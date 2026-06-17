@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import Redis from "ioredis";
 
 export type RateLimitResult = {
   success: boolean;
@@ -15,23 +14,38 @@ type MemoryBucket = {
 
 const memoryStore = new Map<string, MemoryBucket>();
 
-let redisClient: Redis | null = null;
+type RedisLike = {
+  status: string;
+  connect(): Promise<void>;
+  incr(key: string): Promise<number>;
+  expire(key: string, seconds: number): Promise<number>;
+  ttl(key: string): Promise<number>;
+  on(event: string, listener: () => void): void;
+};
+
+let redisClient: RedisLike | null = null;
 let redisUnavailable = false;
 
-function getRedis(): Redis | null {
+async function getRedis(): Promise<RedisLike | null> {
   if (redisUnavailable) return null;
   const url = process.env.REDIS_URL;
   if (!url) return null;
 
   if (!redisClient) {
-    redisClient = new Redis(url, {
-      maxRetriesPerRequest: 1,
-      enableOfflineQueue: false,
-      lazyConnect: true,
-    });
-    redisClient.on("error", () => {
+    try {
+      const { default: Redis } = await import("ioredis");
+      redisClient = new Redis(url, {
+        maxRetriesPerRequest: 1,
+        enableOfflineQueue: false,
+        lazyConnect: true,
+      });
+      redisClient.on("error", () => {
+        redisUnavailable = true;
+      });
+    } catch {
       redisUnavailable = true;
-    });
+      return null;
+    }
   }
 
   return redisClient;
@@ -66,7 +80,7 @@ async function checkRateLimitRedis(
   limit: number,
   windowMs: number
 ): Promise<RateLimitResult> {
-  const redis = getRedis();
+  const redis = await getRedis();
   if (!redis) {
     return checkRateLimitMemory(key, limit, windowMs);
   }
