@@ -4,10 +4,9 @@ import { cards } from "@/lib/db/schema";
 import { buildCardJson } from "@/lib/card-service";
 import { requireSession } from "@/lib/session";
 import {
+  buildWellKnownSetup,
   checkDomainWellKnown,
-  cPanelHint,
   domainWellKnownUrl,
-  nginxWellKnownSnippet,
 } from "@/lib/well-known";
 import { eq, and } from "drizzle-orm";
 
@@ -41,14 +40,18 @@ export async function GET(
     );
   }
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://eilcard.com";
   const registryCard = buildCardJson(row);
   const result = await checkDomainWellKnown(row.domain, registryCard);
+  const setup = buildWellKnownSetup(appUrl, row.domain);
 
   return NextResponse.json({
     ...result,
     well_known_url: domainWellKnownUrl(row.domain),
     download_url: `/api/v1/cards/${handle}/well-known`,
-    nginx_snippet: nginxWellKnownSnippet(),
-    cpanel_path: cPanelHint(),
+    llms_url: `/api/v1/cards/${handle}/llms.txt`,
+    schema_url: `/api/v1/cards/${handle}/schema.json`,
+    ...setup,
+    nginx_snippet: setup.nginx_static_snippet,
   });
 }

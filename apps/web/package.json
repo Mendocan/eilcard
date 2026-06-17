@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@digitalcard/schema": "workspace:*",
+    "@digitalcard/sdk": "workspace:*",
     "better-auth": "^1.2.0",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.44.0",

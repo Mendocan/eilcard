@@ -20,6 +20,7 @@ COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
 COPY --from=deps /app/packages ./packages
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm --filter @digitalcard/sdk build
 RUN pnpm --filter @digitalcard/web build
 
 # --- Migrator (full node_modules, runs SQL migrations) ---

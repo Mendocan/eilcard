@@ -387,6 +387,15 @@ const en = {
     discoveryStatusMismatch: "JSON found but card_id or handle does not match.",
     discoveryStatusStale: "Domain copy is older than registry — re-download and upload.",
     discoveryStatusUnreachable: "Could not reach your domain.",
+    discoveryProxyTitle: "Recommended: nginx proxy (auto-sync)",
+    discoveryProxyIntro:
+      "One-time setup — EIL serves the latest JSON. Dashboard edits sync automatically; no file re-upload.",
+    discoveryStaticTitle: "Alternative: static file upload",
+    discoveryDownloadLlms: "llms.txt",
+    discoveryDownloadSchema: "schema.org JSON",
+    discoverySiteExports: "Site exports (copy to your domain)",
+    discoverySiteExportsHint:
+      "Upload llms.txt to your site root and paste schema.json into your HTML <head> as application/ld+json.",
   },
   admin: {
     title: "Admin",
@@ -881,6 +890,15 @@ const tr: Messages = {
     discoveryStatusMismatch: "JSON var ama card_id veya handle eşleşmiyor.",
     discoveryStatusStale: "Domain kopyası registry'den eski — yeniden indirip yükleyin.",
     discoveryStatusUnreachable: "Domain'e ulaşılamadı.",
+    discoveryProxyTitle: "Önerilen: nginx proxy (otomatik sync)",
+    discoveryProxyIntro:
+      "Tek seferlik kurulum — güncel JSON'u EIL sunar. Panelden düzenleme otomatik yansır; dosyayı yeniden yüklemeniz gerekmez.",
+    discoveryStaticTitle: "Alternatif: statik dosya yükleme",
+    discoveryDownloadLlms: "llms.txt",
+    discoveryDownloadSchema: "schema.org JSON",
+    discoverySiteExports: "Site export'ları (domain'inize kopyalayın)",
+    discoverySiteExportsHint:
+      "llms.txt dosyasını site köküne yükleyin; schema.json içeriğini HTML <head> içine application/ld+json olarak ekleyin.",
   },
   admin: {
     title: "Admin",

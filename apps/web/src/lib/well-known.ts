@@ -30,6 +30,24 @@ export function domainWellKnownUrl(domain: string): string {
   return `https://${normalizeDomain(domain)}/.well-known/digital-card`;
 }
 
+export function registryWellKnownUrl(appBaseUrl: string, domain: string): string {
+  const base = appBaseUrl.replace(/\/$/, "");
+  return `${base}/api/v1/well-known?domain=${encodeURIComponent(normalizeDomain(domain))}`;
+}
+
+export function nginxWellKnownProxySnippet(
+  appBaseUrl: string,
+  domain: string
+): string {
+  const mirror = registryWellKnownUrl(appBaseUrl, domain);
+  const host = new URL(appBaseUrl.replace(/\/$/, "") || "https://eilcard.com").host;
+  return `location = /.well-known/digital-card {
+    proxy_pass ${mirror};
+    proxy_set_header Host ${host};
+    proxy_ssl_server_name on;
+}`;
+}
+
 export function nginxWellKnownSnippet(filePath = "/var/www/html/.well-known/digital-card"): string {
   return `location = /.well-known/digital-card {
     default_type application/json;
@@ -40,6 +58,25 @@ export function nginxWellKnownSnippet(filePath = "/var/www/html/.well-known/digi
 
 export function cPanelHint(): string {
   return `public_html/.well-known/digital-card`;
+}
+
+export type WellKnownSetup = {
+  mirror_url: string;
+  nginx_proxy_snippet: string;
+  nginx_static_snippet: string;
+  cpanel_path: string;
+};
+
+export function buildWellKnownSetup(
+  appBaseUrl: string,
+  domain: string
+): WellKnownSetup {
+  return {
+    mirror_url: registryWellKnownUrl(appBaseUrl, domain),
+    nginx_proxy_snippet: nginxWellKnownProxySnippet(appBaseUrl, domain),
+    nginx_static_snippet: nginxWellKnownSnippet(),
+    cpanel_path: cPanelHint(),
+  };
 }
 
 function parseCardJson(body: unknown): Card | null {

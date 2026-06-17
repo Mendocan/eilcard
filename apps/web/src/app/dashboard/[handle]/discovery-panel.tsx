@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import type { Messages } from "@/lib/i18n/messages";
+import {
+  buildWellKnownSetup,
+  domainWellKnownUrl,
+  registryWellKnownUrl,
+} from "@/lib/well-known";
 
 type CheckResult = {
   status: string;
@@ -10,7 +15,8 @@ type CheckResult = {
   remote_updated_at?: string;
   registry_updated_at: string;
   message?: string;
-  nginx_snippet?: string;
+  nginx_proxy_snippet?: string;
+  nginx_static_snippet?: string;
   cpanel_path?: string;
 };
 
@@ -37,15 +43,16 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
   const [copied, setCopied] = useState("");
 
   const base = appUrl.replace(/\/$/, "");
+  const setup = domain ? buildWellKnownSetup(base, domain) : null;
   const resolveUrl = domain
     ? `${base}/api/v1/resolve?domain=${encodeURIComponent(domain)}`
     : null;
-  const registryWellKnownUrl = domain
-    ? `${base}/api/v1/well-known?domain=${encodeURIComponent(domain)}`
+  const registryWellKnownUrlValue = domain
+    ? registryWellKnownUrl(base, domain)
     : null;
-  const domainWellKnown = domain
-    ? `https://${domain}/.well-known/digital-card`
-    : null;
+  const domainWellKnown = domain ? domainWellKnownUrl(domain) : null;
+  const llmsUrl = `${base}/api/v1/cards/${handle}/llms.txt`;
+  const schemaUrl = `${base}/api/v1/cards/${handle}/schema.json`;
 
   async function runCheck() {
     if (!domain) return;
@@ -74,6 +81,11 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
     };
     return map[status] ?? status;
   }
+
+  const proxySnippet =
+    check?.nginx_proxy_snippet ?? setup?.nginx_proxy_snippet ?? "";
+  const staticSnippet =
+    check?.nginx_static_snippet ?? setup?.nginx_static_snippet ?? "";
 
   return (
     <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 sm:col-span-2">
@@ -107,7 +119,7 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
           </div>
         )}
 
-        {registryWellKnownUrl && (
+        {registryWellKnownUrlValue && (
           <div>
             <p className="mb-1 text-xs font-medium text-[var(--color-text-muted)]">
               {m.discoveryRegistryWellKnown}
@@ -115,12 +127,12 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
             <div className="flex gap-2">
               <input
                 readOnly
-                value={registryWellKnownUrl}
+                value={registryWellKnownUrlValue}
                 className={inputClass}
               />
               <button
                 type="button"
-                onClick={() => copyText("rwk", registryWellKnownUrl)}
+                onClick={() => copyText("rwk", registryWellKnownUrlValue)}
                 className="shrink-0 rounded-lg border border-[var(--color-border)] px-3 py-2 text-xs font-medium hover:bg-[var(--color-bg)]"
               >
                 {copied === "rwk" ? m.discoveryCopied : m.discoveryCopy}
@@ -155,6 +167,18 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
             className="rounded-lg bg-[var(--color-primary)] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[var(--color-primary-dark)]"
           >
             {m.discoveryDownload}
+          </a>
+          <a
+            href={`/api/v1/cards/${handle}/llms.txt`}
+            className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
+          >
+            {m.discoveryDownloadLlms}
+          </a>
+          <a
+            href={`/api/v1/cards/${handle}/schema.json`}
+            className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
+          >
+            {m.discoveryDownloadSchema}
           </a>
           <button
             type="button"
@@ -196,34 +220,59 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
         </div>
       )}
 
-      {showGuide && check?.nginx_snippet && (
-        <div className="mt-4 space-y-3">
-          <p className="text-sm text-[var(--color-text-muted)]">
-            {m.discoveryGuideIntro}
-          </p>
-          <div>
-            <p className="mb-1 text-xs font-medium text-[var(--color-text-muted)]">
-              {m.discoveryCpanelPath}
+      {showGuide && domain && (
+        <div className="mt-4 space-y-4">
+          <div className="rounded-lg border border-[var(--color-primary)]/30 bg-[var(--color-bg)] p-4">
+            <p className="mb-1 text-sm font-medium">{m.discoveryProxyTitle}</p>
+            <p className="mb-3 text-sm text-[var(--color-text-muted)]">
+              {m.discoveryProxyIntro}
             </p>
-            <code className="block rounded-lg bg-[var(--color-bg)] p-2 text-xs">
-              {check.cpanel_path}
-            </code>
-          </div>
-          <div>
-            <p className="mb-1 text-xs font-medium text-[var(--color-text-muted)]">
-              {m.discoveryNginxSnippet}
-            </p>
-            <pre className="overflow-x-auto rounded-lg bg-[var(--color-bg)] p-3 text-xs">
-              {check.nginx_snippet}
+            <pre className="overflow-x-auto rounded-lg bg-[var(--color-surface)] p-3 text-xs">
+              {proxySnippet}
             </pre>
             <button
               type="button"
-              onClick={() => copyText("nginx", check.nginx_snippet ?? "")}
-              className="mt-2 rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--color-bg)]"
+              onClick={() => copyText("proxy", proxySnippet)}
+              className="mt-2 rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--color-surface)]"
             >
-              {copied === "nginx" ? m.discoveryCopied : m.discoveryCopy}
+              {copied === "proxy" ? m.discoveryCopied : m.discoveryCopy}
             </button>
           </div>
+
+          <div>
+            <p className="mb-1 text-sm font-medium">{m.discoveryStaticTitle}</p>
+            <p className="mb-2 text-sm text-[var(--color-text-muted)]">
+              {m.discoveryGuideIntro}
+            </p>
+            <p className="mb-1 text-xs font-medium text-[var(--color-text-muted)]">
+              {m.discoveryCpanelPath}
+            </p>
+            <code className="mb-3 block rounded-lg bg-[var(--color-bg)] p-2 text-xs">
+              {setup?.cpanel_path}
+            </code>
+            <pre className="overflow-x-auto rounded-lg bg-[var(--color-bg)] p-3 text-xs">
+              {staticSnippet}
+            </pre>
+            <button
+              type="button"
+              onClick={() => copyText("static", staticSnippet)}
+              className="mt-2 rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--color-bg)]"
+            >
+              {copied === "static" ? m.discoveryCopied : m.discoveryCopy}
+            </button>
+          </div>
+
+          <div>
+            <p className="mb-1 text-sm font-medium">{m.discoverySiteExports}</p>
+            <p className="mb-2 text-sm text-[var(--color-text-muted)]">
+              {m.discoverySiteExportsHint}
+            </p>
+            <ul className="space-y-1 text-xs font-mono text-[var(--color-text-muted)]">
+              <li>{llmsUrl}</li>
+              <li>{schemaUrl}</li>
+            </ul>
+          </div>
+
           <p className="text-xs text-[var(--color-text-muted)]">
             {m.discoveryGuideNote}
           </p>
