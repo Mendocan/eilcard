@@ -38,10 +38,10 @@ export function LandingPage({ locale, m }: Props) {
           <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-accent)]">
             {m.hero.eyebrow}
           </p>
-          <h1 className="max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="max-w-none text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl lg:whitespace-nowrap">
             {m.hero.title}
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-text-muted)]">
+          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-[var(--color-text-muted)]">
             {m.hero.subtitle}
           </p>
           <div className="mt-10 flex flex-wrap gap-3">

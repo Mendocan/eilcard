@@ -1,7 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 cd /opt/digital_card
+rm -rf apps/web/src/app/admin/\(panel\)
 tar -xzf /root/digital_card.tgz
+sed -i 's/\r$//' scripts/*.sh
 
 if ! grep -q '^ADMIN_PASSWORD=' .env.prod 2>/dev/null; then
   ADMIN_PASSWORD=$(openssl rand -base64 18)

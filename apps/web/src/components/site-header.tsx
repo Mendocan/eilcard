@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Locale } from "@/lib/i18n/types";
 import type { Messages } from "@/lib/i18n/messages";
+import { BrandLogo } from "@/components/brand-logo";
 import { GitHubIcon } from "@/components/icons/github-icon";
 
 const GITHUB_URL =
@@ -29,13 +30,8 @@ export function SiteHeader({ locale, m }: Props) {
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--color-border)]/80 bg-[var(--color-bg)]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-primary)] text-sm font-bold text-white">
-            E
-          </span>
-          <span className="text-sm font-semibold tracking-tight">
-            EIL <span className="text-[var(--color-text-muted)]">Card</span>
-          </span>
+        <Link href="/" className="flex items-center">
+          <BrandLogo showWordmark />
         </Link>
 
         <nav className="flex items-center gap-1 sm:gap-2">

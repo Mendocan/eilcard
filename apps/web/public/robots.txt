@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-
-# Dijital Kart — agent-first canonical profiles
-# Public card JSON: /api/v1/cards/{handle}
-# Resolve: /api/v1/resolve?domain={domain}
