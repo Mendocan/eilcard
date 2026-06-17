@@ -295,6 +295,9 @@ export function DiscoveryPanel({ handle, domain, entityName, appUrl, m }: Props)
             >
               {copied === "proxy" ? m.discoveryCopied : m.discoveryCopy}
             </button>
+            <p className="mt-3 text-xs text-[var(--color-text-muted)]">
+              {m.discoveryGuideNoteProxy}
+            </p>
           </div>
 
           <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
@@ -337,6 +340,9 @@ export function DiscoveryPanel({ handle, domain, entityName, appUrl, m }: Props)
             >
               {copied === "static" ? m.discoveryCopied : m.discoveryCopy}
             </button>
+            <p className="mt-3 text-xs text-[var(--color-text-muted)]">
+              {m.discoveryGuideNoteStatic}
+            </p>
           </div>
 
           <div>

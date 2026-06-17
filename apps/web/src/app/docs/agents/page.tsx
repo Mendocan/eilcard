@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CodeSnippet } from "@/components/code-snippet";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { getAgentDocsSnippets } from "@/lib/agent-docs-snippets";
+import { formatDiscoveryNote, getAgentDocsSnippets } from "@/lib/agent-docs-snippets";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 
@@ -23,12 +23,13 @@ export default async function DocsAgentsPage() {
   const m = t(locale);
   const a = m.docsAgents;
   const snippets = getAgentDocsSnippets(BASE_URL);
+  const discoveryNote = formatDiscoveryNote(a.discoveryNoteBody, BASE_URL);
 
   return (
     <div className="min-h-screen">
       <SiteHeader locale={locale} m={m.nav} />
 
-      <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
+      <main className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-accent)]">
           {a.eyebrow}
         </p>
@@ -41,7 +42,7 @@ export default async function DocsAgentsPage() {
 
         <div className="mt-8 rounded-2xl border border-amber-200/80 bg-amber-50/60 p-5 text-sm text-amber-950 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-100">
           <p className="font-medium">{a.discoveryNoteTitle}</p>
-          <p className="mt-2 leading-relaxed">{snippets.discoveryNote}</p>
+          <p className="mt-2 leading-relaxed whitespace-pre-line">{discoveryNote}</p>
         </div>
 
         <section className="mt-12">

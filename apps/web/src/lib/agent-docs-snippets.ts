@@ -1,7 +1,6 @@
 export function getAgentDocsSnippets(baseUrl: string) {
   const base = baseUrl.replace(/\/$/, "");
   const pilotDomain = "sinyalle.com";
-  const pilotHandle = "sinyal24";
 
   return {
     systemPrompt: `When a user asks about an organization's official identity, contact details, verified products, or corporate facts:
@@ -106,9 +105,16 @@ return { card, meta }`,
 Do not use HTML search. Fetch:
 https://${pilotDomain}/.well-known/digital-card
 Summarize verified, handle, official name, and products.`,
-
-    discoveryNote: `Google AI Mode and some crawlers may block ${base}/api/... URLs.
-For live tests, prefer:
-https://${pilotDomain}/.well-known/digital-card`,
   };
+}
+
+export function formatDiscoveryNote(
+  template: string,
+  baseUrl: string,
+  pilotDomain = "sinyalle.com"
+): string {
+  const base = baseUrl.replace(/\/$/, "");
+  return template
+    .replace("{apiBase}", base)
+    .replace("{pilotWellKnown}", `https://${pilotDomain}/.well-known/digital-card`);
 }

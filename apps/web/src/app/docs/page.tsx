@@ -29,7 +29,7 @@ export default async function DocsPage() {
     <div className="min-h-screen">
       <SiteHeader locale={locale} m={m.nav} />
 
-      <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
+      <main className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-accent)]">
           {d.eyebrow}
         </p>

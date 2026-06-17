@@ -190,6 +190,26 @@ const en = {
         description: "Fetch card JSON by handle",
       },
       {
+        method: "GET",
+        path: "/api/v1/well-known?domain={domain}",
+        description: "Registry mirror of domain digital-card JSON",
+      },
+      {
+        method: "GET",
+        path: "/api/v1/cards/{handle}/agent-card.json",
+        description: "A2A-style agent card template (skills from products)",
+      },
+      {
+        method: "GET",
+        path: "/api/v1/cards/{handle}/llms.txt",
+        description: "llms.txt section for site-root discovery",
+      },
+      {
+        method: "GET",
+        path: "/llms.txt",
+        description: "EIL Card registry agent discovery index",
+      },
+      {
         method: "HEAD",
         path: "/api/v1/resolve?domain={domain}",
         description: "Existence check (200 / 404)",
@@ -234,6 +254,8 @@ const en = {
     intro:
       "Consumer chat UIs still default to web search. These templates wire resolve() and domain well-known into tool-calling agents so they read verified JSON first.",
     discoveryNoteTitle: "Live test tip",
+    discoveryNoteBody:
+      "Google AI Mode and some crawlers may block {apiBase}/api/... URLs. For live tests, prefer:\n{pilotWellKnown}",
     systemPromptTitle: "Recommended system prompt",
     systemPromptBody:
       "Add to Custom GPT, Claude project instructions, or your agent orchestrator. Tells the model to check EIL before scraping.",
@@ -410,7 +432,11 @@ const en = {
     discoveryCpanelPath: "cPanel / FTP file path",
     discoveryNginxSnippet: "nginx location block",
     discoveryGuideNote:
-      "After uploading, click “Check domain well-known”. Re-download when you update the card in this dashboard.",
+      "With nginx proxy: one-time setup — dashboard edits sync automatically; use “Check domain well-known” to verify. With static upload: re-download the file when you update the card.",
+    discoveryGuideNoteProxy:
+      "Proxy setup syncs automatically when you edit the card in this dashboard. Click “Check domain well-known” to verify.",
+    discoveryGuideNoteStatic:
+      "After uploading a static file, click “Check domain well-known”. Re-download when you update the card in this dashboard.",
     discoveryRemoteUpdated: "Remote updated_at",
     discoveryStatusOk: "Domain well-known matches registry.",
     discoveryStatusMissing: "Well-known not found on your domain.",
@@ -427,7 +453,7 @@ const en = {
     discoveryDownloadSchema: "schema.org JSON",
     discoverySiteExports: "Site exports (copy to your domain)",
     discoverySiteExportsHint:
-      "Upload llms.txt to your site root and paste schema.json into your HTML <head> as application/ld+json.",
+      "Append the llms.txt patch to your site root file, upload full llms.txt export if needed, and paste schema.json into your HTML <head> as application/ld+json.",
     discoveryDomainAgentCard: "Your domain agent card (A2A, optional)",
     discoveryRegistryAgentCard: "EIL agent card template (auto-generated)",
     discoveryDownloadAgentCard: "agent-card.json",
@@ -737,6 +763,26 @@ const tr: Messages = {
         description: "Handle ile kart JSON'u",
       },
       {
+        method: "GET",
+        path: "/api/v1/well-known?domain={domain}",
+        description: "Domain digital-card JSON aynası (registry)",
+      },
+      {
+        method: "GET",
+        path: "/api/v1/cards/{handle}/agent-card.json",
+        description: "A2A tarzı agent card şablonu (ürünlerden skill)",
+      },
+      {
+        method: "GET",
+        path: "/api/v1/cards/{handle}/llms.txt",
+        description: "Site kökü keşfi için llms.txt bölümü",
+      },
+      {
+        method: "GET",
+        path: "/llms.txt",
+        description: "EIL Card registry agent keşif indeksi",
+      },
+      {
         method: "HEAD",
         path: "/api/v1/resolve?domain={domain}",
         description: "Varlık kontrolü (200 / 404)",
@@ -781,6 +827,8 @@ const tr: Messages = {
     intro:
       "Tüketici sohbet arayüzleri hâlâ web aramasına döner. Bu şablonlar resolve() ve domain well-known'u tool-calling agent'lara bağlar; önce doğrulanmış JSON okunur.",
     discoveryNoteTitle: "Canlı test ipucu",
+    discoveryNoteBody:
+      "Google AI Modu ve bazı crawler'lar {apiBase}/api/... URL'lerini engelleyebilir. Canlı testlerde şunu tercih edin:\n{pilotWellKnown}",
     systemPromptTitle: "Önerilen sistem prompt'u",
     systemPromptBody:
       "Custom GPT, Claude proje talimatları veya agent orchestrator'a ekleyin. Modele EIL'i taramadan önce kontrol ettirir.",
@@ -822,7 +870,7 @@ const tr: Messages = {
     fieldNoteLink: "AI agent field note'u okuyun →",
   },
   fieldNote: {
-    metaTitle: "AI Agent Field Note — EIL Card",
+    metaTitle: "AI Agent Saha Notu — EIL Card",
     metaDescription:
       "Bir AI agent eilcard.com'u okumaya çalıştığında ne olur — gürültü, düzeltme ve doğrulanmış kimlik neden önemli.",
     eyebrow: "İçgörüler",
@@ -898,7 +946,7 @@ const tr: Messages = {
     officialName: "Resmi ad *",
     shortName: "Kısa ad",
     fullName: "Ad soyad *",
-    tagline: "Tagline",
+    tagline: "Slogan",
     contact: "İletişim",
     domainOptional: "Domain (opsiyonel)",
     creating: "Oluşturuluyor...",
@@ -957,7 +1005,11 @@ const tr: Messages = {
     discoveryCpanelPath: "cPanel / FTP dosya yolu",
     discoveryNginxSnippet: "nginx location bloğu",
     discoveryGuideNote:
-      "Yükledikten sonra “Domain well-known kontrol et”e tıklayın. Kartı panelden güncellediğinizde dosyayı yeniden indirin.",
+      "nginx proxy ile tek seferlik kurulum — panelden düzenlemeler otomatik yansır; “Domain well-known kontrol et” ile doğrulayın. Statik yüklemede kartı güncellediğinizde dosyayı yeniden indirin.",
+    discoveryGuideNoteProxy:
+      "Proxy kurulumu panelden kart düzenlediğinizde otomatik senkronize olur. “Domain well-known kontrol et” ile doğrulayın.",
+    discoveryGuideNoteStatic:
+      "Statik dosya yükledikten sonra “Domain well-known kontrol et”e tıklayın. Kartı panelden güncellediğinizde dosyayı yeniden indirin.",
     discoveryRemoteUpdated: "Uzak updated_at",
     discoveryStatusOk: "Domain well-known registry ile eşleşiyor.",
     discoveryStatusMissing: "Domain'inizde well-known bulunamadı.",
@@ -974,7 +1026,7 @@ const tr: Messages = {
     discoveryDownloadSchema: "schema.org JSON",
     discoverySiteExports: "Site export'ları (domain'inize kopyalayın)",
     discoverySiteExportsHint:
-      "llms.txt dosyasını site köküne yükleyin; schema.json içeriğini HTML <head> içine application/ld+json olarak ekleyin.",
+      "llms.txt yamasını site kök dosyanıza ekleyin; gerekirse tam llms.txt export'unu yükleyin; schema.json içeriğini HTML <head> içine application/ld+json olarak ekleyin.",
     discoveryDomainAgentCard: "Domain agent card (A2A, opsiyonel)",
     discoveryRegistryAgentCard: "EIL agent card şablonu (otomatik)",
     discoveryDownloadAgentCard: "agent-card.json",
