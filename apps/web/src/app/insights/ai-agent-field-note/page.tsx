@@ -38,6 +38,9 @@ export default async function FieldNotePage() {
         <p className="mt-8 leading-relaxed text-[var(--color-text-muted)]">
           {f.intro}
         </p>
+        <p className="mt-4 text-sm text-[var(--color-text-muted)]/80">
+          {f.disclaimer}
+        </p>
 
         <div className="mt-12 space-y-10">
           {f.sections.map((section) => (

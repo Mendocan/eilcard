@@ -1,7 +1,7 @@
 {
   "name": "@digitalcard/sdk",
   "version": "0.1.0",
-  "description": "TypeScript SDK for Dijital Kart — resolve canonical organization/person profiles for agents",
+  "description": "TypeScript SDK for EIL Card — resolve canonical entity profiles for AI agents",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,13 +11,34 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "README.md"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run build"
   },
-  "keywords": ["digital-card", "agent", "schema.org", "llms", "resolve"],
-  "license": "UNLICENSED",
+  "keywords": [
+    "eil",
+    "digital-card",
+    "entity-identity",
+    "agent",
+    "schema.org",
+    "llms",
+    "resolve"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mendocan/eilcard.git",
+    "directory": "packages/sdk"
+  },
+  "homepage": "https://eilcard.com",
+  "bugs": {
+    "url": "https://github.com/Mendocan/eilcard/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=20"
   },

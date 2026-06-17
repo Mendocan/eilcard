@@ -52,6 +52,13 @@ export function SiteHeader({ locale, m }: Props) {
             ))}
           </div>
 
+          <Link
+            href="/docs"
+            className="hidden rounded-lg px-3 py-2 text-sm text-[var(--color-text-muted)] transition hover:text-[var(--color-text)] md:inline"
+          >
+            {m.docs}
+          </Link>
+
           <a
             href={GITHUB_URL}
             target="_blank"

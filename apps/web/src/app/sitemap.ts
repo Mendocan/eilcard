@@ -4,7 +4,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://eilcard.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const routes = ["", "/about", "/insights/ai-agent-field-note", "/login", "/register"];
+  const routes = ["", "/about", "/docs", "/insights/ai-agent-field-note", "/login", "/register"];
 
   return routes.map((path) => ({
     url: `${BASE_URL}${path}`,

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CodeSnippet } from "@/components/code-snippet";
 import { SiteFooter } from "@/components/site-footer";
 import type { Messages } from "@/lib/i18n/messages";
 import { GitHubIcon } from "@/components/icons/github-icon";
@@ -232,9 +233,12 @@ export function LandingPage({ locale, m }: Props) {
               </p>
               <h2 className="mt-2 text-2xl font-semibold">{m.sdk.caption}</h2>
             </div>
-            <pre className="w-full max-w-xl overflow-x-auto rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] p-5 text-[13px] leading-relaxed">
-              <code>{SDK_SNIPPET}</code>
-            </pre>
+            <CodeSnippet
+              code={SDK_SNIPPET}
+              copyLabel={m.sdk.copy}
+              copiedLabel={m.sdk.copied}
+              className="w-full max-w-xl"
+            />
           </div>
         </div>
       </section>

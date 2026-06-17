@@ -90,11 +90,14 @@ const en = {
   sdk: {
     title: "SDK",
     caption: "resolve in one call",
+    copy: "Copy code",
+    copied: "Copied",
   },
   footer: {
     tagline: "Entity identity for machines — not user login.",
     product: "EIL Card",
     about: "About",
+    docs: "Docs",
     insights: "Insights",
     github: "GitHub",
     copyright: "© 2026 EIL Card",
@@ -127,6 +130,77 @@ const en = {
       "We do not publish a public support email. Use GitHub Issues on the project repository for bugs, ideas, and integration questions.",
     backHome: "← Back to home",
   },
+  docs: {
+    metaTitle: "Documentation — EIL Card",
+    metaDescription:
+      "SDK, registry API, and discovery for EIL Card — resolve verified entity identity for AI agents.",
+    eyebrow: "Documentation",
+    title: "Build with EIL",
+    intro:
+      "EIL Card exposes a public registry API and a TypeScript SDK. Agents resolve domain or handle to canonical organization or person JSON — with optional fallback to /.well-known/digital-card on the entity's own domain.",
+    copy: "Copy code",
+    copied: "Copied",
+    sdkTitle: "TypeScript SDK",
+    sdkBody:
+      "Install @digitalcard/sdk from npm. DigitalCard.resolve() tries the registry first, then well-known on the target domain when configured.",
+    npmLink: "View @digitalcard/sdk on npm",
+    apiTitle: "Registry API",
+    apiBody:
+      "All registry routes are under /api/v1. Responses include a card object and optional meta (source, resolved_at). Public read endpoints require no API key.",
+    methodCol: "Method",
+    pathCol: "Path",
+    descCol: "Description",
+    endpoints: [
+      {
+        method: "GET",
+        path: "/api/v1/resolve?domain={domain}",
+        description: "Resolve by verified domain",
+      },
+      {
+        method: "GET",
+        path: "/api/v1/resolve?handle={handle}",
+        description: "Resolve by registry handle",
+      },
+      {
+        method: "GET",
+        path: "/api/v1/cards/{handle}",
+        description: "Fetch card JSON by handle",
+      },
+      {
+        method: "HEAD",
+        path: "/api/v1/resolve?domain={domain}",
+        description: "Existence check (200 / 404)",
+      },
+    ],
+    apiNote:
+      "404 means no registry record — the SDK may fall back to https://{domain}/.well-known/digital-card when enabled.",
+    discoveryTitle: "Discovery chain",
+    discoveryBody:
+      "Hybrid discovery keeps registry fast while domain-bound well-known proves ownership at the source.",
+    discoverySteps: [
+      "Registry — GET /api/v1/resolve or /api/v1/cards/{handle}",
+      "Well-known — GET https://{domain}/.well-known/digital-card",
+      "DNS TXT — _digital-card.{domain} for verification hints",
+    ],
+    dnsNote:
+      "After DNS verification in the dashboard, records expose verified: true and stable canonical fields.",
+    responseTitle: "Response shape",
+    responseBody:
+      "Cards follow schema v1.0 — discriminated by type (organization | person). Key fields agents rely on:",
+    responseFields: [
+      "type, card_id, handle — identity keys",
+      "name — official or full name",
+      "contact — website, email, phone",
+      "verified — domain-attested trust signal",
+      "actions — machine-readable contact intents",
+    ],
+    ctaTitle: "Next steps",
+    ctaBody:
+      "Create a card to publish your entity to the registry, verify your domain, and let agents resolve you in one call.",
+    ctaPrimary: "Create your card",
+    ctaSecondary: "Read the field note",
+    backHome: "← Back to home",
+  },
   whyAgents: {
     title: "Why agents need a verified layer",
     items: [
@@ -153,7 +227,9 @@ const en = {
     title: "When an AI agent met EIL Card",
     subtitle: "A field note on noise, correction, and verified entity identity",
     intro:
-      "In a live conversation with Google AI Mode, the model first misread eilcard.com as a payment or phishing site — then, after the prompt was corrected, understood EIL as infrastructure for the agent web. This note captures that arc and what it means for builders.",
+      "In a live conversation with an AI search assistant, the model first misread eilcard.com as a payment or phishing site — then, after the prompt was corrected, understood EIL as infrastructure for the agent web. This note captures that arc and what it means for builders.",
+    disclaimer:
+      "Independent observation. Not affiliated with or endorsed by any AI provider or trademark holder.",
     sections: [
       {
         title: "1. First read: noise wins",
@@ -434,11 +510,14 @@ const tr: Messages = {
   sdk: {
     title: "SDK",
     caption: "tek çağrıda resolve",
+    copy: "Kodu kopyala",
+    copied: "Kopyalandı",
   },
   footer: {
     tagline: "Makine kimliği — kullanıcı girişi değil.",
     product: "EIL Card",
     about: "Hakkında",
+    docs: "Dokümantasyon",
     insights: "İçgörüler",
     github: "GitHub",
     copyright: "© 2026 EIL Card",
@@ -471,6 +550,77 @@ const tr: Messages = {
       "Herkese açık destek e-postası yayınlamıyoruz. Hata, fikir ve entegrasyon soruları için GitHub Issues kullanın.",
     backHome: "← Ana sayfaya dön",
   },
+  docs: {
+    metaTitle: "Dokümantasyon — EIL Card",
+    metaDescription:
+      "EIL Card SDK, registry API ve keşif — AI agent'lar için doğrulanmış varlık kimliği.",
+    eyebrow: "Dokümantasyon",
+    title: "EIL ile geliştirin",
+    intro:
+      "EIL Card herkese açık bir registry API ve TypeScript SDK sunar. Agent'lar domain veya handle ile kurum/kişi JSON'una ulaşır — isteğe bağlı olarak kurumun kendi domain'inde /.well-known/digital-card fallback'i.",
+    copy: "Kodu kopyala",
+    copied: "Kopyalandı",
+    sdkTitle: "TypeScript SDK",
+    sdkBody:
+      "@digitalcard/sdk paketini npm'den kurun. DigitalCard.resolve() önce registry'yi dener; yapılandırılmışsa hedef domain'de well-known'a düşer.",
+    npmLink: "@digitalcard/sdk — npm",
+    apiTitle: "Registry API",
+    apiBody:
+      "Tüm registry uçları /api/v1 altındadır. Yanıtlar card nesnesi ve isteğe bağlı meta (source, resolved_at) içerir. Herkese açık okuma uçları API anahtarı gerektirmez.",
+    methodCol: "Metod",
+    pathCol: "Yol",
+    descCol: "Açıklama",
+    endpoints: [
+      {
+        method: "GET",
+        path: "/api/v1/resolve?domain={domain}",
+        description: "Doğrulanmış domain ile çözümle",
+      },
+      {
+        method: "GET",
+        path: "/api/v1/resolve?handle={handle}",
+        description: "Registry handle ile çözümle",
+      },
+      {
+        method: "GET",
+        path: "/api/v1/cards/{handle}",
+        description: "Handle ile kart JSON'u",
+      },
+      {
+        method: "HEAD",
+        path: "/api/v1/resolve?domain={domain}",
+        description: "Varlık kontrolü (200 / 404)",
+      },
+    ],
+    apiNote:
+      "404, registry'de kayıt yok demektir — SDK açıksa https://{domain}/.well-known/digital-card adresine düşebilir.",
+    discoveryTitle: "Keşif zinciri",
+    discoveryBody:
+      "Hibrit keşif registry'yi hızlı tutar; domain'e bağlı well-known kaynağı kanıtlar.",
+    discoverySteps: [
+      "Registry — GET /api/v1/resolve veya /api/v1/cards/{handle}",
+      "Well-known — GET https://{domain}/.well-known/digital-card",
+      "DNS TXT — _digital-card.{domain} doğrulama ipucu",
+    ],
+    dnsNote:
+      "Dashboard'da DNS doğrulamasından sonra kayıtlar verified: true ve stabil canonical alanlar sunar.",
+    responseTitle: "Yanıt yapısı",
+    responseBody:
+      "Kartlar şema v1.0'a uyar — type (organization | person) ile ayrılır. Agent'ların kullandığı başlıca alanlar:",
+    responseFields: [
+      "type, card_id, handle — kimlik anahtarları",
+      "name — resmi veya tam ad",
+      "contact — web sitesi, e-posta, telefon",
+      "verified — domain onaylı güven sinyali",
+      "actions — makine okunur iletişim niyetleri",
+    ],
+    ctaTitle: "Sonraki adımlar",
+    ctaBody:
+      "Kart oluşturun, domain'inizi doğrulayın ve agent'ların tek çağrıda sizi çözümlemesini sağlayın.",
+    ctaPrimary: "Kartınızı oluşturun",
+    ctaSecondary: "Field note'u okuyun",
+    backHome: "← Ana sayfaya dön",
+  },
   whyAgents: {
     title: "Agent'lar neden doğrulanmış bir katmana ihtiyaç duyar",
     items: [
@@ -497,7 +647,9 @@ const tr: Messages = {
     title: "Bir AI agent EIL Card ile karşılaştığında",
     subtitle: "Gürültü, düzeltme ve doğrulanmış varlık kimliği üzerine bir field note",
     intro:
-      "Google AI Mode ile yapılan canlı bir sohbette model önce eilcard.com'u ödeme veya oltalama sitesi sandı — istem düzeltildikten sonra EIL'ı agent web'i için altyapı olarak sınıflandırdı. Bu not, o süreci ve geliştiriciler için anlamını özetler.",
+      "Bir AI arama asistanıyla yapılan canlı bir sohbette model önce eilcard.com'u ödeme veya oltalama sitesi sandı — istem düzeltildikten sonra EIL'ı agent web'i için altyapı olarak sınıflandırdı. Bu not, o süreci ve geliştiriciler için anlamını özetler.",
+    disclaimer:
+      "Bağımsız gözlem. Herhangi bir AI sağlayıcısı veya ticari marka sahibiyle bağlantılı veya onaylı değildir.",
     sections: [
       {
         title: "1. İlk okuma: gürültü kazanır",

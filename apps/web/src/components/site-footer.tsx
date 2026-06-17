@@ -24,6 +24,13 @@ export function SiteFooter({ m }: Props) {
           </Link>
           <span className="hidden text-[var(--color-border)] sm:inline">·</span>
           <Link
+            href="/docs"
+            className="transition hover:text-[var(--color-text)]"
+          >
+            {m.docs}
+          </Link>
+          <span className="hidden text-[var(--color-border)] sm:inline">·</span>
+          <Link
             href="/insights/ai-agent-field-note"
             className="transition hover:text-[var(--color-text)]"
           >

@@ -12,6 +12,7 @@ import type {
 } from './types.js';
 
 const DEFAULT_REGISTRY = 'https://eilcard.com';
+const API_PREFIX = '/api/v1';
 const DEFAULT_TIMEOUT = 10_000;
 const WELL_KNOWN_PATH = '/.well-known/digital-card';
 
@@ -43,7 +44,7 @@ export class DigitalCardClient {
   }
 
   private async resolveByHandle(handle: string): Promise<ResolveResult> {
-    const url = `${this.registryBaseUrl}/v1/cards/${encodeURIComponent(handle)}`;
+    const url = `${this.registryBaseUrl}${API_PREFIX}/cards/${encodeURIComponent(handle)}`;
     const card = await this.fetchRegistryCard(url);
     return {
       card,
@@ -60,7 +61,7 @@ export class DigitalCardClient {
 
   private async resolveByDomain(domain: string): Promise<ResolveResult> {
     const normalized = normalizeDomain(domain);
-    const registryUrl = `${this.registryBaseUrl}/v1/resolve?domain=${encodeURIComponent(normalized)}`;
+    const registryUrl = `${this.registryBaseUrl}${API_PREFIX}/resolve?domain=${encodeURIComponent(normalized)}`;
 
     try {
       const card = await this.fetchRegistryCard(registryUrl);
