@@ -1,6 +1,3 @@
-# eilcard
-Entity Identity Layer
-
 # EIL Card
 Entity Identity Layer — verified org/person JSON for AI agents.
 
