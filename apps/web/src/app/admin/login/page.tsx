@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { getAdminSession, isAdminConfigured } from "@/lib/admin-auth";
+import { BrandLogo } from "@/components/brand-logo";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 import { AdminLoginForm } from "./admin-login-form";
@@ -13,13 +15,14 @@ export default async function AdminLoginPage() {
   const m = t(locale);
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4">
+    <main className="relative flex min-h-screen items-center justify-center px-4">
+      <div className="absolute right-4 top-4">
+        <LocaleSwitcher locale={locale} />
+      </div>
       <div className="w-full max-w-sm rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/60 p-8">
         <div className="mb-6">
-          <p className="text-xs font-medium uppercase tracking-wider text-[var(--color-accent)]">
-            EIL
-          </p>
-          <h1 className="mt-1 text-xl font-semibold">{m.admin.loginTitle}</h1>
+          <BrandLogo size={40} className="mb-4" />
+          <h1 className="text-xl font-semibold">{m.admin.loginTitle}</h1>
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">
             {m.admin.loginSubtitle}
           </p>
