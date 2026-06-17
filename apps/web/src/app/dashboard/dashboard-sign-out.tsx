@@ -8,7 +8,7 @@ export function DashboardSignOutButton({ label }: { label: string }) {
 
   async function handleSignOut() {
     await signOut();
-    router.push("/login");
+    router.push("/");
     router.refresh();
   }
 
