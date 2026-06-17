@@ -4,7 +4,9 @@ import { useState } from "react";
 import type { Messages } from "@/lib/i18n/messages";
 import {
   buildWellKnownSetup,
+  domainAgentCardUrl,
   domainWellKnownUrl,
+  registryAgentCardUrl,
   registryWellKnownUrl,
 } from "@/lib/well-known";
 
@@ -16,8 +18,10 @@ type CheckResult = {
   registry_updated_at: string;
   message?: string;
   nginx_proxy_snippet?: string;
+  nginx_agent_card_proxy_snippet?: string;
   nginx_static_snippet?: string;
   cpanel_path?: string;
+  agent_card_cpanel_path?: string;
 };
 
 type Props = {
@@ -43,7 +47,7 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
   const [copied, setCopied] = useState("");
 
   const base = appUrl.replace(/\/$/, "");
-  const setup = domain ? buildWellKnownSetup(base, domain) : null;
+  const setup = domain ? buildWellKnownSetup(base, domain, handle) : null;
   const resolveUrl = domain
     ? `${base}/api/v1/resolve?domain=${encodeURIComponent(domain)}`
     : null;
@@ -51,6 +55,8 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
     ? registryWellKnownUrl(base, domain)
     : null;
   const domainWellKnown = domain ? domainWellKnownUrl(domain) : null;
+  const domainAgentCard = domain ? domainAgentCardUrl(domain) : null;
+  const registryAgentCard = registryAgentCardUrl(base, handle);
   const llmsUrl = `${base}/api/v1/cards/${handle}/llms.txt`;
   const schemaUrl = `${base}/api/v1/cards/${handle}/schema.json`;
 
@@ -84,6 +90,10 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
 
   const proxySnippet =
     check?.nginx_proxy_snippet ?? setup?.nginx_proxy_snippet ?? "";
+  const agentCardProxySnippet =
+    check?.nginx_agent_card_proxy_snippet ??
+    setup?.nginx_agent_card_proxy_snippet ??
+    "";
   const staticSnippet =
     check?.nginx_static_snippet ?? setup?.nginx_static_snippet ?? "";
 
@@ -158,45 +168,87 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
             </div>
           </div>
         )}
+
+        {domainAgentCard && (
+          <div>
+            <p className="mb-1 text-xs font-medium text-[var(--color-text-muted)]">
+              {m.discoveryDomainAgentCard}
+            </p>
+            <div className="flex gap-2">
+              <input readOnly value={domainAgentCard} className={inputClass} />
+              <button
+                type="button"
+                onClick={() => copyText("dac", domainAgentCard)}
+                className="shrink-0 rounded-lg border border-[var(--color-border)] px-3 py-2 text-xs font-medium hover:bg-[var(--color-bg)]"
+              >
+                {copied === "dac" ? m.discoveryCopied : m.discoveryCopy}
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div>
+          <p className="mb-1 text-xs font-medium text-[var(--color-text-muted)]">
+            {m.discoveryRegistryAgentCard}
+          </p>
+          <div className="flex gap-2">
+            <input readOnly value={registryAgentCard} className={inputClass} />
+            <button
+              type="button"
+              onClick={() => copyText("rac", registryAgentCard)}
+              className="shrink-0 rounded-lg border border-[var(--color-border)] px-3 py-2 text-xs font-medium hover:bg-[var(--color-bg)]"
+            >
+              {copied === "rac" ? m.discoveryCopied : m.discoveryCopy}
+            </button>
+          </div>
+        </div>
       </div>
 
-      {domain && (
-        <div className="mt-4 flex flex-wrap gap-2">
-          <a
-            href={`/api/v1/cards/${handle}/well-known`}
-            className="rounded-lg bg-[var(--color-primary)] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[var(--color-primary-dark)]"
-          >
-            {m.discoveryDownload}
-          </a>
-          <a
-            href={`/api/v1/cards/${handle}/llms.txt`}
-            className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
-          >
-            {m.discoveryDownloadLlms}
-          </a>
-          <a
-            href={`/api/v1/cards/${handle}/schema.json`}
-            className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
-          >
-            {m.discoveryDownloadSchema}
-          </a>
-          <button
-            type="button"
-            onClick={runCheck}
-            disabled={loading}
-            className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)] disabled:opacity-50"
-          >
-            {loading ? m.discoveryChecking : m.discoveryCheckDomain}
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowGuide((v) => !v)}
-            className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
-          >
-            {showGuide ? m.discoveryHideGuide : m.discoveryShowGuide}
-          </button>
-        </div>
-      )}
+      <div className="mt-4 flex flex-wrap gap-2">
+        <a
+          href={`/api/v1/cards/${handle}/well-known`}
+          className="rounded-lg bg-[var(--color-primary)] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[var(--color-primary-dark)]"
+        >
+          {m.discoveryDownload}
+        </a>
+        <a
+          href={`/api/v1/cards/${handle}/agent-card.json`}
+          className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
+        >
+          {m.discoveryDownloadAgentCard}
+        </a>
+        {domain && (
+          <>
+            <a
+              href={`/api/v1/cards/${handle}/llms.txt`}
+              className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
+            >
+              {m.discoveryDownloadLlms}
+            </a>
+            <a
+              href={`/api/v1/cards/${handle}/schema.json`}
+              className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
+            >
+              {m.discoveryDownloadSchema}
+            </a>
+            <button
+              type="button"
+              onClick={runCheck}
+              disabled={loading}
+              className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)] disabled:opacity-50"
+            >
+              {loading ? m.discoveryChecking : m.discoveryCheckDomain}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowGuide((v) => !v)}
+              className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
+            >
+              {showGuide ? m.discoveryHideGuide : m.discoveryShowGuide}
+            </button>
+          </>
+        )}
+      </div>
 
       {!domain && (
         <p className="mt-3 text-sm text-[var(--color-text-muted)]">
@@ -239,6 +291,25 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
             </button>
           </div>
 
+          <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+            <p className="mb-1 text-sm font-medium">
+              {m.discoveryAgentCardProxyTitle}
+            </p>
+            <p className="mb-3 text-sm text-[var(--color-text-muted)]">
+              {m.discoveryAgentCardProxyIntro}
+            </p>
+            <pre className="overflow-x-auto rounded-lg bg-[var(--color-surface)] p-3 text-xs">
+              {agentCardProxySnippet}
+            </pre>
+            <button
+              type="button"
+              onClick={() => copyText("acproxy", agentCardProxySnippet)}
+              className="mt-2 rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--color-surface)]"
+            >
+              {copied === "acproxy" ? m.discoveryCopied : m.discoveryCopy}
+            </button>
+          </div>
+
           <div>
             <p className="mb-1 text-sm font-medium">{m.discoveryStaticTitle}</p>
             <p className="mb-2 text-sm text-[var(--color-text-muted)]">
@@ -268,10 +339,15 @@ export function DiscoveryPanel({ handle, domain, appUrl, m }: Props) {
               {m.discoverySiteExportsHint}
             </p>
             <ul className="space-y-1 text-xs font-mono text-[var(--color-text-muted)]">
+              <li>{registryAgentCard}</li>
               <li>{llmsUrl}</li>
               <li>{schemaUrl}</li>
             </ul>
           </div>
+
+          <p className="text-xs text-[var(--color-text-muted)]">
+            {m.discoveryAgentCardNote}
+          </p>
 
           <p className="text-xs text-[var(--color-text-muted)]">
             {m.discoveryGuideNote}

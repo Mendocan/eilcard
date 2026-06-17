@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/session";
 import {
   buildWellKnownSetup,
   checkDomainWellKnown,
+  domainAgentCardUrl,
   domainWellKnownUrl,
 } from "@/lib/well-known";
 import { eq, and } from "drizzle-orm";
@@ -43,14 +44,16 @@ export async function GET(
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://eilcard.com";
   const registryCard = buildCardJson(row);
   const result = await checkDomainWellKnown(row.domain, registryCard);
-  const setup = buildWellKnownSetup(appUrl, row.domain);
+  const setup = buildWellKnownSetup(appUrl, row.domain, handle);
 
   return NextResponse.json({
     ...result,
     well_known_url: domainWellKnownUrl(row.domain),
+    agent_card_url: domainAgentCardUrl(row.domain),
     download_url: `/api/v1/cards/${handle}/well-known`,
     llms_url: `/api/v1/cards/${handle}/llms.txt`,
     schema_url: `/api/v1/cards/${handle}/schema.json`,
+    agent_card_registry_url: `/api/v1/cards/${handle}/agent-card.json`,
     ...setup,
     nginx_snippet: setup.nginx_static_snippet,
   });

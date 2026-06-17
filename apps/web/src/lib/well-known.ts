@@ -30,9 +30,31 @@ export function domainWellKnownUrl(domain: string): string {
   return `https://${normalizeDomain(domain)}/.well-known/digital-card`;
 }
 
+export function domainAgentCardUrl(domain: string): string {
+  return `https://${normalizeDomain(domain)}/.well-known/agent-card.json`;
+}
+
+export function registryAgentCardUrl(appBaseUrl: string, handle: string): string {
+  const base = appBaseUrl.replace(/\/$/, "");
+  return `${base}/api/v1/cards/${encodeURIComponent(handle)}/agent-card.json`;
+}
+
 export function registryWellKnownUrl(appBaseUrl: string, domain: string): string {
   const base = appBaseUrl.replace(/\/$/, "");
   return `${base}/api/v1/well-known?domain=${encodeURIComponent(normalizeDomain(domain))}`;
+}
+
+export function nginxAgentCardProxySnippet(
+  appBaseUrl: string,
+  handle: string
+): string {
+  const mirror = registryAgentCardUrl(appBaseUrl, handle);
+  const host = new URL(appBaseUrl.replace(/\/$/, "") || "https://eilcard.com").host;
+  return `location = /.well-known/agent-card.json {
+    proxy_pass ${mirror};
+    proxy_set_header Host ${host};
+    proxy_ssl_server_name on;
+}`;
 }
 
 export function nginxWellKnownProxySnippet(
@@ -62,20 +84,30 @@ export function cPanelHint(): string {
 
 export type WellKnownSetup = {
   mirror_url: string;
+  agent_card_mirror_url: string;
   nginx_proxy_snippet: string;
+  nginx_agent_card_proxy_snippet: string;
   nginx_static_snippet: string;
   cpanel_path: string;
+  agent_card_cpanel_path: string;
 };
 
 export function buildWellKnownSetup(
   appBaseUrl: string,
-  domain: string
+  domain: string,
+  handle: string
 ): WellKnownSetup {
   return {
     mirror_url: registryWellKnownUrl(appBaseUrl, domain),
+    agent_card_mirror_url: registryAgentCardUrl(appBaseUrl, handle),
     nginx_proxy_snippet: nginxWellKnownProxySnippet(appBaseUrl, domain),
+    nginx_agent_card_proxy_snippet: nginxAgentCardProxySnippet(
+      appBaseUrl,
+      handle
+    ),
     nginx_static_snippet: nginxWellKnownSnippet(),
     cpanel_path: cPanelHint(),
+    agent_card_cpanel_path: "public_html/.well-known/agent-card.json",
   };
 }
 

@@ -396,6 +396,14 @@ const en = {
     discoverySiteExports: "Site exports (copy to your domain)",
     discoverySiteExportsHint:
       "Upload llms.txt to your site root and paste schema.json into your HTML <head> as application/ld+json.",
+    discoveryDomainAgentCard: "Your domain agent card (A2A, optional)",
+    discoveryRegistryAgentCard: "EIL agent card template (auto-generated)",
+    discoveryDownloadAgentCard: "agent-card.json",
+    discoveryAgentCardProxyTitle: "Agent card proxy (auto-sync)",
+    discoveryAgentCardProxyIntro:
+      "Optional A2A discovery at /.well-known/agent-card.json — proxies to EIL; updates when you edit the card.",
+    discoveryAgentCardNote:
+      "The agent-card.json template lists skills from your products. Replace url with your live A2A JSON-RPC endpoint when you deploy an agent server.",
   },
   admin: {
     title: "Admin",
@@ -899,6 +907,14 @@ const tr: Messages = {
     discoverySiteExports: "Site export'ları (domain'inize kopyalayın)",
     discoverySiteExportsHint:
       "llms.txt dosyasını site köküne yükleyin; schema.json içeriğini HTML <head> içine application/ld+json olarak ekleyin.",
+    discoveryDomainAgentCard: "Domain agent card (A2A, opsiyonel)",
+    discoveryRegistryAgentCard: "EIL agent card şablonu (otomatik)",
+    discoveryDownloadAgentCard: "agent-card.json",
+    discoveryAgentCardProxyTitle: "Agent card proxy (otomatik sync)",
+    discoveryAgentCardProxyIntro:
+      "Opsiyonel A2A keşfi: /.well-known/agent-card.json — EIL'e proxy; kartı düzenleyince güncellenir.",
+    discoveryAgentCardNote:
+      "agent-card.json şablonu ürünlerinizi skill olarak listeler. Canlı A2A JSON-RPC sunucunuz olduğunda url alanını güncelleyin.",
   },
   admin: {
     title: "Admin",
