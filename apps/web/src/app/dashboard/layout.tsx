@@ -7,6 +7,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { BrandLogo } from "@/components/brand-logo";
 import { LocaleSwitcher } from "@/components/locale-switcher";
+import { DashboardSignOutButton } from "./dashboard-sign-out";
 
 export default async function DashboardLayout({
   children,
@@ -35,14 +36,7 @@ export default async function DashboardLayout({
             <span className="hidden text-sm text-[var(--color-text-muted)] md:inline">
               {session.user.email}
             </span>
-            <form action="/api/auth/sign-out" method="POST">
-              <button
-                type="submit"
-                className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
-              >
-                {d.signOut}
-              </button>
-            </form>
+            <DashboardSignOutButton label={d.signOut} />
           </div>
         </div>
       </header>
