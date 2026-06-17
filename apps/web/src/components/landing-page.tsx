@@ -104,12 +104,20 @@ export function LandingPage({ locale, m }: Props) {
               </div>
             ))}
           </div>
-          <Link
-            href="/insights/ai-agent-field-note"
-            className="mt-8 inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
-          >
-            {m.whyAgents.fieldNoteLink}
-          </Link>
+          <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
+            <Link
+              href="/insights/ai-agent-field-note"
+              className="inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
+            >
+              {m.whyAgents.fieldNoteLink}
+            </Link>
+            <Link
+              href="/insights/eil-whitepaper"
+              className="inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
+            >
+              {m.whitepaper.landingLink}
+            </Link>
+          </div>
         </div>
       </section>
 

@@ -1,4 +1,5 @@
 import type { Locale } from "./types";
+import { whitepaperMessages } from "./whitepaper";
 
 const en = {
   meta: {
@@ -122,6 +123,7 @@ const en = {
     about: "About",
     docs: "Docs",
     insights: "Insights",
+    whitepaper: "Whitepaper",
     github: "GitHub",
     copyright: "© 2026 EIL Card",
   },
@@ -244,6 +246,7 @@ const en = {
     ctaSecondary: "Read the field note",
     backHome: "← Back to home",
     agentsLink: "Agent integration guide →",
+    whitepaperLink: "EIL whitepaper (v1.0) →",
   },
   docsAgents: {
     metaTitle: "Agent integration — EIL Card",
@@ -340,6 +343,7 @@ const en = {
     ctaSecondary: "View on GitHub",
     backHome: "← Back to home",
   },
+  whitepaper: whitepaperMessages.en,
   dashboard: {
     title: "My cards",
     subtitle: "Manage your digital cards.",
@@ -695,6 +699,7 @@ const tr: Messages = {
     about: "Hakkında",
     docs: "Dokümantasyon",
     insights: "İçgörüler",
+    whitepaper: "Whitepaper",
     github: "GitHub",
     copyright: "© 2026 EIL Card",
   },
@@ -817,6 +822,7 @@ const tr: Messages = {
     ctaSecondary: "Field note'u okuyun",
     backHome: "← Ana sayfaya dön",
     agentsLink: "Agent entegrasyon rehberi →",
+    whitepaperLink: "EIL whitepaper'ı (v1.0) →",
   },
   docsAgents: {
     metaTitle: "Agent entegrasyonu — EIL Card",
@@ -913,6 +919,7 @@ const tr: Messages = {
     ctaSecondary: "GitHub'da görün",
     backHome: "← Ana sayfaya dön",
   },
+  whitepaper: whitepaperMessages.tr,
   dashboard: {
     title: "Kartlarım",
     subtitle: "Dijital kartlarınızı yönetin.",

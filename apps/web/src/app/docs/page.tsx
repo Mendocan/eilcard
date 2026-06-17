@@ -172,6 +172,12 @@ export default async function DocsPage() {
               {d.ctaPrimary}
             </Link>
             <Link
+              href="/insights/eil-whitepaper"
+              className="inline-flex items-center rounded-lg border border-[var(--color-border)] px-4 py-2.5 text-sm font-medium transition hover:border-[var(--color-border-strong)]"
+            >
+              {d.whitepaperLink}
+            </Link>
+            <Link
               href="/insights/ai-agent-field-note"
               className="inline-flex items-center rounded-lg border border-[var(--color-border)] px-4 py-2.5 text-sm font-medium transition hover:border-[var(--color-border-strong)]"
             >

@@ -37,6 +37,13 @@ export function SiteFooter({ m }: Props) {
             {m.insights}
           </Link>
           <span className="hidden text-[var(--color-border)] sm:inline">·</span>
+          <Link
+            href="/insights/eil-whitepaper"
+            className="transition hover:text-[var(--color-text)]"
+          >
+            {m.whitepaper}
+          </Link>
+          <span className="hidden text-[var(--color-border)] sm:inline">·</span>
           <a
             href={GITHUB_URL}
             target="_blank"
