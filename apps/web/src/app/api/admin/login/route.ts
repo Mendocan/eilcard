@@ -4,6 +4,7 @@ import {
   setAdminSessionCookie,
   verifyAdminPassword,
 } from "@/lib/admin-auth";
+import { logAdminAction } from "@/lib/admin-audit";
 
 export async function POST(request: Request) {
   if (!isAdminConfigured()) {
@@ -22,6 +23,8 @@ export async function POST(request: Request) {
   if (!ok) {
     return NextResponse.json({ error: "Session error" }, { status: 500 });
   }
+
+  await logAdminAction("login", "session", "admin");
 
   return NextResponse.json({ ok: true });
 }

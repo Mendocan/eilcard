@@ -135,3 +135,16 @@ export const resolveEvents = pgTable(
     uniqueIndex("resolve_events_card_date_idx").on(table.cardId, table.date),
   ]
 );
+
+export const adminAuditLogs = pgTable(
+  "admin_audit_logs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    action: varchar("action", { length: 64 }).notNull(),
+    targetType: varchar("target_type", { length: 32 }).notNull(),
+    targetId: varchar("target_id", { length: 255 }).notNull(),
+    details: jsonb("details"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [index("admin_audit_logs_created_at_idx").on(table.createdAt)]
+);

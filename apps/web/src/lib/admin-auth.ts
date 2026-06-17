@@ -94,3 +94,9 @@ export async function getAdminSession(): Promise<boolean> {
   const jar = await cookies();
   return verifyAdminSessionToken(jar.get(COOKIE_NAME)?.value);
 }
+
+export async function isAdminRequest(request: Request): Promise<boolean> {
+  const cookieHeader = request.headers.get("cookie") ?? "";
+  const match = cookieHeader.match(new RegExp(`${COOKIE_NAME}=([^;]+)`));
+  return verifyAdminSessionToken(match?.[1]);
+}
