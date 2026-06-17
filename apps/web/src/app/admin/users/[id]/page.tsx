@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAdminSession } from "@/lib/admin-auth";
-import { cardTypeLabel } from "@/lib/admin-labels";
+import { cardTypeLabel, tierLabel } from "@/lib/admin-labels";
 import { getAdminUserDetail } from "@/lib/admin-queries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
+import { AdminUserTierActions } from "../../admin-user-tier-actions";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -31,11 +32,18 @@ export default async function AdminUserDetailPage({ params }: Props) {
       <div className="mt-6">
         <h2 className="text-2xl font-semibold">{user.name}</h2>
         <p className="mt-1 text-sm text-[var(--color-text-muted)]">{user.email}</p>
+        {user.suspendedAt && (
+          <p className="mt-2 text-sm text-[var(--color-error)]">{a.suspended}</p>
+        )}
       </div>
 
       <section className="mt-8 rounded-2xl border border-[var(--color-border)] p-5">
         <h3 className="mb-4 font-medium">{a.userMeta}</h3>
         <dl className="space-y-3 text-sm">
+          <div className="flex justify-between gap-4">
+            <dt className="text-[var(--color-text-muted)]">{a.plan}</dt>
+            <dd>{tierLabel(user.plan.tier, a)}</dd>
+          </div>
           <div className="flex justify-between gap-4">
             <dt className="text-[var(--color-text-muted)]">{a.emailVerified}</dt>
             <dd>{user.emailVerified ? a.yes : a.no}</dd>
@@ -50,9 +58,18 @@ export default async function AdminUserDetailPage({ params }: Props) {
           </div>
           <div className="flex justify-between gap-4">
             <dt className="text-[var(--color-text-muted)]">{a.cards}</dt>
-            <dd>{user.cards.length}</dd>
+            <dd>
+              {user.cards.length} / {user.plan.limits.maxCards}
+            </dd>
           </div>
         </dl>
+        <div className="mt-6 border-t border-[var(--color-border)] pt-4">
+          <AdminUserTierActions
+            userId={user.id}
+            currentTier={user.plan.tier}
+            m={a}
+          />
+        </div>
       </section>
 
       <section className="mt-6">

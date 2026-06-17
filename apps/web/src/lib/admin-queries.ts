@@ -19,6 +19,7 @@ import {
   users,
 } from "@/lib/db/schema";
 import { buildCardJson, getCardByHandle } from "@/lib/card-service";
+import { getUserPlan } from "@/lib/user-plan";
 
 const PAGE_SIZE = 20;
 
@@ -316,6 +317,7 @@ export async function getAdminUserDetail(userId: string) {
       name: users.name,
       email: users.email,
       emailVerified: users.emailVerified,
+      suspendedAt: users.suspendedAt,
       createdAt: users.createdAt,
       updatedAt: users.updatedAt,
     })
@@ -324,6 +326,8 @@ export async function getAdminUserDetail(userId: string) {
     .limit(1);
 
   if (!user) return null;
+
+  const plan = await getUserPlan(userId);
 
   const userCards = await db
     .select({
@@ -344,6 +348,7 @@ export async function getAdminUserDetail(userId: string) {
 
   return {
     ...user,
+    plan,
     cards: userCards,
     sessionCount: sessionCount?.c ?? 0,
   };

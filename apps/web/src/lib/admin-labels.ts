@@ -24,6 +24,14 @@ export function auditActionLabel(action: string, m: Messages["admin"]): string {
     "card.revoke": m.auditActionCardRevoke,
     "card.delete": m.auditActionCardDelete,
     "card.dns_check": m.auditActionCardDnsCheck,
+    "user.plan": m.auditActionUserPlan,
   };
   return labels[action] ?? action;
+}
+
+export function tierLabel(tier: string, m: Messages["admin"]): string {
+  if (tier === "free") return m.tierFree;
+  if (tier === "verified") return m.tierVerified;
+  if (tier === "pro") return m.tierPro;
+  return tier;
 }

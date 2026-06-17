@@ -26,6 +26,8 @@ export const verificationMethodEnum = pgEnum("verification_method_type", [
   "email",
 ]);
 
+export const planTierEnum = pgEnum("plan_tier", ["free", "verified", "pro"]);
+
 // --- Better Auth tables ---
 
 export const users = pgTable("users", {
@@ -34,6 +36,7 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 255 }).notNull().unique(),
   emailVerified: boolean("email_verified").notNull().default(false),
   image: text("image"),
+  suspendedAt: timestamp("suspended_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -147,4 +150,24 @@ export const adminAuditLogs = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [index("admin_audit_logs_created_at_idx").on(table.createdAt)]
+);
+
+export const userPlans = pgTable(
+  "user_plans",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    tier: planTierEnum("tier").notNull().default("free"),
+    startedAt: timestamp("started_at").notNull().defaultNow(),
+    expiresAt: timestamp("expires_at"),
+    polarSubscriptionId: varchar("polar_subscription_id", { length: 255 }),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("user_plans_user_id_idx").on(table.userId),
+    index("user_plans_tier_idx").on(table.tier),
+  ]
 );

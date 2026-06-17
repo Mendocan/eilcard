@@ -7,7 +7,8 @@ export type AdminAuditAction =
   | "card.verify"
   | "card.revoke"
   | "card.delete"
-  | "card.dns_check";
+  | "card.dns_check"
+  | "user.plan";
 
 export async function logAdminAction(
   action: AdminAuditAction,
