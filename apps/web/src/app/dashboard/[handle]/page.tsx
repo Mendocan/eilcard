@@ -7,6 +7,7 @@ import Link from "next/link";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 import { VerifyPanel } from "./verify-panel";
+import { DiscoveryPanel } from "./discovery-panel";
 
 interface Props {
   params: Promise<{ handle: string }>;
@@ -136,6 +137,13 @@ export default async function CardDetailPage({ params }: Props) {
             m={d}
           />
         </section>
+
+        <DiscoveryPanel
+          handle={card.handle}
+          domain={card.domain}
+          appUrl={appUrl ?? "https://eilcard.com"}
+          m={d}
+        />
       </div>
     </div>
   );

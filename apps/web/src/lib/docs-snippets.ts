@@ -14,7 +14,7 @@ console.log(card.verified)
 console.log(meta.source)`,
     curlResolve: `curl "${registry}/api/v1/resolve?domain=example.com"`,
     curlHandle: `curl "${registry}/api/v1/cards/your-handle"`,
-    wellKnown: `curl "https://example.com/.well-known/digital-card"`,
+    wellKnown: `curl "${registry}/api/v1/well-known?domain=example.com"`,
     dnsTxt: "_digital-card.example.com TXT",
   };
 }
