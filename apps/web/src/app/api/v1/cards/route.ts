@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
   }
 
   const ip = getClientIp(request);
-  const createLimit = await checkRateLimit(
+  const createLimit = checkRateLimit(
     `card-create:${session.user.id}:${ip}`,
     RATE_LIMITS.cardCreate.limit,
     RATE_LIMITS.cardCreate.windowMs

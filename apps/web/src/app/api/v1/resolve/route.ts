@@ -15,7 +15,7 @@ import { checkResolveQuota } from "@/lib/resolve-quota";
 
 export async function GET(request: NextRequest) {
   const ip = getClientIp(request);
-  const ipLimit = await checkRateLimit(
+  const ipLimit = checkRateLimit(
     `resolve:ip:${ip}`,
     RATE_LIMITS.resolvePerIp.limit,
     RATE_LIMITS.resolvePerIp.windowMs

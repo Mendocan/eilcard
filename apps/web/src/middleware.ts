@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getClientIp } from "@/lib/client-ip";
 import {
-  checkRateLimitSync,
+  checkRateLimit,
   rateLimitResponse,
   RATE_LIMITS,
 } from "@/lib/rate-limit";
@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
 
     if (path.startsWith("/api/auth")) {
-      const result = checkRateLimitSync(
+      const result = checkRateLimit(
         `auth:${ip}`,
         RATE_LIMITS.auth.limit,
         RATE_LIMITS.auth.windowMs
@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
     }
 
     if (path === "/api/admin/login") {
-      const result = checkRateLimitSync(
+      const result = checkRateLimit(
         `admin-login:${ip}`,
         RATE_LIMITS.adminLogin.limit,
         RATE_LIMITS.adminLogin.windowMs

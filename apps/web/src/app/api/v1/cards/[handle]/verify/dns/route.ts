@@ -25,7 +25,7 @@ export async function POST(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const dnsLimit = await checkRateLimit(
+  const dnsLimit = checkRateLimit(
     `dns-verify:${session.user.id}`,
     RATE_LIMITS.dnsVerify.limit,
     RATE_LIMITS.dnsVerify.windowMs

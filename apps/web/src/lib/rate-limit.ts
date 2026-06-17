@@ -7,61 +7,37 @@ export type RateLimitResult = {
   resetAt: number;
 };
 
-type MemoryBucket = {
+type Bucket = {
   count: number;
   resetAt: number;
 };
 
-const memoryStore = new Map<string, MemoryBucket>();
+const store = new Map<string, Bucket>();
 
-type RedisLike = {
-  status: string;
-  connect(): Promise<void>;
-  incr(key: string): Promise<number>;
-  expire(key: string, seconds: number): Promise<number>;
-  ttl(key: string): Promise<number>;
-  on(event: string, listener: () => void): void;
-};
+const GC_INTERVAL = 60_000;
+let lastGc = Date.now();
 
-let redisClient: RedisLike | null = null;
-let redisUnavailable = false;
-
-async function getRedis(): Promise<RedisLike | null> {
-  if (redisUnavailable) return null;
-  const url = process.env.REDIS_URL;
-  if (!url) return null;
-
-  if (!redisClient) {
-    try {
-      const { default: Redis } = await import("ioredis");
-      redisClient = new Redis(url, {
-        maxRetriesPerRequest: 1,
-        enableOfflineQueue: false,
-        lazyConnect: true,
-      });
-      redisClient.on("error", () => {
-        redisUnavailable = true;
-      });
-    } catch {
-      redisUnavailable = true;
-      return null;
-    }
+function gc() {
+  const now = Date.now();
+  if (now - lastGc < GC_INTERVAL) return;
+  lastGc = now;
+  for (const [key, bucket] of store) {
+    if (bucket.resetAt <= now) store.delete(key);
   }
-
-  return redisClient;
 }
 
-function checkRateLimitMemory(
+export function checkRateLimit(
   key: string,
   limit: number,
   windowMs: number
 ): RateLimitResult {
+  gc();
   const now = Date.now();
-  const bucket = memoryStore.get(key);
+  const bucket = store.get(key);
 
   if (!bucket || bucket.resetAt <= now) {
     const resetAt = now + windowMs;
-    memoryStore.set(key, { count: 1, resetAt });
+    store.set(key, { count: 1, resetAt });
     return { success: true, limit, remaining: limit - 1, resetAt };
   }
 
@@ -75,64 +51,6 @@ function checkRateLimitMemory(
   };
 }
 
-async function checkRateLimitRedis(
-  key: string,
-  limit: number,
-  windowMs: number
-): Promise<RateLimitResult> {
-  const redis = await getRedis();
-  if (!redis) {
-    return checkRateLimitMemory(key, limit, windowMs);
-  }
-
-  const windowSec = Math.max(1, Math.ceil(windowMs / 1000));
-  const now = Date.now();
-  const windowKey = `rl:${key}:${Math.floor(now / windowMs)}`;
-
-  try {
-    if (redis.status !== "ready") {
-      await redis.connect();
-    }
-
-    const count = await redis.incr(windowKey);
-    if (count === 1) {
-      await redis.expire(windowKey, windowSec);
-    }
-
-    const ttl = await redis.ttl(windowKey);
-    const resetAt = now + (ttl > 0 ? ttl * 1000 : windowMs);
-
-    return {
-      success: count <= limit,
-      limit,
-      remaining: Math.max(0, limit - count),
-      resetAt,
-    };
-  } catch {
-    redisUnavailable = true;
-    return checkRateLimitMemory(key, limit, windowMs);
-  }
-}
-
-export async function checkRateLimit(
-  key: string,
-  limit: number,
-  windowMs: number
-): Promise<RateLimitResult> {
-  if (process.env.REDIS_URL && !redisUnavailable) {
-    return checkRateLimitRedis(key, limit, windowMs);
-  }
-  return checkRateLimitMemory(key, limit, windowMs);
-}
-
-export function checkRateLimitSync(
-  key: string,
-  limit: number,
-  windowMs: number
-): RateLimitResult {
-  return checkRateLimitMemory(key, limit, windowMs);
-}
-
 export function rateLimitResponse(result: RateLimitResult): NextResponse {
   const retryAfterSec = Math.max(
     1,
@@ -140,10 +58,7 @@ export function rateLimitResponse(result: RateLimitResult): NextResponse {
   );
 
   return NextResponse.json(
-    {
-      error: "Too many requests",
-      retry_after: retryAfterSec,
-    },
+    { error: "Too many requests", retry_after: retryAfterSec },
     {
       status: 429,
       headers: {
