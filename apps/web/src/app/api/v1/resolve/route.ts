@@ -5,8 +5,25 @@ import {
   buildCardJson,
   incrementResolveCount,
 } from "@/lib/card-service";
+import { getClientIp } from "@/lib/client-ip";
+import {
+  checkRateLimit,
+  rateLimitResponse,
+  RATE_LIMITS,
+} from "@/lib/rate-limit";
+import { checkResolveQuota } from "@/lib/resolve-quota";
 
 export async function GET(request: NextRequest) {
+  const ip = getClientIp(request);
+  const ipLimit = await checkRateLimit(
+    `resolve:ip:${ip}`,
+    RATE_LIMITS.resolvePerIp.limit,
+    RATE_LIMITS.resolvePerIp.windowMs
+  );
+  if (!ipLimit.success) {
+    return rateLimitResponse(ipLimit);
+  }
+
   const { searchParams } = request.nextUrl;
   const domain = searchParams.get("domain");
   const handle = searchParams.get("handle");
@@ -24,6 +41,25 @@ export async function GET(request: NextRequest) {
 
   if (!row) {
     return NextResponse.json({ error: "Card not found" }, { status: 404 });
+  }
+
+  const quota = await checkResolveQuota(row.id, row.userId);
+  if (quota.exceeded) {
+    return NextResponse.json(
+      {
+        error: "Monthly resolve quota exceeded for this card",
+        limit: quota.limit,
+        used: quota.used,
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": "86400",
+          "X-RateLimit-Limit": String(quota.limit),
+          "X-RateLimit-Remaining": "0",
+        },
+      }
+    );
   }
 
   const card = buildCardJson(row);

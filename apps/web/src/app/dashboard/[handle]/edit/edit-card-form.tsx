@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Messages } from "@/lib/i18n/messages";
+import { PublicDataNotice } from "@/components/public-data-notice";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]";
@@ -167,6 +168,11 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <p className="text-sm text-[var(--color-text-muted)]">{m.editCardSubtitle}</p>
+
+      <PublicDataNotice
+        title={m.publicDataNoticeTitle}
+        body={m.publicDataNoticeBody}
+      />
 
       {initial.type === "organization" ? (
         <>

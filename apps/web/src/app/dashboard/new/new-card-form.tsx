@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Messages } from "@/lib/i18n/messages";
+import { PublicDataNotice } from "@/components/public-data-notice";
 
 type Props = {
   m: Messages["dashboard"];
@@ -94,7 +95,12 @@ export function NewCardForm({ m, maxOrgCards, atCardLimit }: Props) {
     <div className="mx-auto max-w-lg">
       <h1 className="mb-6 text-2xl font-bold">{m.newCardTitle}</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <PublicDataNotice
+        title={m.publicDataNoticeTitle}
+        body={m.publicDataNoticeBody}
+      />
+
+      <form onSubmit={handleSubmit} className="mt-6 space-y-5">
         <div>
           <label className="mb-2 block text-sm font-medium">{m.cardType}</label>
           <div className="flex gap-3">

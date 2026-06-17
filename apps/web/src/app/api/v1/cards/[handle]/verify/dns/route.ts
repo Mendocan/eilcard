@@ -8,6 +8,11 @@ import {
   buildTxtRecord,
   verifyDnsTxt,
 } from "@/lib/dns-verify";
+import {
+  checkRateLimit,
+  rateLimitResponse,
+  RATE_LIMITS,
+} from "@/lib/rate-limit";
 
 export async function POST(
   request: NextRequest,
@@ -18,6 +23,15 @@ export async function POST(
     session = await requireSession();
   } catch {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const dnsLimit = await checkRateLimit(
+    `dns-verify:${session.user.id}`,
+    RATE_LIMITS.dnsVerify.limit,
+    RATE_LIMITS.dnsVerify.windowMs
+  );
+  if (!dnsLimit.success) {
+    return rateLimitResponse(dnsLimit);
   }
 
   const { handle } = await params;

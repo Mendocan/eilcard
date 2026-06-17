@@ -1,10 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCardByHandle, buildCardJson } from "@/lib/card-service";
+import {
+  getCardByHandle,
+  buildCardJson,
+  incrementResolveCount,
+} from "@/lib/card-service";
+import { getClientIp } from "@/lib/client-ip";
+import {
+  checkRateLimit,
+  rateLimitResponse,
+  RATE_LIMITS,
+} from "@/lib/rate-limit";
+import { checkResolveQuota } from "@/lib/resolve-quota";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ handle: string }> }
 ) {
+  const ip = getClientIp(request);
+  const ipLimit = await checkRateLimit(
+    `resolve:ip:${ip}`,
+    RATE_LIMITS.resolvePerIp.limit,
+    RATE_LIMITS.resolvePerIp.windowMs
+  );
+  if (!ipLimit.success) {
+    return rateLimitResponse(ipLimit);
+  }
+
   const { handle } = await params;
   const row = await getCardByHandle(handle);
 
@@ -12,7 +33,20 @@ export async function GET(
     return NextResponse.json({ error: "Card not found" }, { status: 404 });
   }
 
+  const quota = await checkResolveQuota(row.id, row.userId);
+  if (quota.exceeded) {
+    return NextResponse.json(
+      {
+        error: "Monthly resolve quota exceeded for this card",
+        limit: quota.limit,
+        used: quota.used,
+      },
+      { status: 429 }
+    );
+  }
+
   const card = buildCardJson(row);
+  incrementResolveCount(row.id).catch(() => {});
 
   return NextResponse.json(
     { card },

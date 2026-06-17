@@ -7,6 +7,12 @@ import {
   validateProductCount,
 } from "@/lib/user-plan";
 import { createCardSchema } from "@digitalcard/schema";
+import { getClientIp } from "@/lib/client-ip";
+import {
+  checkRateLimit,
+  rateLimitResponse,
+  RATE_LIMITS,
+} from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   let session;
@@ -14,6 +20,16 @@ export async function POST(request: NextRequest) {
     session = await requireSession();
   } catch {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const ip = getClientIp(request);
+  const createLimit = await checkRateLimit(
+    `card-create:${session.user.id}:${ip}`,
+    RATE_LIMITS.cardCreate.limit,
+    RATE_LIMITS.cardCreate.windowMs
+  );
+  if (!createLimit.success) {
+    return rateLimitResponse(createLimit);
   }
 
   const body = await request.json();

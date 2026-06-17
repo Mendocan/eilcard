@@ -23,6 +23,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 - [x] **LangChain `EILResolveTool`** — `packages/sdk/examples/langchain-eil-resolve-tool.ts` + `/docs/agents`
 - [x] **Python agent şablonları** — `packages/sdk/examples/python/` (resolve, `@tool`, agent loop) + `/docs/agents`
+- [x] **Güvenlik sertleştirme** — rate limit (Redis), security headers, resolve kotası, `security.txt`, panel public JSON uyarısı
 - [ ] **LlamaIndex `EILReader` (Data Connector)** — HTML scrape yerine resolve + well-known’dan temiz kurumsal JSON; RAG pipeline’a doğrudan besleme.
 - [ ] **MCP sunucusu** — `resolve_domain`, `get_card_by_handle` araçları (`kesif-stratejisi.md` Faz 3+ ile hizalı).
 

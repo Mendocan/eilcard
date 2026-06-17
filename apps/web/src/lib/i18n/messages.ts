@@ -451,6 +451,9 @@ const en = {
       "TXT record not found yet. DNS propagation may take a few minutes.",
     verifyFailed: "Could not start verification.",
     verifySuccess: "Verified!",
+    publicDataNoticeTitle: "Public JSON — read by anyone",
+    publicDataNoticeBody:
+      "Your card is published as open JSON via resolve() and /.well-known/digital-card. Do not store passwords, API keys, private tax IDs, or other secrets. Only include information you want agents and the public to read.",
     editCard: "Edit card",
     editCardTitle: "Edit card",
     editCardSubtitle: "Update public JSON for agents and the shareable card page.",
@@ -1082,6 +1085,9 @@ const tr: Messages = {
     verifyPending: "TXT kaydı henüz bulunamadı. DNS yayılması birkaç dakika sürebilir.",
     verifyFailed: "Doğrulama başlatılamadı.",
     verifySuccess: "Doğrulandı!",
+    publicDataNoticeTitle: "Herkese açık JSON — herkes okuyabilir",
+    publicDataNoticeBody:
+      "Kartınız resolve() ve /.well-known/digital-card ile açık JSON olarak yayınlanır. Şifre, API anahtarı, gizli vergi numarası veya diğer sırları eklemeyin. Yalnızca agent'ların ve kamunun okumasını istediğiniz bilgileri girin.",
     editCard: "Kartı düzenle",
     editCardTitle: "Kartı düzenle",
     editCardSubtitle:
