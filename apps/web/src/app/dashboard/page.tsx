@@ -3,6 +3,7 @@ import { getCardsByUserId } from "@/lib/card-service";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 import { getUserPlan } from "@/lib/user-plan";
+import { planTierLabel } from "@/lib/plan-labels";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -33,7 +34,9 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-2xl font-bold">{d.title}</h1>
           <p className="text-sm text-[var(--color-text-muted)]">{d.subtitle}</p>
-          <p className="mt-1 text-xs text-[var(--color-text-muted)]">{countLabel}</p>
+          <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+            {d.planLabel}: {planTierLabel(plan.tier, d)} · {countLabel}
+          </p>
         </div>
         {atLimit ? (
           <span className={disabledClass}>{d.newCard}</span>

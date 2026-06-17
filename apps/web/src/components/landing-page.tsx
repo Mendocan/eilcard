@@ -84,6 +84,34 @@ export function LandingPage({ locale, m }: Props) {
         </div>
       </section>
 
+      {/* Why agents */}
+      <section className="border-y border-[var(--color-border)] bg-[var(--color-surface)]/20">
+        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+          <h2 className="mb-8 max-w-2xl text-2xl font-semibold tracking-tight">
+            {m.whyAgents.title}
+          </h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            {m.whyAgents.items.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)]/40 p-6"
+              >
+                <h3 className="mb-2 font-semibold">{item.title}</h3>
+                <p className="text-sm leading-relaxed text-[var(--color-text-muted)]">
+                  {item.body}
+                </p>
+              </div>
+            ))}
+          </div>
+          <Link
+            href="/insights/ai-agent-field-note"
+            className="mt-8 inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
+          >
+            {m.whyAgents.fieldNoteLink}
+          </Link>
+        </div>
+      </section>
+
       {/* SSL vs EIL */}
       <section className="border-y border-[var(--color-border)] bg-[var(--color-surface)]/30">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">

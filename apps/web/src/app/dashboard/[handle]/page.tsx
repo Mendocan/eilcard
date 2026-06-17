@@ -4,6 +4,8 @@ import { cards, resolveEvents } from "@/lib/db/schema";
 import { eq, and, sql } from "drizzle-orm";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
 import { VerifyPanel } from "./verify-panel";
 
 interface Props {
@@ -14,6 +16,8 @@ export default async function CardDetailPage({ params }: Props) {
   const session = await getSession();
   if (!session) redirect("/login");
 
+  const locale = await getLocale();
+  const d = t(locale).dashboard;
   const { handle } = await params;
 
   const [card] = await db
@@ -44,19 +48,17 @@ export default async function CardDetailPage({ params }: Props) {
         href="/dashboard"
         className="mb-4 inline-block text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
       >
-        ← Kartlarım
+        {d.backToCards}
       </Link>
 
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">{name ?? card.handle}</h1>
-          <p className="text-sm text-[var(--color-text-muted)]">
-            @{card.handle}
-          </p>
+          <p className="text-sm text-[var(--color-text-muted)]">@{card.handle}</p>
         </div>
         {card.verified && (
           <span className="inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300">
-            Doğrulanmış
+            {d.verified}
           </span>
         )}
       </div>
@@ -64,13 +66,13 @@ export default async function CardDetailPage({ params }: Props) {
       <div className="grid gap-5 sm:grid-cols-2">
         <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
-            QR Kod
+            {d.qrCode}
           </h2>
           <div className="flex justify-center rounded-lg bg-white p-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`/api/v1/cards/${card.handle}/qr`}
-              alt="QR kod"
+              alt={d.qrCode}
               width={180}
               height={180}
             />
@@ -79,17 +81,15 @@ export default async function CardDetailPage({ params }: Props) {
 
         <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
-            İstatistik
+            {d.stats}
           </h2>
           <p className="text-3xl font-bold">{Number(stats?.total ?? 0)}</p>
-          <p className="text-sm text-[var(--color-text-muted)]">
-            toplam resolve
-          </p>
+          <p className="text-sm text-[var(--color-text-muted)]">{d.totalResolves}</p>
         </section>
 
         <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 sm:col-span-2">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
-            Paylaşılabilir Link
+            {d.shareLink}
           </h2>
           <div className="flex flex-wrap gap-2">
             <a
@@ -106,25 +106,26 @@ export default async function CardDetailPage({ params }: Props) {
               href={`/api/v1/cards/${card.handle}`}
               className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
             >
-              JSON
+              {d.json}
             </Link>
             <Link
               href={`/api/v1/cards/${card.handle}/vcard`}
               className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
             >
-              vCard
+              {d.vcard}
             </Link>
           </div>
         </section>
 
         <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 sm:col-span-2">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
-            Domain Doğrulama
+            {d.domainVerification}
           </h2>
           <VerifyPanel
             handle={card.handle}
             domain={card.domain}
             verified={card.verified}
+            m={d}
           />
         </section>
       </div>

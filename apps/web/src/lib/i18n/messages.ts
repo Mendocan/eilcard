@@ -95,6 +95,7 @@ const en = {
     tagline: "Entity identity for machines — not user login.",
     product: "EIL Card",
     about: "About",
+    insights: "Insights",
     github: "GitHub",
     copyright: "© 2026 EIL Card",
   },
@@ -126,6 +127,66 @@ const en = {
       "We do not publish a public support email. Use GitHub Issues on the project repository for bugs, ideas, and integration questions.",
     backHome: "← Back to home",
   },
+  whyAgents: {
+    title: "Why agents need a verified layer",
+    items: [
+      {
+        title: "Stop guessing from HTML",
+        body: "Agents today scrape pages and hallucinate phones, addresses, and entity names. EIL returns one domain-bound JSON record via resolve() — in milliseconds.",
+      },
+      {
+        title: "Beyond SEO snippets",
+        body: "Search snippets optimize for humans, not machines. Verified entity identity replaces keyword games with a canonical trust signal: verified: true.",
+      },
+      {
+        title: "SSL secures the pipe. EIL certifies meaning.",
+        body: "TLS proves the connection is authentic. EIL proves who stands behind the domain — using DNS TXT and RFC 8615 /.well-known/ standards agents already trust.",
+      },
+    ],
+    fieldNoteLink: "Read the AI agent field note →",
+  },
+  fieldNote: {
+    metaTitle: "AI Agent Field Note — EIL Card",
+    metaDescription:
+      "What happens when an AI agent tries to understand eilcard.com — noise, correction, and why verified entity identity matters.",
+    eyebrow: "Insights",
+    title: "When an AI agent met EIL Card",
+    subtitle: "A field note on noise, correction, and verified entity identity",
+    intro:
+      "In a live conversation with Google AI Mode, the model first misread eilcard.com as a payment or phishing site — then, after the prompt was corrected, understood EIL as infrastructure for the agent web. This note captures that arc and what it means for builders.",
+    sections: [
+      {
+        title: "1. First read: noise wins",
+        body: "The word “card” triggered banking and fraud templates. Without a verified entity layer, the model reached for the loudest pattern in training data — not the actual product. That is exactly the problem EIL is built to solve.",
+        quote:
+          "The domain was treated like an unknown financial site before the Entity Identity Layer context was provided.",
+      },
+      {
+        title: "2. Corrected read: infrastructure, not payments",
+        body: "Once the request was read correctly, the model classified EIL as domain-attested, agent-native identity — not SSO, not a business card app, not a bank product. A single canonical JSON record replaces HTML scraping for “who is this entity?”",
+        quote:
+          "Agents call resolve() instead of parsing megabytes of HTML, JavaScript, and ads.",
+      },
+      {
+        title: "3. Trust boundary for the agent web",
+        body: "Verified records let agents distinguish an official organization from a lookalike domain opened minutes ago. DNS TXT and /.well-known/digital-card provide a protocol-level trust boundary — similar to how TLS secures transport, EIL certifies meaning.",
+        quote:
+          "SSL secures the pipe. EIL certifies who is behind the domain.",
+      },
+      {
+        title: "4. Less scraping, less compute",
+        body: "Every unnecessary crawl and cross-check burns GPU cycles. A few bytes of verified JSON reduce data transfer, reasoning load, and hallucination risk — a structural efficiency gain, not just a UX improvement.",
+        quote:
+          "Clean, verified data at the source is cheaper for agents to consume than the open web.",
+      },
+    ],
+    takeawayTitle: "Takeaway",
+    takeaway:
+      "If even a state-of-the-art AI assistant misreads a new infrastructure product at first glance, the agent web needs a verified entity layer. EIL Card is that layer — starting with registry + well-known discovery today.",
+    ctaPrimary: "Create your card",
+    ctaSecondary: "View on GitHub",
+    backHome: "← Back to home",
+  },
   dashboard: {
     title: "My cards",
     subtitle: "Manage your digital cards.",
@@ -142,6 +203,40 @@ const en = {
     planFree: "Free",
     planVerified: "Verified",
     planPro: "Pro",
+    signOut: "Sign out",
+    planLabel: "Plan",
+    backToCards: "← My cards",
+    qrCode: "QR code",
+    stats: "Statistics",
+    totalResolves: "total resolves",
+    shareLink: "Shareable link",
+    domainVerification: "Domain verification",
+    json: "JSON",
+    vcard: "vCard",
+    newCardTitle: "New card",
+    cardType: "Card type",
+    handleLabel: "Handle",
+    officialName: "Official name *",
+    shortName: "Short name",
+    fullName: "Full name *",
+    tagline: "Tagline",
+    contact: "Contact",
+    domainOptional: "Domain (optional)",
+    creating: "Creating...",
+    createFailed: "Could not create card.",
+    limitReached: "Plan limit reached.",
+    orgNotAllowed: "Organization cards are not available on the Free plan.",
+    verifyNoDomain: "Add a domain to the card to verify.",
+    verifyDone: "{domain} is verified.",
+    verifyDomain: "Domain",
+    verifyTxtLabel: "TXT record:",
+    verifyStart: "Generate TXT record",
+    verifyCheck: "Check DNS",
+    verifyStartHint: "Add the TXT record to your domain DNS, then check.",
+    verifyPending:
+      "TXT record not found yet. DNS propagation may take a few minutes.",
+    verifyFailed: "Could not start verification.",
+    verifySuccess: "Verified!",
   },
   admin: {
     title: "Admin",
@@ -344,6 +439,7 @@ const tr: Messages = {
     tagline: "Makine kimliği — kullanıcı girişi değil.",
     product: "EIL Card",
     about: "Hakkında",
+    insights: "İçgörüler",
     github: "GitHub",
     copyright: "© 2026 EIL Card",
   },
@@ -375,6 +471,66 @@ const tr: Messages = {
       "Herkese açık destek e-postası yayınlamıyoruz. Hata, fikir ve entegrasyon soruları için GitHub Issues kullanın.",
     backHome: "← Ana sayfaya dön",
   },
+  whyAgents: {
+    title: "Agent'lar neden doğrulanmış bir katmana ihtiyaç duyar",
+    items: [
+      {
+        title: "HTML'den tahmin etmeyi bırakın",
+        body: "Agent'lar bugün sayfaları tarayıp telefon, adres ve kurum adını halüsinasyonla üretiyor. EIL, resolve() ile tek bir domain'e bağlı JSON kaydı döner — milisaniyeler içinde.",
+      },
+      {
+        title: "SEO snippet'lerinin ötesinde",
+        body: "Arama snippet'leri insanlar için optimize edilir, makineler için değil. Doğrulanmış varlık kimliği, anahtar kelime oyunlarının yerine canonical bir güven sinyali sunar: verified: true.",
+      },
+      {
+        title: "SSL boruyu güvence altına alır. EIL anlamı sertifikalar.",
+        body: "TLS bağlantının özgün olduğunu kanıtlar. EIL, domain'in arkasındaki kurumu kanıtlar — agent'ların zaten güvendiği DNS TXT ve RFC 8615 /.well-known/ standartlarıyla.",
+      },
+    ],
+    fieldNoteLink: "AI agent field note'u okuyun →",
+  },
+  fieldNote: {
+    metaTitle: "AI Agent Field Note — EIL Card",
+    metaDescription:
+      "Bir AI agent eilcard.com'u okumaya çalıştığında ne olur — gürültü, düzeltme ve doğrulanmış kimlik neden önemli.",
+    eyebrow: "İçgörüler",
+    title: "Bir AI agent EIL Card ile karşılaştığında",
+    subtitle: "Gürültü, düzeltme ve doğrulanmış varlık kimliği üzerine bir field note",
+    intro:
+      "Google AI Mode ile yapılan canlı bir sohbette model önce eilcard.com'u ödeme veya oltalama sitesi sandı — istem düzeltildikten sonra EIL'ı agent web'i için altyapı olarak sınıflandırdı. Bu not, o süreci ve geliştiriciler için anlamını özetler.",
+    sections: [
+      {
+        title: "1. İlk okuma: gürültü kazanır",
+        body: "“Card” kelimesi bankacılık ve dolandırıcılık şablonlarını tetikledi. Doğrulanmış bir varlık katmanı olmadan model, gerçek ürün yerine eğitim verisindeki en gürültülü kalıba uzandı. EIL tam da bu sorunu çözmek için var.",
+        quote:
+          "Entity Identity Layer bağlamı verilmeden önce domain bilinmeyen bir finans sitesi gibi okundu.",
+      },
+      {
+        title: "2. Düzeltilmiş okuma: altyapı, ödeme değil",
+        body: "İstem doğru okununca model EIL'ı domain onaylı, agent-native kimlik olarak sınıflandırdı — SSO değil, kartvizit uygulaması değil, banka ürünü değil. “Bu kurum kim?” sorusu için tek canonical JSON, HTML taramanın yerini alır.",
+        quote:
+          "Agent'lar megabaytlarca HTML, JavaScript ve reklam parse etmek yerine resolve() çağırır.",
+      },
+      {
+        title: "3. Agent web için güven sınırı",
+        body: "Doğrulanmış kayıtlar, agent'ların resmi kurumu dakikalar önce açılmış benzer bir domain'den ayırt etmesini sağlar. DNS TXT ve /.well-known/digital-card, TLS'in taşımayı güvence altına aldığı gibi anlamı sertifikalandırır.",
+        quote:
+          "SSL boruyu güvence altına alır. EIL domain'in arkasındaki kurumu sertifikalar.",
+      },
+      {
+        title: "4. Daha az tarama, daha az compute",
+        body: "Her gereksiz crawl ve çapraz kontrol GPU döngüsü yakar. Birkaç baytlık doğrulanmış JSON; veri trafiğini, akıl yürütme yükünü ve halüsinasyon riskini azaltır — yalnızca UX değil, yapısal verimlilik.",
+        quote:
+          "Kaynağında temiz, doğrulanmış veri agent'lar için açık web'den daha ucuzdur.",
+      },
+    ],
+    takeawayTitle: "Sonuç",
+    takeaway:
+      "En güncel bir AI asistanı bile yeni bir altyapı ürününü ilk bakışta yanlış okuyabiliyorsa, agent web'in doğrulanmış bir varlık katmanına ihtiyacı var. EIL Card bu katman — bugün registry + well-known keşifle başlıyor.",
+    ctaPrimary: "Kartınızı oluşturun",
+    ctaSecondary: "GitHub'da görün",
+    backHome: "← Ana sayfaya dön",
+  },
   dashboard: {
     title: "Kartlarım",
     subtitle: "Dijital kartlarınızı yönetin.",
@@ -391,6 +547,39 @@ const tr: Messages = {
     planFree: "Ücretsiz",
     planVerified: "Verified",
     planPro: "Pro",
+    signOut: "Çıkış",
+    planLabel: "Plan",
+    backToCards: "← Kartlarım",
+    qrCode: "QR kod",
+    stats: "İstatistik",
+    totalResolves: "toplam resolve",
+    shareLink: "Paylaşılabilir link",
+    domainVerification: "Domain doğrulama",
+    json: "JSON",
+    vcard: "vCard",
+    newCardTitle: "Yeni Kart",
+    cardType: "Kart tipi",
+    handleLabel: "Handle",
+    officialName: "Resmi ad *",
+    shortName: "Kısa ad",
+    fullName: "Ad soyad *",
+    tagline: "Tagline",
+    contact: "İletişim",
+    domainOptional: "Domain (opsiyonel)",
+    creating: "Oluşturuluyor...",
+    createFailed: "Kart oluşturulamadı.",
+    limitReached: "Plan limitine ulaşıldı.",
+    orgNotAllowed: "Ücretsiz planda kurum kartı oluşturulamaz.",
+    verifyNoDomain: "Doğrulama için karta bir domain ekleyin.",
+    verifyDone: "{domain} doğrulandı.",
+    verifyDomain: "Domain",
+    verifyTxtLabel: "TXT kaydı:",
+    verifyStart: "TXT kaydı oluştur",
+    verifyCheck: "DNS kontrol et",
+    verifyStartHint: "TXT kaydını domain DNS ayarlarınıza ekleyin, sonra kontrol edin.",
+    verifyPending: "TXT kaydı henüz bulunamadı. DNS yayılması birkaç dakika sürebilir.",
+    verifyFailed: "Doğrulama başlatılamadı.",
+    verifySuccess: "Doğrulandı!",
   },
   admin: {
     title: "Admin",
