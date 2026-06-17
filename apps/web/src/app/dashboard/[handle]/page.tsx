@@ -51,16 +51,24 @@ export default async function CardDetailPage({ params }: Props) {
         {d.backToCards}
       </Link>
 
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{name ?? card.handle}</h1>
           <p className="text-sm text-[var(--color-text-muted)]">@{card.handle}</p>
         </div>
-        {card.verified && (
-          <span className="inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300">
-            {d.verified}
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/dashboard/${card.handle}/edit`}
+            className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium transition hover:bg-[var(--color-bg)]"
+          >
+            {d.editCard}
+          </Link>
+          {card.verified && (
+            <span className="inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300">
+              {d.verified}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">

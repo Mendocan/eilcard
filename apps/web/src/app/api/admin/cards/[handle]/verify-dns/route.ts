@@ -47,11 +47,15 @@ export async function POST(request: Request, { params }: Params) {
       .set({ status: "verified", verifiedAt: new Date() })
       .where(eq(domainVerifications.id, pending.id));
 
+    const methods = Array.from(
+      new Set([...(card.verificationMethod ?? []), "dns"])
+    );
+
     await db
       .update(cards)
       .set({
         verified: true,
-        verificationMethod: [...card.verificationMethod, "dns"],
+        verificationMethod: methods,
         updatedAt: new Date(),
       })
       .where(eq(cards.id, card.id));

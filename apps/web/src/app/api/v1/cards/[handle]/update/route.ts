@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { cards } from "@/lib/db/schema";
+import { mergeCardBody } from "@/lib/card-service";
 import { requireSession } from "@/lib/session";
+import { getUserTierLimits, validateProductCount } from "@/lib/user-plan";
+import {
+  patchOrganizationCardSchema,
+  patchPersonCardSchema,
+} from "@digitalcard/schema";
 import { eq, and } from "drizzle-orm";
 
 export async function PATCH(
@@ -16,7 +22,7 @@ export async function PATCH(
   }
 
   const { handle } = await params;
-  const body = await request.json();
+  const raw = await request.json();
 
   const [existing] = await db
     .select()
@@ -28,13 +34,46 @@ export async function PATCH(
     return NextResponse.json({ error: "Card not found" }, { status: 404 });
   }
 
+  const schema =
+    existing.type === "organization"
+      ? patchOrganizationCardSchema
+      : patchPersonCardSchema;
+
+  const parsed = schema.safeParse(raw);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Validation failed", issues: parsed.error.flatten() },
+      { status: 400 }
+    );
+  }
+
+  const { domain, ...updates } = parsed.data;
+
+  if (
+    existing.type === "organization" &&
+    "products" in updates &&
+    updates.products
+  ) {
+    const { limits } = await getUserTierLimits(session.user.id);
+    if (!validateProductCount(updates.products.length, limits)) {
+      return NextResponse.json(
+        {
+          error: "Product limit reached",
+          limit: limits.maxProducts,
+          count: updates.products.length,
+        },
+        { status: 403 }
+      );
+    }
+  }
+
   const currentBody = existing.body as Record<string, unknown>;
-  const { domain, ...updates } = body;
+  const nextBody = mergeCardBody(currentBody, updates as Record<string, unknown>);
 
   const [updated] = await db
     .update(cards)
     .set({
-      body: { ...currentBody, ...updates },
+      body: nextBody,
       domain: domain !== undefined ? domain : existing.domain,
       updatedAt: new Date(),
     })

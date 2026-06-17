@@ -48,6 +48,13 @@ export default async function CardPage({ params }: Props) {
 
   const tagline =
     (body.description as { tagline?: string })?.tagline ?? undefined;
+  const summary =
+    (body.description as { summary?: string })?.summary ?? undefined;
+  const products =
+    card.type === "organization"
+      ? ((body.products as Array<{ name: string; description?: string; url?: string }>) ??
+        [])
+      : [];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -83,7 +90,35 @@ export default async function CardPage({ params }: Props) {
                 {tagline}
               </p>
             )}
+            {summary && (
+              <p className="mt-3 text-left text-sm leading-relaxed text-[var(--color-text-muted)]">
+                {summary}
+              </p>
+            )}
           </div>
+
+          {products.length > 0 && (
+            <div className="mb-6 space-y-2">
+              <p className="text-xs font-medium uppercase tracking-wider text-[var(--color-text-muted)]">
+                Ürünler
+              </p>
+              <ul className="space-y-2">
+                {products.map((product) => (
+                  <li
+                    key={product.name}
+                    className="rounded-lg border border-[var(--color-border)] px-4 py-3 text-sm"
+                  >
+                    <p className="font-medium">{product.name}</p>
+                    {product.description && (
+                      <p className="mt-1 text-[var(--color-text-muted)]">
+                        {product.description}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="space-y-3">
             {contact.email && (

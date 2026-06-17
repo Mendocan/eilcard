@@ -19,6 +19,8 @@ export {
   createOrganizationCardSchema,
   createPersonCardSchema,
   createCardSchema,
+  patchOrganizationCardSchema,
+  patchPersonCardSchema,
 } from "./card";
 
 export type {

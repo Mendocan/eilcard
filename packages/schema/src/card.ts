@@ -194,3 +194,30 @@ export const createCardSchema = z.discriminatedUnion("type", [
   createOrganizationCardSchema,
   createPersonCardSchema,
 ]);
+
+// --- Patch schemas (dashboard edit -> API body) ---
+
+export const patchOrganizationCardSchema = z.object({
+  domain: z.string().max(253).optional(),
+  name: organizationNameSchema.partial().optional(),
+  contact: contactSchema.partial().optional(),
+  description: descriptionSchema.optional(),
+  legal: legalSchema.optional(),
+  products: z.array(productSchema).max(50).optional(),
+  apps: appsSchema.optional(),
+  logo_url: z.string().url().optional(),
+  actions: z.array(cardActionSchema).max(20).optional(),
+  same_as: z.array(z.string().url()).max(20).optional(),
+});
+
+export const patchPersonCardSchema = z.object({
+  domain: z.string().max(253).optional(),
+  name: personNameSchema.partial().optional(),
+  contact: contactSchema.partial().optional(),
+  description: descriptionSchema.optional(),
+  organization_ref: z.string().max(100).optional(),
+  modes: z.array(cardModeSchema).max(10).optional(),
+  photo_url: z.string().url().optional(),
+  actions: z.array(cardActionSchema).max(20).optional(),
+  same_as: z.array(z.string().url()).max(20).optional(),
+});

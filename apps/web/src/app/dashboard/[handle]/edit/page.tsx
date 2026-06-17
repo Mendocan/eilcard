@@ -1,0 +1,105 @@
+import Link from "next/link";
+import { and, eq } from "drizzle-orm";
+import { notFound, redirect } from "next/navigation";
+import { db } from "@/lib/db";
+import { cards } from "@/lib/db/schema";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
+import { getSession } from "@/lib/session";
+import { getUserTierLimits } from "@/lib/user-plan";
+import { EditCardForm } from "./edit-card-form";
+
+interface Props {
+  params: Promise<{ handle: string }>;
+}
+
+export default async function EditCardPage({ params }: Props) {
+  const session = await getSession();
+  if (!session) redirect("/login");
+
+  const locale = await getLocale();
+  const d = t(locale).dashboard;
+  const { handle } = await params;
+
+  const [card] = await db
+    .select()
+    .from(cards)
+    .where(and(eq(cards.handle, handle), eq(cards.userId, session.user.id)))
+    .limit(1);
+
+  if (!card) notFound();
+
+  const { limits } = await getUserTierLimits(session.user.id);
+  const body = card.body as Record<string, unknown>;
+  const contact = (body.contact ?? {}) as {
+    email?: string;
+    phone?: string;
+    website?: string;
+  };
+  const description = (body.description ?? {}) as {
+    tagline?: string;
+    summary?: string;
+  };
+  const sameAs = (body.same_as as string[] | undefined) ?? [];
+  const products =
+    card.type === "organization"
+      ? ((body.products as Array<{
+          id: string;
+          name: string;
+          description?: string;
+          url?: string;
+        }>) ?? []).map((p) => ({
+          id: p.id,
+          name: p.name,
+          description: p.description ?? "",
+          url: p.url ?? "",
+        }))
+      : [];
+
+  const initial =
+    card.type === "organization"
+      ? {
+          type: "organization" as const,
+          nameOfficial: (body.name as { official?: string })?.official ?? "",
+          nameShort: (body.name as { short?: string })?.short ?? "",
+          tagline: description.tagline ?? "",
+          summary: description.summary ?? "",
+          email: contact.email ?? "",
+          phone: contact.phone ?? "",
+          website: contact.website ?? "",
+          domain: card.domain ?? "",
+          products,
+          sameAsText: sameAs.join("\n"),
+        }
+      : {
+          type: "person" as const,
+          nameFull: (body.name as { full?: string })?.full ?? "",
+          tagline: description.tagline ?? "",
+          summary: description.summary ?? "",
+          email: contact.email ?? "",
+          phone: contact.phone ?? "",
+          website: contact.website ?? "",
+          domain: card.domain ?? "",
+          sameAsText: sameAs.join("\n"),
+        };
+
+  return (
+    <div className="mx-auto max-w-2xl">
+      <Link
+        href={`/dashboard/${handle}`}
+        className="mb-4 inline-block text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+      >
+        ← @{handle}
+      </Link>
+      <h1 className="text-2xl font-bold">{d.editCardTitle}</h1>
+      <div className="mt-8">
+        <EditCardForm
+          handle={handle}
+          initial={initial}
+          maxProducts={limits.maxProducts}
+          m={d}
+        />
+      </div>
+    </div>
+  );
+}
