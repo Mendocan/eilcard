@@ -59,6 +59,10 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 ## Uzun vade — Standart ve ekosistem
 
+### Ekip / Açık Kaynak hazırlığı
+
+- [ ] **Branch protection rules** — Ekip büyüdüğünde veya açık kaynak katkılar başladığında `main` branch'i korumaya al. GitHub → Settings → Branch protection rules → Require PR + review zorunluluğu ekle.
+
 - [ ] IANA `/.well-known/digital-card` kaydı
 - [ ] Federated registry / mesh değerlendirmesi
 - [ ] Büyük AI sağlayıcılarına resmi entegrasyon başvurusu (OpenAPI + pilot metriklerle)

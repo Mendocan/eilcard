@@ -5,7 +5,7 @@ import { CodeSnippet } from "@/components/code-snippet";
 import { SiteFooter } from "@/components/site-footer";
 import type { Messages } from "@/lib/i18n/messages";
 import { GitHubIcon } from "@/components/icons/github-icon";
-import { SiteHeader } from "@/components/site-header";
+import { SiteNav } from "@/components/site-header";
 import type { Locale } from "@/lib/i18n/types";
 
 const GITHUB_URL =
@@ -28,14 +28,16 @@ type Props = {
 export function LandingPage({ locale, m }: Props) {
   return (
     <div className="min-h-screen">
-      <SiteHeader locale={locale} m={m.nav} />
-
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-[var(--color-border)]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(99,102,241,0.18),transparent)]" />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
 
-        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+        <div className="relative">
+          <SiteNav locale={locale} m={m.nav} />
+        </div>
+
+        <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-8 sm:px-6 sm:pb-28 sm:pt-12">
           <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-accent)]">
             {m.hero.eyebrow}
           </p>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
+import { SiteNav } from "@/components/site-header";
 import { GitHubIcon } from "@/components/icons/github-icon";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
@@ -25,7 +25,7 @@ export default async function FieldNotePage() {
 
   return (
     <div className="min-h-screen">
-      <SiteHeader locale={locale} m={m.nav} />
+      <SiteNav locale={locale} m={m.nav} />
 
       <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-accent)]">

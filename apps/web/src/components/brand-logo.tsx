@@ -15,6 +15,7 @@ export function BrandLogo({ size = 32, showWordmark = false, className }: Props)
         width={size}
         height={size}
         className="rounded-lg object-contain"
+        unoptimized
         priority
       />
       {showWordmark && (
