@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { CodeSnippet } from "@/components/code-snippet";
 import { SiteFooter } from "@/components/site-footer";
 import type { Messages } from "@/lib/i18n/messages";
@@ -29,40 +30,58 @@ export function LandingPage({ locale, m }: Props) {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-[var(--color-border)]">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(99,102,241,0.18),transparent)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+      <section className="relative border-b border-[var(--color-border)]">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(99,102,241,0.18),transparent)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--hero-grid-line)_1px,transparent_1px),linear-gradient(to_bottom,var(--hero-grid-line)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+        </div>
 
         <div className="relative">
           <SiteNav locale={locale} m={m.nav} />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-8 sm:px-6 sm:pb-28 sm:pt-12">
-          <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-accent)]">
-            {m.hero.eyebrow}
-          </p>
-          <h1 className="max-w-none text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl lg:whitespace-nowrap">
-            {m.hero.title}
-          </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-[var(--color-text-muted)]">
-            {m.hero.subtitle}
-          </p>
-          <div className="mt-10 flex flex-wrap gap-3">
-            <Link
-              href="/register"
-              className="inline-flex items-center rounded-lg bg-[var(--color-text)] px-5 py-3 text-sm font-medium text-[var(--color-bg)] transition hover:opacity-90"
-            >
-              {m.hero.ctaPrimary}
-            </Link>
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]/50 px-5 py-3 text-sm font-medium transition hover:border-[var(--color-border-strong)]"
-            >
-              <GitHubIcon className="h-4 w-4" />
-              {m.hero.ctaSecondary}
-            </a>
+        <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pb-28 sm:pt-14">
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
+            <div className="max-w-3xl flex-1">
+              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                {m.hero.eyebrow}
+              </p>
+              <h1 className="text-lg font-semibold leading-relaxed sm:text-xl">
+                {m.hero.title}
+              </h1>
+              <p className="mt-4 text-lg leading-relaxed text-[var(--color-text-muted)] sm:text-xl">
+                {m.hero.subtitle}
+              </p>
+              <div className="mt-10 flex flex-wrap gap-3">
+                <Link
+                  href="/register"
+                  className="inline-flex items-center rounded-lg bg-[var(--color-text)] px-5 py-3 text-sm font-medium text-[var(--color-bg)] transition hover:opacity-90"
+                >
+                  {m.hero.ctaPrimary}
+                </Link>
+                <a
+                  href={GITHUB_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]/50 px-5 py-3 text-sm font-medium transition hover:border-[var(--color-border-strong)]"
+                >
+                  <GitHubIcon className="h-4 w-4" />
+                  {m.hero.ctaSecondary}
+                </a>
+              </div>
+            </div>
+
+            <div className="flex shrink-0 justify-center lg:justify-end">
+              <Image
+                src="/eil-card.png"
+                alt="EIL Card"
+                width={360}
+                height={360}
+                className="h-auto w-full max-w-[240px] object-contain sm:max-w-[280px] lg:max-w-[320px]"
+                unoptimized
+                priority
+              />
+            </div>
           </div>
         </div>
       </section>

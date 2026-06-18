@@ -3,9 +3,9 @@ import { whitepaperMessages } from "./whitepaper";
 
 const en = {
   meta: {
-    title: "EIL — Entity Identity Layer",
+    title: "EIL - Entity Identity Layer",
     description:
-      "Domain-verified entity identity for AI agents. Canonical JSON in milliseconds — not a payment card.",
+      "Domain-verified entity identity for AI agents. Canonical JSON in milliseconds - not a payment card.",
   },
   nav: {
     docs: "Documentation",
@@ -17,7 +17,7 @@ const en = {
   auth: {
     registerTitle: "Create account",
     registerSubtitle:
-      "Set up access to the EIL Card registry. Your organization or person identity is defined when you create a card — not here.",
+      "Set up access to the EIL Card registry. Your organization or person identity is defined when you create a card - not here.",
     accountOwner: "Account owner",
     accountOwnerHint: "Person who manages this account (dashboard and billing contact).",
     email: "Work email",
@@ -41,7 +41,7 @@ const en = {
     eyebrow: "EIL — Entity Identity Layer",
     title: "Verified identity for the agent era",
     subtitle:
-      "EIL (Entity Identity Layer) standardizes who an organization or person is — domain-bound, machine-readable, and authoritative. Agents call resolve() to read canonical JSON in milliseconds, without scraping HTML or guessing from search snippets. Not a payment card. Not user login. Infrastructure for the agent web.",
+      "EIL (Entity Identity Layer) standardizes who an organization or person is - domain-bound, machine-readable, and authoritative. Agents call resolve() to read canonical JSON in milliseconds, without scraping HTML or guessing from search snippets. It is not a payment card or user login. It is infrastructure for the agent web.",
     ctaPrimary: "Create your card",
     ctaSecondary: "View on GitHub",
   },
@@ -54,7 +54,7 @@ const en = {
       },
       {
         title: "Agent-native",
-        body: "Registry API and /.well-known/digital-card — built for resolve(), not browsers alone.",
+        body: "Registry API and /.well-known/digital-card - built for resolve(), not browsers alone.",
       },
       {
         title: "Canonical by design",
@@ -75,7 +75,7 @@ const en = {
       example: "resolve(domain)",
     },
     footnote:
-      "Agents do not choose between SSL and EIL — they choose between crawling the web or reading a verified registry record.",
+      "Agents do not choose between SSL and EIL - they choose between crawling the web or reading a verified registry record.",
   },
   notThis: {
     title: "Scope",
@@ -99,15 +99,15 @@ const en = {
     steps: [
       {
         title: "Registry (primary)",
-        body: "GET /v1/resolve?domain= — indexed, fast, verification metadata",
+        body: "GET /v1/resolve?domain= - indexed, fast, verification metadata",
       },
       {
         title: "Well-known (fallback)",
-        body: "GET /.well-known/digital-card — RFC 8615, domain-bound",
+        body: "GET /.well-known/digital-card - RFC 8615, domain-bound",
       },
       {
         title: "DNS TXT (hint)",
-        body: "_digital-card.{domain} — ownership proof and registry pointer",
+        body: "_digital-card.{domain} - ownership proof and registry pointer",
       },
     ],
   },
@@ -118,7 +118,7 @@ const en = {
     copied: "Copied",
   },
   footer: {
-    tagline: "Entity identity for machines — not user login.",
+    tagline: "Entity identity for machines - not user login.",
     product: "EIL Card",
     about: "About",
     docs: "Docs",
@@ -129,14 +129,14 @@ const en = {
     copyright: "© 2026 EIL Card",
   },
   about: {
-    metaTitle: "About — EIL Card",
+    metaTitle: "About - EIL Card",
     metaDescription:
-      "EIL (Entity Identity Layer) — domain-verified identity for AI agents.",
+      "EIL (Entity Identity Layer) - domain-verified identity for AI agents.",
     eyebrow: "About",
     title: "EIL Card",
-    expansion: "EIL — Entity Identity Layer",
+    expansion: "EIL - Entity Identity Layer",
     intro:
-      "EIL Card is a registry and discovery layer for verified organization and person identity. Agents call resolve() to read canonical JSON tied to a domain — without scraping HTML or guessing from search results.",
+      "EIL Card is a registry and discovery layer for verified organization and person identity. Agents call resolve() to read canonical JSON tied to a domain - without scraping HTML or guessing from search results.",
     notTitle: "What EIL is not",
     notItems: [
       "A payment or banking card",
@@ -157,13 +157,13 @@ const en = {
     backHome: "← Back to home",
   },
   docs: {
-    metaTitle: "Documentation — EIL Card",
+    metaTitle: "Documentation - EIL Card",
     metaDescription:
-      "SDK, registry API, and discovery for EIL Card — resolve verified entity identity for AI agents.",
+      "SDK, registry API, and discovery for EIL Card - resolve verified entity identity for AI agents.",
     eyebrow: "Documentation",
     title: "Build with EIL",
     intro:
-      "EIL Card exposes a public registry API and a TypeScript SDK. Agents resolve domain or handle to canonical organization or person JSON — with optional fallback to /.well-known/digital-card on the entity's own domain.",
+      "EIL Card exposes a public registry API and a TypeScript SDK. Agents resolve domain or handle to canonical organization or person JSON - with optional fallback to /.well-known/digital-card on the entity's own domain.",
     copy: "Copy code",
     copied: "Copied",
     sdkTitle: "TypeScript SDK",
@@ -252,9 +252,9 @@ const en = {
     playgroundLink: "Agent playground →",
   },
   docsAgents: {
-    metaTitle: "Agent integration — EIL Card",
+    metaTitle: "Agent integration - EIL Card",
     metaDescription:
-      "Official Python and TypeScript templates for LangChain, OpenAI, Anthropic, and Gemini — verify entity identity via @digitalcard/sdk before workflows or payments.",
+      "Official Python and TypeScript templates for LangChain, OpenAI, Anthropic, and Gemini - verify entity identity via @digitalcard/sdk before workflows or payments.",
     eyebrow: "Agent integration",
     title: "AI agent integration templates",
     intro:
@@ -268,17 +268,17 @@ const en = {
     systemPromptTitle: "Recommended system prompt",
     systemPromptBody:
       "Add to Custom GPT, Claude project instructions, or your agent orchestrator. Tells the model to check EIL before scraping.",
-    pythonTitle: "Python — native resolve",
+    pythonTitle: "Python - native resolve",
     pythonNativeTitle: "Zero-dependency helper",
     pythonNativeBody:
       "Resolve verified EIL Card JSON with requests only. Copy packages/sdk/examples/python/resolve_eil_card.py or paste below.",
-    pythonLangchainTitle: "LangChain — @tool decorator",
+    pythonLangchainTitle: "LangChain - @tool decorator",
     pythonLangchainBody:
       "Expose verify_entity_identity to GPT-4o, Claude, or any tool-calling model. Uses langchain_core.tools and the registry resolve endpoint.",
     pythonAgentLoopTitle: "Sample agent loop (OpenAI + LangChain)",
     pythonAgentLoopBody:
       "End-to-end AgentExecutor that calls verify_entity_identity before answering. Requires langchain, langchain-openai, and OPENAI_API_KEY.",
-    sdkTitle: "TypeScript — @digitalcard/sdk",
+    sdkTitle: "TypeScript - @digitalcard/sdk",
     langchainJsTitle: "LangChain (JavaScript / TypeScript)",
     langchainJsBody:
       "DynamicStructuredTool wrapper around DigitalCard.resolve(). Copy packages/sdk/examples/langchain-eil-resolve-tool.ts into your agent project.",
@@ -287,19 +287,19 @@ const en = {
       "buildEILResolveToolDefinition() and invokeEILResolve() work with any function-calling runtime without LangChain.",
     curlTitle: "curl (pilot domain)",
     curlBody:
-      "Prefer the entity's domain well-known URL — some AI browsers block registry /api/ URLs.",
-    openaiTitle: "OpenAI — function tool definition",
+      "Prefer the entity's domain well-known URL - some AI browsers block registry /api/ URLs.",
+    openaiTitle: "OpenAI - function tool definition",
     openaiBody:
       "Paste into Assistants API tools or Custom GPT Actions schema. Implement the handler with fetch to /api/v1/resolve.",
     openaiHandlerTitle: "Tool handler (Node.js)",
-    anthropicTitle: "Anthropic — tool use schema",
+    anthropicTitle: "Anthropic - tool use schema",
     anthropicBody: "Pass to messages.create tools array in the Claude API.",
-    geminiTitle: "Gemini — function declaration",
+    geminiTitle: "Gemini - function declaration",
     geminiBody:
       "Use in Gemini API tools or paste the prompt below in AI Mode for a grounded test.",
     geminiPromptTitle: "Gemini AI Mode prompt (copy-paste)",
     adoptionOutro:
-      "These templates include the @tool decorators and structured dependency patterns the global AI developer community expects — fork the repo, npm install @digitalcard/sdk, and wire verify_entity_identity into your agent in minutes.",
+      "These templates include the @tool decorators and structured dependency patterns the global AI developer community expects - fork the repo, npm install @digitalcard/sdk, and wire verify_entity_identity into your agent in minutes.",
     copy: "Copy code",
     copied: "Copied",
     backDocs: "← API documentation",
@@ -307,13 +307,13 @@ const en = {
     openapiLink: "OpenAPI 3.1 spec →",
   },
   playground: {
-    metaTitle: "Agent playground — EIL Card",
+    metaTitle: "Agent playground - EIL Card",
     metaDescription:
-      "Simulate how an agent resolves entity identity — domain or handle to verified JSON in milliseconds.",
+      "Simulate how an agent resolves entity identity - domain or handle to verified JSON in milliseconds.",
     eyebrow: "Playground",
     title: "How agents see your entity",
     intro:
-      "Enter a domain or registry handle to run the same resolve() path agents use — registry API first, with timing and domain well-known check.",
+      "Enter a domain or registry handle to run the same resolve() path agents use - registry API first, with timing and domain well-known check.",
     modeDomain: "By domain",
     modeHandle: "By handle",
     domainPlaceholder: "sinyalle.com",
@@ -342,7 +342,7 @@ const en = {
     items: [
       {
         title: "Stop guessing from HTML",
-        body: "Agents today scrape pages and hallucinate phones, addresses, and entity names. EIL returns one domain-bound JSON record via resolve() — in milliseconds.",
+        body: "Agents today scrape pages and hallucinate phones, addresses, and entity names. EIL returns one domain-bound JSON record via resolve() - in milliseconds.",
       },
       {
         title: "Beyond SEO snippets",
@@ -350,51 +350,51 @@ const en = {
       },
       {
         title: "SSL secures the pipe. EIL certifies meaning.",
-        body: "TLS proves the connection is authentic. EIL proves who stands behind the domain — using DNS TXT and RFC 8615 /.well-known/ standards agents already trust.",
+        body: "TLS proves the connection is authentic. EIL proves who stands behind the domain - using DNS TXT and RFC 8615 /.well-known/ standards agents already trust.",
       },
     ],
     fieldNoteLink: "Read the AI agent field note →",
   },
   fieldNote: {
-    metaTitle: "AI Agent Field Note — EIL Card",
+    metaTitle: "AI Agent Field Note - EIL Card",
     metaDescription:
-      "What happens when an AI agent tries to understand eilcard.com — noise, correction, and why verified entity identity matters.",
+      "What happens when an AI agent tries to understand eilcard.com - noise, correction, and why verified entity identity matters.",
     eyebrow: "Insights",
     title: "When an AI agent met EIL Card",
     subtitle: "A field note on noise, correction, and verified entity identity",
     intro:
-      "In a live conversation with an AI search assistant, the model first misread eilcard.com as a payment or phishing site — then, after the prompt was corrected, understood EIL as infrastructure for the agent web. This note captures that arc and what it means for builders.",
+      "In a live conversation with an AI search assistant, the model first misread eilcard.com as a payment or phishing site - then, after the prompt was corrected, understood EIL as infrastructure for the agent web. This note captures that arc and what it means for builders.",
     disclaimer:
       "Independent observation. Not affiliated with or endorsed by any AI provider or trademark holder.",
     sections: [
       {
         title: "1. First read: noise wins",
-        body: "The word “card” triggered banking and fraud templates. Without a verified entity layer, the model reached for the loudest pattern in training data — not the actual product. That is exactly the problem EIL is built to solve.",
+        body: "The word “card” triggered banking and fraud templates. Without a verified entity layer, the model reached for the loudest pattern in training data - not the actual product. That is exactly the problem EIL is built to solve.",
         quote:
           "The domain was treated like an unknown financial site before the Entity Identity Layer context was provided.",
       },
       {
         title: "2. Corrected read: infrastructure, not payments",
-        body: "Once the request was read correctly, the model classified EIL as domain-attested, agent-native identity — not SSO, not a business card app, not a bank product. A single canonical JSON record replaces HTML scraping for “who is this entity?”",
+        body: "Once the request was read correctly, the model classified EIL as domain-attested, agent-native identity - not SSO, not a business card app, not a bank product. A single canonical JSON record replaces HTML scraping for “who is this entity?”",
         quote:
           "Agents call resolve() instead of parsing megabytes of HTML, JavaScript, and ads.",
       },
       {
         title: "3. Trust boundary for the agent web",
-        body: "Verified records let agents distinguish an official organization from a lookalike domain opened minutes ago. DNS TXT and /.well-known/digital-card provide a protocol-level trust boundary — similar to how TLS secures transport, EIL certifies meaning.",
+        body: "Verified records let agents distinguish an official organization from a lookalike domain opened minutes ago. DNS TXT and /.well-known/digital-card provide a protocol-level trust boundary - similar to how TLS secures transport, EIL certifies meaning.",
         quote:
           "SSL secures the pipe. EIL certifies who is behind the domain.",
       },
       {
         title: "4. Less scraping, less compute",
-        body: "Every unnecessary crawl and cross-check burns GPU cycles. A few bytes of verified JSON reduce data transfer, reasoning load, and hallucination risk — a structural efficiency gain, not just a UX improvement.",
+        body: "Every unnecessary crawl and cross-check burns GPU cycles. A few bytes of verified JSON reduce data transfer, reasoning load, and hallucination risk - a structural efficiency gain, not just a UX improvement.",
         quote:
           "Clean, verified data at the source is cheaper for agents to consume than the open web.",
       },
     ],
     takeawayTitle: "Takeaway",
     takeaway:
-      "If even a state-of-the-art AI assistant misreads a new infrastructure product at first glance, the agent web needs a verified entity layer. EIL Card is that layer — starting with registry + well-known discovery today.",
+      "If even a state-of-the-art AI assistant misreads a new infrastructure product at first glance, the agent web needs a verified entity layer. EIL Card is that layer - starting with registry + well-known discovery today.",
     ctaPrimary: "Create your card",
     ctaSecondary: "View on GitHub",
     backHome: "← Back to home",
@@ -451,7 +451,7 @@ const en = {
       "TXT record not found yet. DNS propagation may take a few minutes.",
     verifyFailed: "Could not start verification.",
     verifySuccess: "Verified!",
-    publicDataNoticeTitle: "Public JSON — read by anyone",
+    publicDataNoticeTitle: "Public JSON - read by anyone",
     publicDataNoticeBody:
       "Your card is published as open JSON via resolve() and /.well-known/digital-card. Do not store passwords, API keys, private tax IDs, or other secrets. Only include information you want agents and the public to read.",
     editCard: "Edit card",
@@ -462,7 +462,7 @@ const en = {
     saveSuccess: "Card updated.",
     saveFailed: "Could not save card.",
     summary: "Summary",
-    summaryHint: "2–3 sentences for AI agents — what this entity does.",
+    summaryHint: "2–3 sentences for AI agents - what this entity does.",
     products: "Products & services",
     productName: "Name",
     productDescription: "Description",
@@ -470,13 +470,13 @@ const en = {
     addProduct: "+ Add product",
     removeProduct: "Remove",
     sameAs: "Profiles (sameAs)",
-    sameAsHint: "One URL per line — LinkedIn, Instagram, GitHub, etc.",
+    sameAsHint: "One URL per line - LinkedIn, Instagram, GitHub, etc.",
     website: "Website",
     phone: "Phone",
     email: "Email",
     discoveryTitle: "Discovery & agents",
     discoverySubtitle:
-      "Agents read your card from the EIL registry after DNS verification — no server upload required.",
+      "Agents read your card from the EIL registry after DNS verification - no server upload required.",
     discoveryRegistryFirst:
       "Registry is enough for most users: verify DNS, edit your card here, and agents call resolve(). Domain well-known is optional.",
     discoveryResolve: "Registry resolve (primary)",
@@ -495,7 +495,7 @@ const en = {
     discoveryCpanelPath: "cPanel / FTP file path",
     discoveryNginxSnippet: "nginx location block",
     discoveryGuideNote:
-      "With nginx proxy: one-time setup — dashboard edits sync automatically; use “Check domain well-known” to verify. With static upload: re-download the file when you update the card.",
+      "With nginx proxy: one-time setup - dashboard edits sync automatically; use “Check domain well-known” to verify. With static upload: re-download the file when you update the card.",
     discoveryGuideNoteProxy:
       "Proxy setup syncs automatically when you edit the card in this dashboard. Click “Check domain well-known” to verify.",
     discoveryGuideNoteStatic:
@@ -503,14 +503,14 @@ const en = {
     discoveryRemoteUpdated: "Remote updated_at",
     discoveryStatusOk: "Domain well-known matches registry.",
     discoveryStatusMissing: "Well-known not found on your domain.",
-    discoveryStatusHtml: "URL returns HTML (SPA) — nginx or static file needed.",
+    discoveryStatusHtml: "URL returns HTML (SPA) - nginx or static file needed.",
     discoveryStatusInvalid: "Response is not valid card JSON.",
     discoveryStatusMismatch: "JSON found but card_id or handle does not match.",
-    discoveryStatusStale: "Domain copy is older than registry — re-download and upload.",
+    discoveryStatusStale: "Domain copy is older than registry - re-download and upload.",
     discoveryStatusUnreachable: "Could not reach your domain.",
     discoveryProxyTitle: "Recommended: nginx proxy (auto-sync)",
     discoveryProxyIntro:
-      "One-time setup — EIL serves the latest JSON. Dashboard edits sync automatically; no file re-upload.",
+      "One-time setup - EIL serves the latest JSON. Dashboard edits sync automatically; no file re-upload.",
     discoveryStaticTitle: "Alternative: static file upload",
     discoveryDownloadLlms: "llms.txt",
     discoveryDownloadSchema: "schema.org JSON",
@@ -522,7 +522,7 @@ const en = {
     discoveryDownloadAgentCard: "agent-card.json",
     discoveryAgentCardProxyTitle: "Agent card proxy (auto-sync)",
     discoveryAgentCardProxyIntro:
-      "Optional A2A discovery at /.well-known/agent-card.json — proxies to EIL; updates when you edit the card.",
+      "Optional A2A discovery at /.well-known/agent-card.json - proxies to EIL; updates when you edit the card.",
     discoveryAgentCardNote:
       "The agent-card.json template lists skills from your products. Replace url with your live A2A JSON-RPC endpoint when you deploy an agent server.",
     discoveryLlmsPatchTitle: "llms.txt patch (append to your site)",
@@ -594,7 +594,7 @@ const en = {
     recheckDns: "Recheck DNS",
     verifySuccess: "Card marked as verified.",
     revokeSuccess: "Verification revoked.",
-    dnsVerifySuccess: "DNS verified — card is now verified.",
+    dnsVerifySuccess: "DNS verified - card is now verified.",
     dnsStillPending: "DNS TXT record not found yet.",
     method: "Method",
     txtRecord: "TXT record",
@@ -638,9 +638,9 @@ export type Messages = typeof en;
 
 const tr: Messages = {
   meta: {
-    title: "EIL — Entity Identity Layer",
+    title: "EIL - Entity Identity Layer",
     description:
-      "AI agent'lar için domain doğrulamalı varlık kimliği. Milisaniyeler içinde canonical JSON — ödeme kartı değil.",
+      "AI agent'lar için domain doğrulamalı varlık kimliği. Milisaniyeler içinde canonical JSON - ödeme kartı değil.",
   },
   nav: {
     docs: "Dokümantasyon",
@@ -652,7 +652,7 @@ const tr: Messages = {
   auth: {
     registerTitle: "Hesap oluştur",
     registerSubtitle:
-      "EIL Card registry'ye erişim açın. Kurum veya kişi kimliğiniz kart oluştururken tanımlanır — bu adımda değil.",
+      "EIL Card registry'ye erişim açın. Kurum veya kişi kimliğiniz kart oluştururken tanımlanır - bu adımda değil.",
     accountOwner: "Hesap sahibi",
     accountOwnerHint: "Bu hesabı yöneten kişi (panel ve fatura iletişimi).",
     email: "İş e-postası",
@@ -673,15 +673,15 @@ const tr: Messages = {
     registerLink: "Hesap oluşturun",
   },
   hero: {
-    eyebrow: "EIL — Entity Identity Layer",
-    title: "Agent çağı için doğrulanmış kimlik",
+    eyebrow: "EIL - Entity Identity Layer",
+    title: "Agent dönemi için doğrulanmış kimlik",
     subtitle:
-      "EIL (Entity Identity Layer), kurum ve kişinin kim olduğunu standartlaştırır — domain'e bağlı, makine okunur ve otoritatif. Agent'lar resolve() ile canonical JSON'u milisaniyeler içinde okur; HTML taraması veya arama snippet'lerinden tahmin yok. Ödeme kartı değil. Kullanıcı girişi değil. Agent web'i için altyapı katmanı.",
+      "EIL (Varlık Kimlik Katmanı), bir kurumun veya kişinin kim olduğunu standartlaştırır; alan adına bağlı, makine tarafından okunabilir ve güvenilirdir. Agent'lar, HTML sayfalarını taramak veya arama sonuçlarından tahmin yürütmek zorunda kalmadan, resolve() fonksiyonunu kullanarak milisaniyeler içinde kanonik JSON verisini okuyabilirler. Bu bir ödeme kartı veya kullanıcı girişi değildir; Agent web'i için bir altyapıdır.",
     ctaPrimary: "Kartınızı oluşturun",
     ctaSecondary: "GitHub'da görün",
   },
   pillars: {
-    title: "Altyapı katmanı — bir kart ürünü değil",
+    title: "Altyapı katmanı - bir kart ürünü değil",
     items: [
       {
         title: "Domain onaylı",
@@ -689,7 +689,7 @@ const tr: Messages = {
       },
       {
         title: "Agent-native",
-        body: "Registry API ve /.well-known/digital-card — resolve() için tasarlandı.",
+        body: "Registry API ve /.well-known/digital-card - resolve() için tasarlandı.",
       },
       {
         title: "Canonical tasarım",
@@ -710,7 +710,7 @@ const tr: Messages = {
       example: "resolve(domain)",
     },
     footnote:
-      "Agent'lar SSL ile EIL arasında seçim yapmaz — web taraması ile doğrulanmış kayıt arasında seçim yapar.",
+      "Agent'lar SSL ile EIL arasında seçim yapmaz - web taraması ile doğrulanmış kayıt arasında seçim yapar.",
   },
   notThis: {
     title: "Kapsam",
@@ -734,15 +734,15 @@ const tr: Messages = {
     steps: [
       {
         title: "Registry (birincil)",
-        body: "GET /v1/resolve?domain= — indeksli, hızlı, doğrulama metadata",
+        body: "GET /v1/resolve?domain= - indeksli, hızlı, doğrulama metadata",
       },
       {
         title: "Well-known (fallback)",
-        body: "GET /.well-known/digital-card — RFC 8615, domain bağlı",
+        body: "GET /.well-known/digital-card - RFC 8615, domain bağlı",
       },
       {
         title: "DNS TXT (ipucu)",
-        body: "_digital-card.{domain} — sahiplik kanıtı ve registry yönlendirmesi",
+        body: "_digital-card.{domain} - sahiplik kanıtı ve registry yönlendirmesi",
       },
     ],
   },
@@ -753,7 +753,7 @@ const tr: Messages = {
     copied: "Kopyalandı",
   },
   footer: {
-    tagline: "Makine kimliği — kullanıcı girişi değil.",
+    tagline: "Makine kimliği - kullanıcı girişi değil.",
     product: "EIL Card",
     about: "Hakkında",
     docs: "Dokümantasyon",
@@ -764,12 +764,12 @@ const tr: Messages = {
     copyright: "© 2026 EIL Card",
   },
   about: {
-    metaTitle: "Hakkında — EIL Card",
+    metaTitle: "Hakkında - EIL Card",
     metaDescription:
-      "EIL (Entity Identity Layer) — AI agent'lar için domain doğrulamalı kimlik.",
+      "EIL (Entity Identity Layer) - AI agent'lar için domain doğrulamalı kimlik.",
     eyebrow: "Hakkında",
     title: "EIL Card",
-    expansion: "EIL — Entity Identity Layer",
+    expansion: "EIL - Entity Identity Layer",
     intro:
       "EIL Card, doğrulanmış kurum ve kişi kimliği için bir registry ve keşif katmanıdır. Agent'lar domain'e bağlı canonical JSON'u HTML taramadan resolve() ile okur.",
     notTitle: "EIL ne değildir",
@@ -792,19 +792,19 @@ const tr: Messages = {
     backHome: "← Ana sayfaya dön",
   },
   docs: {
-    metaTitle: "Dokümantasyon — EIL Card",
+    metaTitle: "Dokümantasyon - EIL Card",
     metaDescription:
-      "EIL Card SDK, registry API ve keşif — AI agent'lar için doğrulanmış varlık kimliği.",
+      "EIL Card SDK, registry API ve keşif - AI agent'lar için doğrulanmış varlık kimliği.",
     eyebrow: "Dokümantasyon",
     title: "EIL ile geliştirin",
     intro:
-      "EIL Card herkese açık bir registry API ve TypeScript SDK sunar. Agent'lar domain veya handle ile kurum/kişi JSON'una ulaşır — isteğe bağlı olarak kurumun kendi domain'inde /.well-known/digital-card fallback'i.",
+      "EIL Card herkese açık bir registry API ve TypeScript SDK sunar. Agent'lar domain veya handle ile kurum/kişi JSON'una ulaşır - isteğe bağlı olarak kurumun kendi domain'inde /.well-known/digital-card fallback'i.",
     copy: "Kodu kopyala",
     copied: "Kopyalandı",
     sdkTitle: "TypeScript SDK",
     sdkBody:
       "@digitalcard/sdk paketini npm'den kurun. DigitalCard.resolve() önce registry'yi dener; yapılandırılmışsa hedef domain'de well-known'a düşer.",
-    npmLink: "@digitalcard/sdk — npm",
+    npmLink: "@digitalcard/sdk - npm",
     apiTitle: "Registry API",
     apiBody:
       "Tüm registry uçları /api/v1 altındadır. Yanıtlar card nesnesi ve isteğe bağlı meta (source, resolved_at) içerir. Herkese açık okuma uçları API anahtarı gerektirmez.",
@@ -854,26 +854,26 @@ const tr: Messages = {
       },
     ],
     apiNote:
-      "404, registry'de kayıt yok demektir — SDK açıksa https://{domain}/.well-known/digital-card adresine düşebilir.",
+      "404, registry'de kayıt yok demektir - SDK açıksa https://{domain}/.well-known/digital-card adresine düşebilir.",
     discoveryTitle: "Keşif zinciri",
     discoveryBody:
       "Hibrit keşif registry'yi hızlı tutar; domain'e bağlı well-known kaynağı kanıtlar.",
     discoverySteps: [
-      "Registry — GET /api/v1/resolve veya /api/v1/cards/{handle}",
-      "Well-known — GET https://{domain}/.well-known/digital-card",
-      "DNS TXT — _digital-card.{domain} doğrulama ipucu",
+      "Registry - GET /api/v1/resolve veya /api/v1/cards/{handle}",
+      "Well-known - GET https://{domain}/.well-known/digital-card",
+      "DNS TXT - _digital-card.{domain} doğrulama ipucu",
     ],
     dnsNote:
       "Dashboard'da DNS doğrulamasından sonra kayıtlar verified: true ve stabil canonical alanlar sunar.",
     responseTitle: "Yanıt yapısı",
     responseBody:
-      "Kartlar şema v1.0'a uyar — type (organization | person) ile ayrılır. Agent'ların kullandığı başlıca alanlar:",
+      "Kartlar şema v1.0'a uyar - type (organization | person) ile ayrılır. Agent'ların kullandığı başlıca alanlar:",
     responseFields: [
-      "type, card_id, handle — kimlik anahtarları",
-      "name — resmi veya tam ad",
-      "contact — web sitesi, e-posta, telefon",
-      "verified — domain onaylı güven sinyali",
-      "actions — makine okunur iletişim niyetleri",
+      "type, card_id, handle - kimlik anahtarları",
+      "name - resmi veya tam ad",
+      "contact - web sitesi, e-posta, telefon",
+      "verified - domain onaylı güven sinyali",
+      "actions - makine okunur iletişim niyetleri",
     ],
     ctaTitle: "Sonraki adımlar",
     ctaBody:
@@ -887,9 +887,9 @@ const tr: Messages = {
     playgroundLink: "Agent playground →",
   },
   docsAgents: {
-    metaTitle: "Agent entegrasyonu — EIL Card",
+    metaTitle: "Agent entegrasyonu - EIL Card",
     metaDescription:
-      "LangChain, OpenAI, Anthropic ve Gemini için resmi Python ve TypeScript şablonları — iş akışı veya ödeme öncesi @digitalcard/sdk ile kimlik doğrulama.",
+      "LangChain, OpenAI, Anthropic ve Gemini için resmi Python ve TypeScript şablonları - iş akışı veya ödeme öncesi @digitalcard/sdk ile kimlik doğrulama.",
     eyebrow: "Agent entegrasyonu",
     title: "AI agent entegrasyon şablonları",
     intro:
@@ -903,17 +903,17 @@ const tr: Messages = {
     systemPromptTitle: "Önerilen sistem prompt'u",
     systemPromptBody:
       "Custom GPT, Claude proje talimatları veya agent orchestrator'a ekleyin. Modele EIL'i taramadan önce kontrol ettirir.",
-    pythonTitle: "Python — native resolve",
+    pythonTitle: "Python - native resolve",
     pythonNativeTitle: "Sıfır bağımlılık helper",
     pythonNativeBody:
       "Yalnızca requests ile doğrulanmış EIL Card JSON çözümleyin. packages/sdk/examples/python/resolve_eil_card.py dosyasını kopyalayın veya alttakini yapıştırın.",
-    pythonLangchainTitle: "LangChain — @tool dekoratörü",
+    pythonLangchainTitle: "LangChain - @tool dekoratörü",
     pythonLangchainBody:
       "verify_entity_identity aracını GPT-4o, Claude veya herhangi bir tool-calling modele açın. langchain_core.tools ve registry resolve endpoint kullanır.",
     pythonAgentLoopTitle: "Örnek agent döngüsü (OpenAI + LangChain)",
     pythonAgentLoopBody:
       "Yanıtlamadan önce verify_entity_identity çağıran uçtan uca AgentExecutor. langchain, langchain-openai ve OPENAI_API_KEY gerekir.",
-    sdkTitle: "TypeScript — @digitalcard/sdk",
+    sdkTitle: "TypeScript - @digitalcard/sdk",
     langchainJsTitle: "LangChain (JavaScript / TypeScript)",
     langchainJsBody:
       "DigitalCard.resolve() etrafında DynamicStructuredTool sarmalayıcısı. packages/sdk/examples/langchain-eil-resolve-tool.ts dosyasını projenize kopyalayın.",
@@ -922,19 +922,19 @@ const tr: Messages = {
       "buildEILResolveToolDefinition() ve invokeEILResolve() LangChain olmadan her function-calling runtime ile çalışır.",
     curlTitle: "curl (pilot domain)",
     curlBody:
-      "Kurumun domain well-known URL'sini tercih edin — bazı AI tarayıcıları registry /api/ URL'lerini engeller.",
-    openaiTitle: "OpenAI — function tool tanımı",
+      "Kurumun domain well-known URL'sini tercih edin - bazı AI tarayıcıları registry /api/ URL'lerini engeller.",
+    openaiTitle: "OpenAI - function tool tanımı",
     openaiBody:
       "Assistants API tools veya Custom GPT Actions şemasına yapıştırın. Handler'da /api/v1/resolve'a fetch kullanın.",
     openaiHandlerTitle: "Tool handler (Node.js)",
-    anthropicTitle: "Anthropic — tool use şeması",
+    anthropicTitle: "Anthropic - tool use şeması",
     anthropicBody: "Claude API messages.create tools dizisine verin.",
-    geminiTitle: "Gemini — function declaration",
+    geminiTitle: "Gemini - function declaration",
     geminiBody:
       "Gemini API tools içinde kullanın veya AI Modu'nda test için alttaki prompt'u yapıştırın.",
     geminiPromptTitle: "Gemini AI Modu prompt'u (kopyala-yapıştır)",
     adoptionOutro:
-      "Bu şablonlar küresel AI geliştirici topluluğunun aradığı @tool dekoratörleri ve yapılandırılmış bağımlılık şemalarını içerir — repoyu fork edin, npm install @digitalcard/sdk yapın ve verify_entity_identity aracını dakikalar içinde agent'ınıza bağlayın.",
+      "Bu şablonlar küresel AI geliştirici topluluğunun aradığı @tool dekoratörleri ve yapılandırılmış bağımlılık şemalarını içerir - repoyu fork edin, npm install @digitalcard/sdk yapın ve verify_entity_identity aracını dakikalar içinde agent'ınıza bağlayın.",
     copy: "Kodu kopyala",
     copied: "Kopyalandı",
     backDocs: "← API dokümantasyonu",
@@ -942,13 +942,13 @@ const tr: Messages = {
     openapiLink: "OpenAPI 3.1 spec →",
   },
   playground: {
-    metaTitle: "Agent playground — EIL Card",
+    metaTitle: "Agent playground - EIL Card",
     metaDescription:
-      "Agent'ın varlık kimliğini nasıl çözdüğünü simüle edin — domain veya handle ile doğrulanmış JSON, milisaniyeler içinde.",
+      "Agent'ın varlık kimliğini nasıl çözdüğünü simüle edin - domain veya handle ile doğrulanmış JSON, milisaniyeler içinde.",
     eyebrow: "Playground",
     title: "Agent kurumunuzu nasıl görür?",
     intro:
-      "Domain veya registry handle girin — agent'ların kullandığı resolve() yolunu çalıştırın: registry API, süre ölçümü ve domain well-known kontrolü.",
+      "Domain veya registry handle girin - agent'ların kullandığı resolve() yolunu çalıştırın: registry API, süre ölçümü ve domain well-known kontrolü.",
     modeDomain: "Domain ile",
     modeHandle: "Handle ile",
     domainPlaceholder: "sinyalle.com",
@@ -977,7 +977,7 @@ const tr: Messages = {
     items: [
       {
         title: "HTML'den tahmin etmeyi bırakın",
-        body: "Agent'lar bugün sayfaları tarayıp telefon, adres ve kurum adını halüsinasyonla üretiyor. EIL, resolve() ile tek bir domain'e bağlı JSON kaydı döner — milisaniyeler içinde.",
+        body: "Agent'lar bugün sayfaları tarayıp telefon, adres ve kurum adını halüsinasyonla üretiyor. EIL, resolve() ile tek bir domain'e bağlı JSON kaydı döner - milisaniyeler içinde.",
       },
       {
         title: "SEO snippet'lerinin ötesinde",
@@ -985,20 +985,20 @@ const tr: Messages = {
       },
       {
         title: "SSL boruyu güvence altına alır. EIL anlamı sertifikalar.",
-        body: "TLS bağlantının özgün olduğunu kanıtlar. EIL, domain'in arkasındaki kurumu kanıtlar — agent'ların zaten güvendiği DNS TXT ve RFC 8615 /.well-known/ standartlarıyla.",
+        body: "TLS bağlantının özgün olduğunu kanıtlar. EIL, domain'in arkasındaki kurumu kanıtlar - agent'ların zaten güvendiği DNS TXT ve RFC 8615 /.well-known/ standartlarıyla.",
       },
     ],
     fieldNoteLink: "AI agent field note'u okuyun →",
   },
   fieldNote: {
-    metaTitle: "AI Agent Saha Notu — EIL Card",
+    metaTitle: "AI Agent Saha Notu - EIL Card",
     metaDescription:
-      "Bir AI agent eilcard.com'u okumaya çalıştığında ne olur — gürültü, düzeltme ve doğrulanmış kimlik neden önemli.",
+      "Bir AI agent eilcard.com'u okumaya çalıştığında ne olur - gürültü, düzeltme ve doğrulanmış kimlik neden önemli.",
     eyebrow: "İçgörüler",
     title: "Bir AI agent EIL Card ile karşılaştığında",
     subtitle: "Gürültü, düzeltme ve doğrulanmış varlık kimliği üzerine bir field note",
     intro:
-      "Bir AI arama asistanıyla yapılan canlı bir sohbette model önce eilcard.com'u ödeme veya oltalama sitesi sandı — istem düzeltildikten sonra EIL'ı agent web'i için altyapı olarak sınıflandırdı. Bu not, o süreci ve geliştiriciler için anlamını özetler.",
+      "Bir AI arama asistanıyla yapılan canlı bir sohbette model önce eilcard.com'u ödeme veya oltalama sitesi sandı - istem düzeltildikten sonra EIL'ı agent web'i için altyapı olarak sınıflandırdı. Bu not, o süreci ve geliştiriciler için anlamını özetler.",
     disclaimer:
       "Bağımsız gözlem. Herhangi bir AI sağlayıcısı veya ticari marka sahibiyle bağlantılı veya onaylı değildir.",
     sections: [
@@ -1010,7 +1010,7 @@ const tr: Messages = {
       },
       {
         title: "2. Düzeltilmiş okuma: altyapı, ödeme değil",
-        body: "İstem doğru okununca model EIL'ı domain onaylı, agent-native kimlik olarak sınıflandırdı — SSO değil, kartvizit uygulaması değil, banka ürünü değil. “Bu kurum kim?” sorusu için tek canonical JSON, HTML taramanın yerini alır.",
+        body: "İstem doğru okununca model EIL'ı domain onaylı, agent-native kimlik olarak sınıflandırdı - SSO değil, kartvizit uygulaması değil, banka ürünü değil. “Bu kurum kim?” sorusu için tek canonical JSON, HTML taramanın yerini alır.",
         quote:
           "Agent'lar megabaytlarca HTML, JavaScript ve reklam parse etmek yerine resolve() çağırır.",
       },
@@ -1022,14 +1022,14 @@ const tr: Messages = {
       },
       {
         title: "4. Daha az tarama, daha az compute",
-        body: "Her gereksiz crawl ve çapraz kontrol GPU döngüsü yakar. Birkaç baytlık doğrulanmış JSON; veri trafiğini, akıl yürütme yükünü ve halüsinasyon riskini azaltır — yalnızca UX değil, yapısal verimlilik.",
+        body: "Her gereksiz crawl ve çapraz kontrol GPU döngüsü yakar. Birkaç baytlık doğrulanmış JSON; veri trafiğini, akıl yürütme yükünü ve halüsinasyon riskini azaltır - yalnızca UX değil, yapısal verimlilik.",
         quote:
           "Kaynağında temiz, doğrulanmış veri agent'lar için açık web'den daha ucuzdur.",
       },
     ],
     takeawayTitle: "Sonuç",
     takeaway:
-      "En güncel bir AI asistanı bile yeni bir altyapı ürününü ilk bakışta yanlış okuyabiliyorsa, agent web'in doğrulanmış bir varlık katmanına ihtiyacı var. EIL Card bu katman — bugün registry + well-known keşifle başlıyor.",
+      "En güncel bir AI asistanı bile yeni bir altyapı ürününü ilk bakışta yanlış okuyabiliyorsa, agent web'in doğrulanmış bir varlık katmanına ihtiyacı var. EIL Card bu katman - bugün registry + well-known keşifle başlıyor.",
     ctaPrimary: "Kartınızı oluşturun",
     ctaSecondary: "GitHub'da görün",
     backHome: "← Ana sayfaya dön",
@@ -1085,7 +1085,7 @@ const tr: Messages = {
     verifyPending: "TXT kaydı henüz bulunamadı. DNS yayılması birkaç dakika sürebilir.",
     verifyFailed: "Doğrulama başlatılamadı.",
     verifySuccess: "Doğrulandı!",
-    publicDataNoticeTitle: "Herkese açık JSON — herkes okuyabilir",
+    publicDataNoticeTitle: "Herkese açık JSON - herkes okuyabilir",
     publicDataNoticeBody:
       "Kartınız resolve() ve /.well-known/digital-card ile açık JSON olarak yayınlanır. Şifre, API anahtarı, gizli vergi numarası veya diğer sırları eklemeyin. Yalnızca agent'ların ve kamunun okumasını istediğiniz bilgileri girin.",
     editCard: "Kartı düzenle",
@@ -1097,7 +1097,7 @@ const tr: Messages = {
     saveSuccess: "Kart güncellendi.",
     saveFailed: "Kart kaydedilemedi.",
     summary: "Özet",
-    summaryHint: "AI agent'lar için 2–3 cümle — bu kurum ne yapar?",
+    summaryHint: "AI agent'lar için 2–3 cümle - bu kurum ne yapar?",
     products: "Ürün ve hizmetler",
     productName: "Ad",
     productDescription: "Açıklama",
@@ -1105,13 +1105,13 @@ const tr: Messages = {
     addProduct: "+ Ürün ekle",
     removeProduct: "Kaldır",
     sameAs: "Profiller (sameAs)",
-    sameAsHint: "Her satıra bir URL — LinkedIn, Instagram, GitHub vb.",
+    sameAsHint: "Her satıra bir URL - LinkedIn, Instagram, GitHub vb.",
     website: "Web sitesi",
     phone: "Telefon",
     email: "E-posta",
     discoveryTitle: "Keşif ve agent'lar",
     discoverySubtitle:
-      "DNS doğrulamasından sonra agent'lar kartınızı EIL registry'den okur — sunucuya dosya yüklemeniz gerekmez.",
+      "DNS doğrulamasından sonra agent'lar kartınızı EIL registry'den okur - sunucuya dosya yüklemeniz gerekmez.",
     discoveryRegistryFirst:
       "Çoğu kullanıcı için registry yeterli: DNS doğrulayın, kartı buradan düzenleyin, agent'lar resolve() çağırır. Domain well-known isteğe bağlıdır.",
     discoveryResolve: "Registry resolve (birincil)",
@@ -1130,7 +1130,7 @@ const tr: Messages = {
     discoveryCpanelPath: "cPanel / FTP dosya yolu",
     discoveryNginxSnippet: "nginx location bloğu",
     discoveryGuideNote:
-      "nginx proxy ile tek seferlik kurulum — panelden düzenlemeler otomatik yansır; “Domain well-known kontrol et” ile doğrulayın. Statik yüklemede kartı güncellediğinizde dosyayı yeniden indirin.",
+      "nginx proxy ile tek seferlik kurulum - panelden düzenlemeler otomatik yansır; “Domain well-known kontrol et” ile doğrulayın. Statik yüklemede kartı güncellediğinizde dosyayı yeniden indirin.",
     discoveryGuideNoteProxy:
       "Proxy kurulumu panelden kart düzenlediğinizde otomatik senkronize olur. “Domain well-known kontrol et” ile doğrulayın.",
     discoveryGuideNoteStatic:
@@ -1138,14 +1138,14 @@ const tr: Messages = {
     discoveryRemoteUpdated: "Uzak updated_at",
     discoveryStatusOk: "Domain well-known registry ile eşleşiyor.",
     discoveryStatusMissing: "Domain'inizde well-known bulunamadı.",
-    discoveryStatusHtml: "URL HTML döndürüyor (SPA) — nginx veya statik dosya gerekli.",
+    discoveryStatusHtml: "URL HTML döndürüyor (SPA) - nginx veya statik dosya gerekli.",
     discoveryStatusInvalid: "Yanıt geçerli kart JSON'u değil.",
     discoveryStatusMismatch: "JSON var ama card_id veya handle eşleşmiyor.",
-    discoveryStatusStale: "Domain kopyası registry'den eski — yeniden indirip yükleyin.",
+    discoveryStatusStale: "Domain kopyası registry'den eski - yeniden indirip yükleyin.",
     discoveryStatusUnreachable: "Domain'e ulaşılamadı.",
     discoveryProxyTitle: "Önerilen: nginx proxy (otomatik sync)",
     discoveryProxyIntro:
-      "Tek seferlik kurulum — güncel JSON'u EIL sunar. Panelden düzenleme otomatik yansır; dosyayı yeniden yüklemeniz gerekmez.",
+      "Tek seferlik kurulum - güncel JSON'u EIL sunar. Panelden düzenleme otomatik yansır; dosyayı yeniden yüklemeniz gerekmez.",
     discoveryStaticTitle: "Alternatif: statik dosya yükleme",
     discoveryDownloadLlms: "llms.txt",
     discoveryDownloadSchema: "schema.org JSON",
@@ -1157,7 +1157,7 @@ const tr: Messages = {
     discoveryDownloadAgentCard: "agent-card.json",
     discoveryAgentCardProxyTitle: "Agent card proxy (otomatik sync)",
     discoveryAgentCardProxyIntro:
-      "Opsiyonel A2A keşfi: /.well-known/agent-card.json — EIL'e proxy; kartı düzenleyince güncellenir.",
+      "Opsiyonel A2A keşfi: /.well-known/agent-card.json - EIL'e proxy; kartı düzenleyince güncellenir.",
     discoveryAgentCardNote:
       "agent-card.json şablonu ürünlerinizi skill olarak listeler. Canlı A2A JSON-RPC sunucunuz olduğunda url alanını güncelleyin.",
     discoveryLlmsPatchTitle: "llms.txt yaması (sitenize ekleyin)",
@@ -1229,7 +1229,7 @@ const tr: Messages = {
     recheckDns: "DNS yeniden kontrol",
     verifySuccess: "Kart doğrulandı.",
     revokeSuccess: "Doğrulama geri alındı.",
-    dnsVerifySuccess: "DNS doğrulandı — kart artık verified.",
+    dnsVerifySuccess: "DNS doğrulandı - kart artık verified.",
     dnsStillPending: "DNS TXT kaydı henüz bulunamadı.",
     method: "Yöntem",
     txtRecord: "TXT kaydı",
