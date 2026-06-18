@@ -30,7 +30,7 @@ export function SiteNav({ locale, m }: Props) {
   return (
     <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
       <Link href="/" className="flex items-center">
-        <BrandLogo showWordmark />
+        <BrandLogo />
       </Link>
 
       <div className="flex items-center gap-1 sm:gap-2">
