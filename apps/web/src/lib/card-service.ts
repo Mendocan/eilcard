@@ -3,7 +3,6 @@ import { cards, resolveEvents } from "./db/schema";
 import { eq, sql } from "drizzle-orm";
 import { SCHEMA_VERSION } from "@digitalcard/schema";
 import type { Card } from "@digitalcard/schema";
-import { env } from "@/lib/env";
 
 export async function getCardByHandle(handle: string) {
   const [row] = await db
@@ -73,8 +72,8 @@ export function buildCardJson(row: typeof cards.$inferSelect): Card {
     verification_method: methods as Card["verification_method"],
     updated_at: row.updatedAt.toISOString(),
     created_at: row.createdAt.toISOString(),
-    human_url: `${env.NEXT_PUBLIC_APP_URL}/kart/${row.handle}`,
-    registry_url: `${env.NEXT_PUBLIC_APP_URL}/api/v1/cards/${row.handle}`,
+    human_url: `${process.env.NEXT_PUBLIC_APP_URL}/kart/${row.handle}`,
+    registry_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/cards/${row.handle}`,
   } as Card;
 }
 
