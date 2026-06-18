@@ -5,8 +5,14 @@ import {
   incrementResolveCount,
 } from "@/lib/card-service";
 import { normalizeDomain } from "@/lib/well-known";
+import { getClientIp } from "@/lib/client-ip";
+import { checkRateLimit, rateLimitResponse, RATE_LIMITS } from "@/lib/rate-limit";
 
 export async function GET(request: NextRequest) {
+  const ip = getClientIp(request);
+  const rl = checkRateLimit(`public:ip:${ip}`, RATE_LIMITS.publicRead.limit, RATE_LIMITS.publicRead.windowMs);
+  if (!rl.success) return rateLimitResponse(rl);
+
   const domain = request.nextUrl.searchParams.get("domain");
   if (!domain) {
     return NextResponse.json(

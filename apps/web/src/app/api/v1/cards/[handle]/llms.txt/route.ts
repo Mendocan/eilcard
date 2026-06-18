@@ -1,11 +1,17 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getCardByHandle, buildCardJson } from "@/lib/card-service";
 import { toFullLlmsTxt } from "@/lib/card-exports";
+import { getClientIp } from "@/lib/client-ip";
+import { checkRateLimit, rateLimitResponse, RATE_LIMITS } from "@/lib/rate-limit";
 
 export async function GET(
-  _request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ handle: string }> }
 ) {
+  const ip = getClientIp(request);
+  const rl = checkRateLimit(`public:ip:${ip}`, RATE_LIMITS.publicRead.limit, RATE_LIMITS.publicRead.windowMs);
+  if (!rl.success) return rateLimitResponse(rl);
+
   const { handle } = await params;
   const row = await getCardByHandle(handle);
   if (!row) {

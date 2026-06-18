@@ -76,4 +76,6 @@ export const RATE_LIMITS = {
   auth: { limit: 10, windowMs: 15 * 60_000 },
   cardCreate: { limit: 10, windowMs: 60 * 60_000 },
   dnsVerify: { limit: 30, windowMs: 60 * 60_000 },
+  playground: { limit: 20, windowMs: 60_000 },
+  publicRead: { limit: 60, windowMs: 60_000 },
 } as const;

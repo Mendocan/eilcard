@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCardByHandle, buildCardJson } from "@/lib/card-service";
+import { getClientIp } from "@/lib/client-ip";
+import { checkRateLimit, rateLimitResponse, RATE_LIMITS } from "@/lib/rate-limit";
 
 function toVCardString(card: Record<string, unknown>): string {
   const lines: string[] = ["BEGIN:VCARD", "VERSION:3.0"];
@@ -33,9 +35,13 @@ function toVCardString(card: Record<string, unknown>): string {
 }
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ handle: string }> }
 ) {
+  const ip = getClientIp(request);
+  const rl = checkRateLimit(`public:ip:${ip}`, RATE_LIMITS.publicRead.limit, RATE_LIMITS.publicRead.windowMs);
+  if (!rl.success) return rateLimitResponse(rl);
+
   const { handle } = await params;
   const row = await getCardByHandle(handle);
 

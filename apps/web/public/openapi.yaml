@@ -69,6 +69,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
     head:
       tags: [resolve]
       operationId: resolveEntityHead
@@ -116,6 +118,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
 
   /api/v1/cards/{handle}:
     get:
@@ -146,6 +150,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
 
   /api/v1/cards/{handle}/agent-card.json:
     get:
@@ -168,6 +174,8 @@ paths:
                 type: object
         "404":
           description: Card not found
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
 
   /api/v1/cards/{handle}/llms.txt:
     get:
@@ -189,6 +197,8 @@ paths:
                 type: string
         "404":
           description: Card not found
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
 
   /api/v1/cards/{handle}/schema.json:
     get:
@@ -210,6 +220,8 @@ paths:
                 type: object
         "404":
           description: Card not found
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
 
   /llms.txt:
     get:
@@ -225,7 +237,40 @@ paths:
                 type: string
 
 components:
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded — back off and retry after the indicated delay
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Seconds until the rate-limit window resets
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Maximum requests allowed in the window
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Remaining requests in the current window
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RateLimitError"
+
   schemas:
+    RateLimitError:
+      type: object
+      required: [error, retry_after]
+      properties:
+        error:
+          type: string
+          example: Too many requests
+        retry_after:
+          type: integer
+          description: Seconds until the rate-limit window resets
+          example: 42
+
     Error:
       type: object
       properties:

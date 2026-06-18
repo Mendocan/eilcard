@@ -9,6 +9,7 @@ import {
   patchPersonCardSchema,
 } from "@digitalcard/schema";
 import { eq, and } from "drizzle-orm";
+import { isDomainTaken } from "@/lib/domain-check";
 
 export async function PATCH(
   request: NextRequest,
@@ -48,6 +49,13 @@ export async function PATCH(
   }
 
   const { domain, ...updates } = parsed.data;
+
+  if (domain && domain !== existing.domain && (await isDomainTaken(domain, existing.id))) {
+    return NextResponse.json(
+      { error: "Domain already registered to another card" },
+      { status: 409 }
+    );
+  }
 
   if (
     existing.type === "organization" &&

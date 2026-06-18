@@ -12,6 +12,7 @@ import {
   uniqueIndex,
   index,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 export const cardTypeEnum = pgEnum("card_type", ["organization", "person"]);
 
@@ -106,7 +107,9 @@ export const cards = pgTable(
   (table) => [
     uniqueIndex("cards_handle_idx").on(table.handle),
     uniqueIndex("cards_card_id_idx").on(table.cardId),
-    index("cards_domain_idx").on(table.domain),
+    uniqueIndex("cards_domain_idx")
+      .on(table.domain)
+      .where(sql`${table.domain} IS NOT NULL`),
     index("cards_user_id_idx").on(table.userId),
   ]
 );

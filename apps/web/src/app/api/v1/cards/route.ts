@@ -7,6 +7,7 @@ import {
   validateProductCount,
 } from "@/lib/user-plan";
 import { createCardSchema } from "@digitalcard/schema";
+import { isDomainTaken } from "@/lib/domain-check";
 import { getClientIp } from "@/lib/client-ip";
 import {
   checkRateLimit,
@@ -72,6 +73,13 @@ export async function POST(request: NextRequest) {
         count: productCount,
       },
       { status: 403 }
+    );
+  }
+
+  if (data.domain && (await isDomainTaken(data.domain))) {
+    return NextResponse.json(
+      { error: "Domain already registered to another card" },
+      { status: 409 }
     );
   }
 
