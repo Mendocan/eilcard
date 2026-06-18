@@ -10,4 +10,15 @@ const envSchema = z.object({
   NEXT_PUBLIC_GITHUB_URL: z.string().url().optional(),
 });
 
-export const env = envSchema.parse(process.env);
+type Env = z.infer<typeof envSchema>;
+
+let _cached: Env | undefined;
+
+export const env: Env = new Proxy({} as Env, {
+  get(_target, prop: string) {
+    if (!_cached) {
+      _cached = envSchema.parse(process.env);
+    }
+    return _cached[prop as keyof Env];
+  },
+});

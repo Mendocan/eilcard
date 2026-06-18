@@ -1,3 +1,4 @@
 export async function register() {
-  await import("@/lib/env");
+  const { env } = await import("@/lib/env");
+  env.DATABASE_URL;
 }
