@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Locale } from "@/lib/i18n/types";
 import type { Messages } from "@/lib/i18n/messages";
+import { BrandLogo } from "@/components/brand-logo";
 import { GitHubIcon } from "@/components/icons/github-icon";
 
 const GITHUB_URL =
@@ -28,8 +29,8 @@ export function SiteNav({ locale, m }: Props) {
 
   return (
     <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-      <Link href="/" className="text-sm font-semibold tracking-tight">
-        EIL <span className="text-[var(--color-text-muted)]">Card</span>
+      <Link href="/" className="flex items-center">
+        <BrandLogo showWordmark />
       </Link>
 
       <div className="flex items-center gap-1 sm:gap-2">
