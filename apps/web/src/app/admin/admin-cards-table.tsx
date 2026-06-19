@@ -12,6 +12,7 @@ type CardRow = {
   type: string;
   verified: boolean;
   userEmail: string;
+  userIsPlatformOperator: boolean;
   createdAt: Date;
 };
 
@@ -106,7 +107,18 @@ export function AdminCardsTable({ rows, m }: Props) {
                   {c.domain ?? "—"}
                 </td>
                 <td className="px-4 py-3 text-[var(--color-text-muted)]">
-                  {c.userEmail}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span>{c.userEmail}</span>
+                    {c.userIsPlatformOperator ? (
+                      <span className="rounded-full bg-[var(--color-accent)]/10 px-2 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+                        {m.platformOperatorBadge}
+                      </span>
+                    ) : (
+                      <span className="rounded-full border border-[var(--color-border)] px-2 py-0.5 text-xs text-[var(--color-text-muted)]">
+                        {m.customerBadge}
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-4 py-3">{cardTypeLabel(c.type, m)}</td>
                 <td className="px-4 py-3">

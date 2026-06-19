@@ -18,6 +18,7 @@ export default async function NewCardPage() {
     <NewCardForm
       m={m}
       maxOrgCards={plan.limits.maxOrgCards}
+      maxProducts={plan.limits.maxProducts}
       atCardLimit={!createCheck.allowed && createCheck.reason === "card_limit"}
     />
   );

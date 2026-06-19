@@ -5,13 +5,110 @@
 
 ---
 
+## Kuzey yıldızı (tek cümle)
+
+**Satılan şey JSON dosyası değil; süreli, yenilenebilir güven hizmetidir** — registry barındırma + DNS doğrulama + `verified: true` otoritesi + resolve kotası. SSL sertifikası gibi: dosya kalabilir, güven sinyali abonelikle yaşar.
+
+---
+
+## Temel kararlar (erken kilit — geri dönüş maliyeti yüksek)
+
+Bunlar sonradan değişirse migration, müşteri sözleşmesi ve SDK davranışı kırılır. **Önce bunları kodla, sonra özellik ekle.**
+
+| # | Karar | Açıklama |
+|---|--------|----------|
+| 1 | **Hibrit keşif** | Registry birincil, `/.well-known/digital-card` fallback (`kesif-stratejisi.md`) |
+| 2 | **`verified` ≠ kalıcı** | DNS + aktif abonelik birlikte; süre bitince veya domain değişince revoke |
+| 3 | **`getEffectiveTier()`** | `expires_at` geçmişse DB tier ne olursa olsun efektif tier = free |
+| 4 | **Churn: grace → downgrade** | 14–30 gün tam erişim → free limitleri + `verified` düşür (JSON silinmez) |
+| 5 | **Domain değişimi = re-doğrulama** | PATCH update’te domain değişirse `verified=false`, DNS kapat, kuyruğa al |
+| 6 | **Public JSON açık, otorite ücretli** | Resolve/well-known okunabilir; verified rozeti ve yüksek kota abonelikle |
+| 7 | **Kart geçmişi (minimal log)** | Müşteri PATCH’lerinde `changed_fields` + timestamp (tam diff sonra) |
+
+**Bilinçli olarak ertelenen:** JWS imza, MCP sunucusu, şema v1.1, federated registry, rol tabanlı admin.
+
+---
+
+## Uygulama sırası (tıkanmayı önleyen yol)
+
+Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
+
+### Faz 0 — Temeli sabitle (1–2 hafta, kod)
+
+- [x] **`getEffectiveTier()`** — `user-plan.ts`; tüm limit/kota kontrolleri buna bağlansın
+- [x] **Domain değişiminde revoke** — `update/route.ts` + kuyruk senkronu
+- [x] **Doğrulama kuyruğu (kart merkezli)** — doğrulanmamış kartlar listelensin (deploy + test)
+- [x] **`card_change_logs` migration** — minimal: card_id, user_id, fields[], created_at
+- [ ] **Git commit + push** — birikmiş UI/operatör/kuyruk/Faz 0 değişiklikleri
+
+### Faz 1 — Ticari iskelet (Polar öncesi yasal zemin)
+
+- [ ] **`/pricing`** — tier tablosu + “abonelik bitince ne olur” kutusu
+- [ ] **`/legal/terms`** + **`/legal/refund`** — abonelik, export hakkı, verified süresi
+- [ ] **Footer linkleri** + kayıt Terms onayı
+
+### Faz 2 — Polar + churn otomasyonu
+
+- [ ] Polar ürünleri (Verified / Pro, yıllık + aylık)
+- [ ] Webhook → `tier`, `expires_at`, `polar_subscription_id`
+- [ ] Grace job veya webhook: bitince efektif free + verified revoke
+- [ ] Dashboard: plan bitiş tarihi, “Manage billing”, yenileme banner’ı
+- [ ] Resend: bitiş / grace / downgrade e-postaları
+
+### Faz 3 — Pilot müşteri + operatör kartı
+
+- [ ] Production operatör: `@eilcard` DNS doğrulama
+- [ ] Sinyalle pilot: abonelik senaryosu test (grace simülasyonu)
+- [ ] Admin: son müşteri değişikliği + kuyruk durumu
+
+### Faz 4 — Genişleme (temel oturduktan sonra)
+
+- [ ] Şema v1.1, MCP, JWS, CLI — **Faz 0–2 tamamlanmadan başlanmaz**
+
+---
+
+## Kısa vade — Kart içeriği ve UI (önce UI, sonra şema)
+
+Strateji: Mevcut şema v1.0 alanlarıyla zengin kart içeriği; şema v1.1 (`offerings[]` vb.) UI oturduktan sonra.
+
+- [x] **Dashboard — “AI agent'lar için” alanı** (yeni + düzenle): özet, ürünler (org), link/projeler (person → `actions`), `same_as`
+- [x] **Public kart (`/kart/[handle]`)** — özet, ürünler, linkler, profiller, iletişim; EN/TR etiketleri
+- [x] **Kart sayfası dil tutarlılığı** — UI etiketleri ziyaretçi çerezi yerine kart içeriği diline göre (TR içerik → TR etiket)
+- [x] **`/example` — temalı demo sayfa** — registry kaydı değil; EN/TR tutarlı “kart böyle görünür” önizlemesi ([eilcard.com/example](https://eilcard.com/example))
+- [x] **Landing kart önizlemesi** — ana sayfada mini demo + `/example` linki
+- [x] **Yanlış `@eilcard` registry kartı kaldırıldı** — platform kartı müşteri hesabında (Sinyalle) olmamalı; demo yalnızca `/example`
+- [x] **Platform operatör hesabı** — `is_platform_operator` + `PLATFORM_OPERATOR_EMAIL`; rezerve handle/domain; admin ayarları; `ensure-platform-operator.mjs`
+- [ ] **Operatör hesabını production'da kur** — `platform@eilcard.com` ile kayıt → ensure script → isteğe bağlı `@eilcard` org kartı
+- [ ] **Şema v1.1** — birleşik `offerings[]`, `content_locale` (veya eşdeğeri); UI ile senkron
+
+**Canlı referanslar**
+
+| Tür | URL |
+|-----|-----|
+| Demo (statik) | https://eilcard.com/example |
+| Pilot (gerçek, doğrulanmış) | https://eilcard.com/kart/sinyal24 |
+| Resolve (pilot) | https://eilcard.com/api/v1/resolve?domain=sinyalle.com |
+
+---
+
 ## Kısa vade — Agent keşif yüzeyi
 
 Entegrasyon rehberi (`/docs/agents`) — **yayında** (kısa vade maddeleri tamamlandı).
 
-- [x] **eilcard.com kök `llms.txt`** — Registry'nin kendi agent keşif dosyası (`/llms.txt` route); resolve, well-known, docs ve pilot örnek linkleri.
-- [x] **`/docs/agents` sayfası** — OpenAI Actions, Anthropic tool use, Gemini function calling için copy-paste şablonları; curl + `@digitalcard/sdk` örnekleri.
-- [x] **Dashboard: `llms.txt` patch bloğu** — Domain'e eklenecek EIL bölümü (resolve, well-known, agent-card); Sinyalle pilotu için indirilebilir / kopyalanabilir snippet.
+- [x] **eilcard.com kök `llms.txt`** — resolve, well-known, docs; pilot + `/example` linkleri
+- [x] **`/docs/agents` sayfası** — OpenAI / Anthropic / Gemini şablonları; curl + SDK
+- [x] **Dashboard: `llms.txt` patch bloğu** — domain'e eklenecek EIL bölümü; indirilebilir snippet
+
+---
+
+## Kısa vade — Site ve deploy
+
+- [x] **Production VPS** — DigitalOcean Amsterdam, Docker Compose + Caddy, `eilcard.com` canlı
+- [x] **Footer** — `support@eilcard.com`; tagline + iletişim yan yana; landing’deki yinelenen İletişim bölümü kaldırıldı
+- [x] **`platform-config.ts`** — `SUPPORT_EMAIL` / `BILLING_EMAIL` varsayılanları
+- [x] **Deploy script** — `scripts/prod-deploy-eilcard.sh` (tarball → VPS → rebuild)
+- [ ] **Production `.env.prod`** — `SUPPORT_EMAIL`, `BILLING_EMAIL` değerlerini doğrula (Admin → Ayarlar)
+- [ ] **Git commit + push** — kart UI, `/example`, locale düzeltmesi henüz commit edilmedi
 
 ---
 
@@ -39,42 +136,32 @@ Entegrasyon rehberi (`/docs/agents`) — **yayında** (kısa vade maddeleri tama
 
 ### Resmi iletişim kanalı (e-posta)
 
-İki katman gerekir: **gelen kutusu** (insan) + **işlem postası** (uygulama API).
+İki katman: **gelen kutusu** (insan) + **işlem postası** (uygulama API).
 
-**Karar:** Gelen kutusu **Namecheap Private Email** ([namecheap.com/hosting/email](https://www.namecheap.com/hosting/email/)) — domain ve VPS zaten Namecheap'te; DNS çoğu durumda otomatik kurulur.
+**Karar:** Gelen kutusu **Namecheap Private Email** — domain Namecheap/DigitalOcean DNS.
 
 | Katman | Amaç | Sağlayıcı |
 |--------|------|-----------|
 | **Gelen kutusu** | support@, billing@, hello@ | **Namecheap Private Email** |
-| **İşlem postası** | şifre sıfırlama, fatura bildirimi, sistem | **Resend** (`RESEND_API_KEY` hazır; ~3.000/ay ücretsiz) |
+| **İşlem postası** | şifre sıfırlama, fatura bildirimi | **Resend** (~3.000/ay ücretsiz) |
 
-**Önerilen plan (EIL Card başlangıç):** **Starter** — 1 mailbox + **10 alias** (yıllık ~$14.88 yenileme; ilk yıl promosyonlu daha düşük). Tek mailbox (`support@`) + alias'lar: `billing@`, `hello@`, `noreply@` yönlendirmesi. İleride moderatör için **Pro** (3 mailbox) veya **Ultimate** (5 mailbox).
+**Önerilen adresler:** `support@eilcard.com` (ana), `billing@` (alias → support@)
 
-**Önerilen adresler:** `support@eilcard.com` (ana), `billing@eilcard.com` (alias), `hello@eilcard.com` (alias)
-
-**Kurulum sırası (Namecheap):**
-1. Namecheap → Domain List → `eilcard.com` → **Private Email** ekle (30 gün deneme; domain Namecheap'teyse MX genelde otomatik)
-2. Webmail'de mailbox + alias'ları tanımla
-3. SPF/DKIM — Namecheap panelinde Private Email için kayıtları doğrula
-4. **Resend** — aynı domain için ayrı SPF/DKIM (işlem postası; gelen kutusu ile çakışmaması için Resend dokümantasyonundaki birleşik SPF)
-5. Production `.env`: `SUPPORT_EMAIL=support@eilcard.com`, `BILLING_EMAIL=billing@eilcard.com`, `RESEND_API_KEY`
-6. About, footer, Terms/Refund sayfalarında support adresi
-7. Polar checkout + fatura bildirimlerinde `billing@`
-
-**Maliyet (başlangıç):** Private Email Starter ~**$1–1.25/ay** (yıllık faturalama) + Resend free tier ≈ **~$15/yıl** toplam.
-
-- [x] **Admin → Ayarlar** — iletişim env durumu, güvenlik notu, ekip rolleri yol haritası
-- [ ] **Namecheap Private Email** — Starter + alias'lar (`support@`, `billing@`, `hello@`)
-- [ ] Resend domain doğrulama + şifre sıfırlama / bildirim şablonları
-- [ ] `SUPPORT_EMAIL` / `BILLING_EMAIL` production `.env` ve About sayfası
+- [x] **Namecheap Private Email** — Starter; `support@` çalışıyor; `billing@` alias
+- [x] **Footer + About** — `support@eilcard.com` görünür
+- [x] **Admin → Ayarlar** — iletişim env durumu, güvenlik notu, ekip yol haritası
+- [ ] **Resend** — domain doğrulama + şifre sıfırlama / bildirim şablonları
+- [ ] **`hello@` alias** (opsiyonel)
+- [ ] Polar checkout + fatura bildirimlerinde `billing@`
 
 ### Admin panel iyileştirmeleri
 
-- [x] **Doğrulama sayacı düzeltmesi** — yalnızca gerçekten bekleyen (kart henüz doğrulanmamış) DNS işlemleri; eski `pending` satırları temizlenir
+- [x] **Doğrulama kuyruğu (kart merkezli)** — doğrulanmamış kartlar; admin verify → kuyruktan düşer
+- [x] **Doğrulama sayacı düzeltmesi** — doğrulanmamış kart sayısı (kuyruk ile uyumlu)
 - [x] **Çift dil/çıkış butonu** — mobil üst / masaüstü sidebar tek konum
-- [x] **Ayarlar sayfası** (`/admin/settings`) — iletişim, güvenlik, ekip planı
+- [x] **Ayarlar sayfası** (`/admin/settings`)
 - [ ] **Rol tabanlı admin** — editör, moderatör, admin; davet + DB hesapları
-- [ ] **Admin şifre değiştirme UI** — `ADMIN_PASSWORD` yerine DB veya güvenli rotasyon akışı
+- [ ] **Admin şifre değiştirme UI** — `ADMIN_PASSWORD` yerine DB veya güvenli rotasyon
 
 ---
 
@@ -85,38 +172,39 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 ### 1. AI framework entegrasyonları (Tool / Plugin)
 
 - [x] **LangChain `EILResolveTool`** — `packages/sdk/examples/langchain-eil-resolve-tool.ts` + `/docs/agents`
-- [x] **Python agent şablonları** — `packages/sdk/examples/python/` (resolve, `@tool`, agent loop) + `/docs/agents`
-- [x] **Güvenlik sertleştirme** — rate limit (in-process), security headers (Caddy + Next.js), resolve kotası (plan bazlı), `security.txt`, panel public JSON uyarısı
-- [ ] **LlamaIndex `EILReader` (Data Connector)** — HTML scrape yerine resolve + well-known'dan temiz kurumsal JSON; RAG pipeline'a doğrudan besleme.
-- [ ] **MCP sunucusu** — `resolve_domain`, `get_card_by_handle` araçları (`kesif-stratejisi.md` Faz 3+ ile hizalı).
+- [x] **Python agent şablonları** — `packages/sdk/examples/python/` + `/docs/agents`
+- [x] **Güvenlik sertleştirme** — rate limit, security headers, resolve kotası, `security.txt`, public JSON uyarısı
+- [ ] **LlamaIndex `EILReader` (Data Connector)**
+- [ ] **MCP sunucusu** — `resolve_domain`, `get_card_by_handle`
 
 ### 2. LLM sistem komutları ve Function Calling
 
-- [x] **OpenAPI 3.x spec** — `public/openapi.yaml` → `/openapi.yaml`; `/docs` linki
-- [x] **Standart system prompt şablonu** — `/docs/agents`'ta; "EIL'i HTML taramadan önce kontrol et" (OpenAI, Anthropic, Gemini varyantları).
-- [x] **SDK agent tool** — `buildEILResolveToolDefinition`, `invokeEILResolve` (`@digitalcard/sdk`)
-- [ ] **JSON Schema → tool definition export** — Function calling şemalarının otomatik üretimi (TS + Python örnekleri).
+- [x] **OpenAPI 3.x spec** — `/openapi.yaml`
+- [x] **Standart system prompt şablonu** — `/docs/agents`
+- [x] **SDK agent tool** — `buildEILResolveToolDefinition`, `invokeEILResolve`
+- [ ] **JSON Schema → tool definition export**
 
 ### 3. Güven katmanı (kriptografik doğrulama)
 
-- [ ] **JWS imza alanı** — Kart JSON'unda `signature` / `jws`; registry authoritative imza; agent tarafında doğrulama SDK'sı.
-- [ ] **DNSSEC dokümantasyonu** — `_digital-card` TXT pointer güveni için rehber (zorunluluk değil, enterprise opsiyon).
-- [ ] **Proxy vs native well-known güven modeli** — Registry proxy (Sinyalle modeli) ile self-host arasında trust sinyalleri dokümante edilsin.
+- [ ] **JWS imza alanı**
+- [ ] **DNSSEC dokümantasyonu**
+- [ ] **Proxy vs native well-known güven modeli**
 
 ### 4. Geriye dönük uyumluluk (Bridge)
 
-- [ ] **Schema.org bridge** — EIL yoksa `resolve` fallback: sayfa HTML'inden `Organization` / `LocalBusiness` JSON-LD okuyup EIL formatına dönüştürme (`toSchemaOrg` ters yön).
-- [ ] **Bridge response meta** — `meta.source: "schema.org-inferred"`, `verified: false` — agent'ın güven seviyesini ayırt etmesi.
+- [ ] **Schema.org bridge**
+- [ ] **Bridge response meta**
 
 ### 5. Adoption araçları (özet yol haritası)
 
 | Araç | Durum | Yapılacak |
 |------|--------|-----------|
-| **Universal NPM SDK** | Kısmen var (`@digitalcard/sdk`) | Python paketi (`eilcard` / `digitalcard`), publish ve docs |
+| **Universal NPM SDK** | Kısmen var (`@digitalcard/sdk`) | Python paketi, publish |
 | **EIL CLI** | Yok | `eil-card init`, `verify`, `export well-known` |
-| **Playground** | Yayında | `/playground` — domain/handle resolve simülatörü |
-| **Entegrasyon rehberi** | Yayında | `/docs/agents` — Python + TS + LLM şablonları |
-| **Whitepaper** | Yayında | `/insights/eil-whitepaper` — EN/TR v1.0 |
+| **Playground** | Yayında | `/playground` |
+| **Kart demo** | Yayında | `/example` (statik; registry değil) |
+| **Entegrasyon rehberi** | Yayında | `/docs/agents` |
+| **Whitepaper** | Yayında | `/insights/eil-whitepaper` EN/TR |
 
 ---
 
@@ -124,11 +212,11 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 ### Ekip / Açık Kaynak hazırlığı
 
-- [ ] **Branch protection rules** — Ekip büyüdüğünde veya açık kaynak katkılar başladığında `main` branch'i korumaya al. GitHub → Settings → Branch protection rules → Require PR + review zorunluluğu ekle.
+- [ ] **Branch protection rules** — `main` için PR + review
 
 - [ ] IANA `/.well-known/digital-card` kaydı
 - [ ] Federated registry / mesh değerlendirmesi
-- [ ] Büyük AI sağlayıcılarına resmi entegrasyon başvurusu (OpenAPI + pilot metriklerle)
+- [ ] Büyük AI sağlayıcılarına resmi entegrasyon başvurusu
 
 ---
 
@@ -136,14 +224,14 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 - Registry API: `resolve`, `cards/{handle}`, `well-known` mirror
 - TypeScript SDK: `DigitalCard.resolve`, well-known fallback, `toSchemaOrg`, `toLlmsTxtSection`
-- SDK agent tool: `buildEILResolveToolDefinition`, `invokeEILResolve`
-- LangChain JS/TS: `EILResolveTool` (`packages/sdk/examples/`)
-- Python şablonları: resolve, `@tool`, agent loop (`packages/sdk/examples/python/`)
-- OpenAPI 3.1 spec: `/openapi.yaml`
-- Dashboard keşif paneli: proxy snippet, well-known check, agent-card, llms.txt indirme
-- Güvenlik: rate limit, security headers, resolve kotası, `security.txt`, public data uyarısı
+- SDK agent tool, LangChain örneği, Python şablonları
+- OpenAPI 3.1: `/openapi.yaml`
+- Dashboard keşif paneli: proxy snippet, well-known check, agent-card, llms.txt
+- Güvenlik: rate limit, headers, resolve kotası, `security.txt`
 - Whitepaper v1.0: `/insights/eil-whitepaper` (EN/TR)
 - Sinyalle pilot: nginx proxy, domain well-known **ok**
+- Kart UI v1.0: agent discovery alanları (şema değişmeden)
+- Demo sayfa: `/example` — Northwind Studio temalı önizleme (registry dışı)
 
 ---
 
@@ -152,3 +240,4 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 - `kesif-stratejisi.md` — keşif stratejisi ve MVP kararları
 - `packages/sdk/SDK.md` — SDK spesifikasyonu
 - `schema/SCHEMA.md` — kart JSON şeması
+- `deploy.md` — VPS deploy rehberi

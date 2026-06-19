@@ -30,7 +30,14 @@ export default async function AdminUserDetailPage({ params }: Props) {
       </Link>
 
       <div className="mt-6">
-        <h2 className="text-2xl font-semibold">{user.name}</h2>
+        <div className="flex flex-wrap items-center gap-3">
+          <h2 className="text-2xl font-semibold">{user.name}</h2>
+          {user.isPlatformOperator && (
+            <span className="rounded-full bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+              {a.platformOperatorBadge}
+            </span>
+          )}
+        </div>
         <p className="mt-1 text-sm text-[var(--color-text-muted)]">{user.email}</p>
         {user.suspendedAt && (
           <p className="mt-2 text-sm text-[var(--color-error)]">{a.suspended}</p>
@@ -42,8 +49,27 @@ export default async function AdminUserDetailPage({ params }: Props) {
         <dl className="space-y-3 text-sm">
           <div className="flex justify-between gap-4">
             <dt className="text-[var(--color-text-muted)]">{a.plan}</dt>
-            <dd>{tierLabel(user.plan.tier, a)}</dd>
+            <dd>{tierLabel(user.plan.subscribedTier, a)}</dd>
           </div>
+          {user.plan.expiresAt && (
+            <div className="flex justify-between gap-4">
+              <dt className="text-[var(--color-text-muted)]">{a.planExpires}</dt>
+              <dd>
+                {user.plan.expiresAt.toISOString().slice(0, 10)}
+                {user.plan.planExpired ? (
+                  <span className="ml-2 text-[var(--color-error)]">
+                    ({a.planExpiredBadge})
+                  </span>
+                ) : null}
+              </dd>
+            </div>
+          )}
+          {user.plan.planExpired && (
+            <div className="flex justify-between gap-4">
+              <dt className="text-[var(--color-text-muted)]">{a.planEffective}</dt>
+              <dd>{tierLabel(user.plan.tier, a)}</dd>
+            </div>
+          )}
           <div className="flex justify-between gap-4">
             <dt className="text-[var(--color-text-muted)]">{a.emailVerified}</dt>
             <dd>{user.emailVerified ? a.yes : a.no}</dd>
@@ -66,7 +92,7 @@ export default async function AdminUserDetailPage({ params }: Props) {
         <div className="mt-6 border-t border-[var(--color-border)] pt-4">
           <AdminUserTierActions
             userId={user.id}
-            currentTier={user.plan.tier}
+            currentTier={user.plan.subscribedTier}
             m={a}
           />
         </div>

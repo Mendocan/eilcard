@@ -8,6 +8,7 @@ import {
 } from "@/lib/user-plan";
 import { createCardSchema } from "@digitalcard/schema";
 import { isDomainTaken } from "@/lib/domain-check";
+import { checkPlatformResourceAccess } from "@/lib/platform-operator";
 import { getClientIp } from "@/lib/client-ip";
 import {
   checkRateLimit,
@@ -44,6 +45,21 @@ export async function POST(request: NextRequest) {
   }
 
   const data = parsed.data;
+
+  const resourceCheck = await checkPlatformResourceAccess(session.user.id, {
+    handle: data.handle,
+    domain: data.domain,
+  });
+  if (!resourceCheck.allowed) {
+    return NextResponse.json(
+      {
+        error: "Reserved for platform operator",
+        reason: resourceCheck.reason,
+      },
+      { status: 403 }
+    );
+  }
+
   const createCheck = await canCreateCard(session.user.id, data.type);
 
   if (!createCheck.allowed) {

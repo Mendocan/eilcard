@@ -23,3 +23,24 @@ export async function isDomainTaken(
 
   return Boolean(row);
 }
+
+export async function isRegistryCardIdTaken(
+  cardId: string,
+  excludeCardUuid?: string
+): Promise<boolean> {
+  const normalized = cardId.trim().toLowerCase();
+  if (!normalized) return false;
+
+  const conditions = [eq(cards.cardId, normalized)];
+  if (excludeCardUuid) {
+    conditions.push(ne(cards.id, excludeCardUuid));
+  }
+
+  const [row] = await db
+    .select({ id: cards.id })
+    .from(cards)
+    .where(and(...conditions))
+    .limit(1);
+
+  return Boolean(row);
+}

@@ -7,6 +7,7 @@ import {
   ilike,
   and,
   gte,
+  inArray,
   type SQL,
 } from "drizzle-orm";
 import { db } from "@/lib/db";
@@ -20,8 +21,9 @@ import {
 } from "@/lib/db/schema";
 import { buildCardJson, getCardByHandle } from "@/lib/card-service";
 import {
-  actionablePendingCondition,
   reconcileStaleVerifications,
+  resolveVerificationQueueState,
+  unverifiedCardCondition,
 } from "@/lib/domain-verification-queue";
 import { getUserPlan } from "@/lib/user-plan";
 
@@ -48,11 +50,7 @@ export async function getAdminOverview() {
         .select({ total: sql<number>`coalesce(sum(${resolveEvents.count}), 0)` })
         .from(resolveEvents)
         .where(eq(resolveEvents.date, today)),
-      db
-        .select({ c: count() })
-        .from(domainVerifications)
-        .innerJoin(cards, eq(domainVerifications.cardId, cards.id))
-        .where(actionablePendingCondition),
+      db.select({ c: count() }).from(cards).where(unverifiedCardCondition),
     ]);
 
   const [recentCards, recentUsers] = await Promise.all([
@@ -129,6 +127,7 @@ export async function listAdminCards(filters: CardListFilters) {
       verified: cards.verified,
       createdAt: cards.createdAt,
       userEmail: users.email,
+      userIsPlatformOperator: users.isPlatformOperator,
     })
     .from(cards)
     .innerJoin(users, eq(cards.userId, users.id));
@@ -177,6 +176,7 @@ export async function getAdminCardDetail(handle: string) {
       userId: users.id,
       userName: users.name,
       userEmail: users.email,
+      userIsPlatformOperator: users.isPlatformOperator,
       userEmailVerified: users.emailVerified,
     })
     .from(cards)
@@ -213,32 +213,92 @@ export async function listVerificationQueue(page: number) {
 
   const offset = (page - 1) * PAGE_SIZE;
 
-  const rows = await db
+  const cardRows = await db
     .select({
-      verificationId: domainVerifications.id,
-      domain: domainVerifications.domain,
-      method: domainVerifications.method,
-      status: domainVerifications.status,
-      token: domainVerifications.token,
-      verifiedAt: domainVerifications.verifiedAt,
-      createdAt: domainVerifications.createdAt,
+      cardId: cards.id,
       handle: cards.handle,
-      cardVerified: cards.verified,
+      domain: cards.domain,
+      cardCreatedAt: cards.createdAt,
       userEmail: users.email,
     })
-    .from(domainVerifications)
-    .innerJoin(cards, eq(domainVerifications.cardId, cards.id))
+    .from(cards)
     .innerJoin(users, eq(cards.userId, users.id))
-    .where(actionablePendingCondition)
-    .orderBy(desc(domainVerifications.createdAt))
+    .where(unverifiedCardCondition)
+    .orderBy(
+      sql`case
+        when ${cards.domain} is not null and exists (
+          select 1 from domain_verifications dv
+          where dv.card_id = ${cards.id} and dv.status = 'pending'
+        ) then 0
+        when ${cards.domain} is not null then 1
+        else 2
+      end`,
+      desc(cards.createdAt)
+    )
     .limit(PAGE_SIZE)
     .offset(offset);
 
+  const cardIds = cardRows.map((row) => row.cardId);
+  const pendingByCard = new Map<
+    string,
+    {
+      id: string;
+      method: string;
+      token: string;
+      createdAt: Date;
+    }
+  >();
+
+  if (cardIds.length > 0) {
+    const pendingRows = await db
+      .select({
+        id: domainVerifications.id,
+        cardId: domainVerifications.cardId,
+        method: domainVerifications.method,
+        token: domainVerifications.token,
+        createdAt: domainVerifications.createdAt,
+      })
+      .from(domainVerifications)
+      .where(
+        and(
+          inArray(domainVerifications.cardId, cardIds),
+          eq(domainVerifications.status, "pending")
+        )
+      )
+      .orderBy(desc(domainVerifications.createdAt));
+
+    for (const row of pendingRows) {
+      if (!pendingByCard.has(row.cardId)) {
+        pendingByCard.set(row.cardId, row);
+      }
+    }
+  }
+
+  const rows = cardRows.map((card) => {
+    const pending = pendingByCard.get(card.cardId);
+    const queueState = resolveVerificationQueueState(
+      card.domain,
+      Boolean(pending)
+    );
+
+    return {
+      cardId: card.cardId,
+      handle: card.handle,
+      domain: card.domain,
+      userEmail: card.userEmail,
+      cardCreatedAt: card.cardCreatedAt,
+      queueState,
+      verificationId: pending?.id ?? null,
+      method: pending?.method ?? null,
+      token: pending?.token ?? null,
+      verificationCreatedAt: pending?.createdAt ?? null,
+    };
+  });
+
   const [totalRow] = await db
     .select({ c: count() })
-    .from(domainVerifications)
-    .innerJoin(cards, eq(domainVerifications.cardId, cards.id))
-    .where(actionablePendingCondition);
+    .from(cards)
+    .where(unverifiedCardCondition);
 
   const total = totalRow?.c ?? 0;
 
@@ -265,6 +325,7 @@ export async function listAdminUsers(q: string, page: number) {
       name: users.name,
       email: users.email,
       emailVerified: users.emailVerified,
+      isPlatformOperator: users.isPlatformOperator,
       createdAt: users.createdAt,
       cardCount: sql<number>`count(${cards.id})::int`,
     })
@@ -275,6 +336,7 @@ export async function listAdminUsers(q: string, page: number) {
       users.name,
       users.email,
       users.emailVerified,
+      users.isPlatformOperator,
       users.createdAt
     )
     .orderBy(desc(users.createdAt))
@@ -327,6 +389,7 @@ export async function getAdminUserDetail(userId: string) {
       name: users.name,
       email: users.email,
       emailVerified: users.emailVerified,
+      isPlatformOperator: users.isPlatformOperator,
       suspendedAt: users.suspendedAt,
       createdAt: users.createdAt,
       updatedAt: users.updatedAt,

@@ -65,12 +65,19 @@ export default async function AdminUsersPage({ searchParams }: Props) {
                     </Link>
                   </td>
                   <td className="px-4 py-3 text-[var(--color-text-muted)]">
-                    <Link
-                      href={`/admin/users/${u.id}`}
-                      className="hover:text-[var(--color-accent)]"
-                    >
-                      {u.email}
-                    </Link>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Link
+                        href={`/admin/users/${u.id}`}
+                        className="hover:text-[var(--color-accent)]"
+                      >
+                        {u.email}
+                      </Link>
+                      {u.isPlatformOperator && (
+                        <span className="rounded-full bg-[var(--color-accent)]/10 px-2 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+                          {a.platformOperatorBadge}
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="px-4 py-3">
                     {u.cardCount > 0 ? (

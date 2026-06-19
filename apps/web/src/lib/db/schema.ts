@@ -37,6 +37,7 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 255 }).notNull().unique(),
   emailVerified: boolean("email_verified").notNull().default(false),
   image: text("image"),
+  isPlatformOperator: boolean("is_platform_operator").notNull().default(false),
   suspendedAt: timestamp("suspended_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -153,6 +154,25 @@ export const adminAuditLogs = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [index("admin_audit_logs_created_at_idx").on(table.createdAt)]
+);
+
+export const cardChangeLogs = pgTable(
+  "card_change_logs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    cardId: uuid("card_id")
+      .notNull()
+      .references(() => cards.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    changedFields: text("changed_fields").array().notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("card_change_logs_card_id_idx").on(table.cardId),
+    index("card_change_logs_created_at_idx").on(table.createdAt),
+  ]
 );
 
 export const userPlans = pgTable(

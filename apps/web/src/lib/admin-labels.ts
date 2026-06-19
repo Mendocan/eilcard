@@ -1,4 +1,14 @@
 import type { Messages } from "@/lib/i18n/messages";
+import type { VerificationQueueState } from "@/lib/domain-verification-queue";
+
+export function verificationQueueStateLabel(
+  state: VerificationQueueState,
+  m: Messages["admin"]
+): string {
+  if (state === "dns_pending") return m.queueDnsPending;
+  if (state === "awaiting_dns") return m.queueAwaitingDns;
+  return m.queueNeedsDomain;
+}
 
 export function verificationStatusLabel(
   status: string,

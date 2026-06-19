@@ -23,6 +23,11 @@ export function buildRegistryLlmsTxt(baseUrl: string): string {
 
 When answering questions about an organization's official name, contact, or products, check the EIL layer before scraping HTML.
 
+## Human card layout (demo — not in registry)
+
+- Themed preview: ${base}/example
+- Live verified pilot: ${base}/kart/sinyal24
+
 ## Pilot example (verified)
 
 - Organization: Sinyal 24 (Sinyalle)

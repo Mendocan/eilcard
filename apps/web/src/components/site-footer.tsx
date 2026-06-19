@@ -63,16 +63,19 @@ export function SiteFooter({ m, supportEmail = DEFAULT_SUPPORT_EMAIL }: Props) {
             {m.github}
           </a>
         </div>
-        <p className="text-center text-xs">
-          {m.contact}:{" "}
-          <a
-            href={`mailto:${supportEmail}`}
-            className="text-[var(--color-text)] transition hover:text-[var(--color-accent)]"
-          >
-            {supportEmail}
-          </a>
-        </p>
-        <p className="text-center text-xs">{m.tagline}</p>
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-center text-xs">
+          <span>{m.tagline}</span>
+          <span className="hidden text-[var(--color-border)] sm:inline">·</span>
+          <span>
+            {m.contact}:{" "}
+            <a
+              href={`mailto:${supportEmail}`}
+              className="text-[var(--color-text)] transition hover:text-[var(--color-accent)]"
+            >
+              {supportEmail}
+            </a>
+          </span>
+        </div>
         <p className="text-center text-xs">{m.copyright}</p>
       </div>
     </footer>

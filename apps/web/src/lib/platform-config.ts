@@ -1,3 +1,5 @@
+import { getPlatformOperatorEmail } from "@/lib/platform-operator-env";
+
 export const DEFAULT_SUPPORT_EMAIL = "support@eilcard.com";
 
 export function getPublicSupportEmail(): string {
@@ -8,6 +10,7 @@ export type PlatformConfig = {
   appUrl: string;
   supportEmail: string | null;
   billingEmail: string | null;
+  platformOperatorEmail: string;
   resendConfigured: boolean;
   adminConfigured: boolean;
 };
@@ -17,6 +20,7 @@ export function getPlatformConfig(): PlatformConfig {
     appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://eilcard.com",
     supportEmail: process.env.SUPPORT_EMAIL?.trim() || DEFAULT_SUPPORT_EMAIL,
     billingEmail: process.env.BILLING_EMAIL?.trim() || null,
+    platformOperatorEmail: getPlatformOperatorEmail(),
     resendConfigured: Boolean(process.env.RESEND_API_KEY?.trim()),
     adminConfigured: Boolean(process.env.ADMIN_PASSWORD?.trim()),
   };

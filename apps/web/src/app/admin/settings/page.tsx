@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requireAdminSession } from "@/lib/admin-auth";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
@@ -5,6 +6,7 @@ import {
   getPlatformConfig,
   getRecommendedContactAddresses,
 } from "@/lib/platform-config";
+import { getPlatformOperatorStatus } from "@/lib/platform-operator";
 
 function StatusBadge({ ok, label }: { ok: boolean; label: string }) {
   return (
@@ -55,6 +57,14 @@ export default async function AdminSettingsPage() {
   const config = getPlatformConfig();
   const domain = new URL(config.appUrl).hostname;
   const recommended = getRecommendedContactAddresses(domain);
+  const operator = await getPlatformOperatorStatus();
+
+  const operatorReady = operator.userFound && operator.isDesignated;
+  const operatorStatusLabel = !operator.userFound
+    ? a.settingsOperatorPending
+    : operator.isDesignated
+      ? a.settingsOperatorReady
+      : a.settingsOperatorMismatch;
 
   return (
     <main>
@@ -66,6 +76,40 @@ export default async function AdminSettingsPage() {
       </div>
 
       <div className="space-y-6 p-4 sm:p-8">
+        <SettingsCard title={a.settingsOperatorTitle}>
+          <p>{a.settingsOperatorBody}</p>
+          <div className="space-y-2 rounded-xl border border-[var(--color-border)] p-4">
+            <ConfigRow
+              label={a.settingsOperatorEmail}
+              value={operator.expectedEmail}
+            />
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <span>{a.settingsOperatorStatus}</span>
+              <StatusBadge ok={operatorReady} label={operatorStatusLabel} />
+            </div>
+            {operator.userFound && (
+              <>
+                <ConfigRow label={a.name} value={operator.userName ?? "—"} />
+                <ConfigRow
+                  label={a.settingsOperatorCards}
+                  value={String(operator.cardCount)}
+                />
+              </>
+            )}
+          </div>
+          {operator.userId && (
+            <Link
+              href={`/admin/users/${operator.userId}`}
+              className="inline-flex text-sm font-medium text-[var(--color-accent)] hover:opacity-80"
+            >
+              {a.view} →
+            </Link>
+          )}
+          <p className="rounded-lg border border-dashed border-[var(--color-border)] px-4 py-3 text-xs">
+            {a.settingsOperatorSetupHint}
+          </p>
+        </SettingsCard>
+
         <SettingsCard title={a.settingsContactTitle}>
           <p>{a.settingsContactBody}</p>
           <div className="space-y-2 rounded-xl border border-[var(--color-border)] p-4">

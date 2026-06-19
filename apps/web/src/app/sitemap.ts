@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/insights/ai-agent-field-note",
     "/insights/eil-whitepaper",
     "/playground",
+    "/example",
     "/login",
     "/register",
   ];

@@ -8,6 +8,23 @@ export const actionablePendingCondition = and(
   eq(cards.verified, false)
 );
 
+/** Cards that belong in the admin verification queue. */
+export const unverifiedCardCondition = eq(cards.verified, false);
+
+export type VerificationQueueState =
+  | "dns_pending"
+  | "awaiting_dns"
+  | "needs_domain";
+
+export function resolveVerificationQueueState(
+  domain: string | null,
+  hasPendingDns: boolean
+): VerificationQueueState {
+  if (!domain) return "needs_domain";
+  if (hasPendingDns) return "dns_pending";
+  return "awaiting_dns";
+}
+
 export async function reconcileStaleVerifications() {
   const staleOnVerifiedCards = await db
     .select({ id: domainVerifications.id })

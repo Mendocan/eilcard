@@ -117,11 +117,6 @@ const en = {
     copy: "Copy code",
     copied: "Copied",
   },
-  contact: {
-    title: "Contact",
-    body: "Questions about your account, billing, or integrations? Email us — we typically reply within one business day.",
-    label: "Contact",
-  },
   footer: {
     tagline: "Entity identity for machines - not user login.",
     product: "EIL Card",
@@ -163,6 +158,60 @@ const en = {
     contactBodyWithEmail:
       "For support, billing questions, and account issues, email us. You can also open GitHub Issues for bugs and integration ideas.",
     backHome: "← Back to home",
+  },
+  publicCard: {
+    verified: "Verified",
+    products: "Products & services",
+    profiles: "Profiles",
+    links: "Links",
+    email: "Email",
+    phone: "Phone",
+    website: "Website",
+    notFound: "Card not found",
+    footer: "Digital card",
+  },
+  exampleCard: {
+    metaTitle: "Card example — EIL Card",
+    metaDescription:
+      "Themed preview of a human-facing digital card. Illustrative only — not a live registry entry.",
+    eyebrow: "Example",
+    title: "What a digital card looks like",
+    intro:
+      "This is a themed layout preview for visitors. It is not stored in the registry and has no JSON API. Verified customers get their own handle at /kart/{handle}.",
+    demoBadge: "Demo · illustrative only",
+    footerNote: "Example layout · not in the registry",
+    livePilot: "Live verified pilot",
+    livePilotHint: "Sinyal 24 — a real registry card with DNS verification.",
+    landingTitle: "Human card preview",
+    landingBody:
+      "Visitors see a clean identity page; agents read canonical JSON from the registry.",
+    landingLink: "Open full example",
+    card: {
+      nameOfficial: "Northwind Studio",
+      nameShort: "Northwind",
+      tagline: "Product design & brand systems",
+      summary:
+        "Northwind Studio helps SaaS teams ship coherent product UI and brand systems. This card shows how organization name, summary, products, and contact appear to humans — the same fields agents read as JSON via resolve().",
+      products: [
+        {
+          name: "Design systems",
+          description: "Component libraries and Figma tokens for product teams.",
+        },
+        {
+          name: "Brand identity",
+          description: "Logo, typography, and voice guidelines.",
+        },
+      ],
+      links: [
+        { label: "Portfolio", url: "https://example.com/work" },
+        { label: "Book a call", url: "https://example.com/contact" },
+      ],
+      sameAs: ["https://github.com/example", "https://linkedin.com/company/example"],
+      contact: {
+        email: "hello@northwind.example",
+        website: "https://northwind.example",
+      },
+    },
   },
   docs: {
     metaTitle: "Documentation - EIL Card",
@@ -324,8 +373,8 @@ const en = {
       "Enter a domain or registry handle to run the same resolve() path agents use - registry API first, with timing and domain well-known check.",
     modeDomain: "By domain",
     modeHandle: "By handle",
-    domainPlaceholder: "sinyalle.com",
-    handlePlaceholder: "sinyal24",
+    domainPlaceholder: "example.com",
+    handlePlaceholder: "mycompany",
     resolveButton: "Resolve",
     resolving: "Resolving…",
     resolveFailed: "Could not reach the registry.",
@@ -426,6 +475,11 @@ const en = {
     planPro: "Pro",
     signOut: "Sign out",
     planLabel: "Plan",
+    planExpiredNote: "expired — Free limits apply",
+    platformOperatorBanner:
+      "Platform operator account — registry cards here are for EIL Card itself, not customer pilots. Visitor demo layout lives at /example.",
+    reservedHandleError: "This handle is reserved for the platform operator account.",
+    reservedDomainError: "This domain is reserved for the platform operator account.",
     backToCards: "← My cards",
     backToCard: "← Back to card",
     qrCode: "QR code",
@@ -438,6 +492,7 @@ const en = {
     newCardTitle: "New card",
     cardType: "Card type",
     handleLabel: "Handle",
+    handlePlaceholder: "mycompany",
     officialName: "Official name *",
     shortName: "Short name",
     fullName: "Full name *",
@@ -470,8 +525,14 @@ const en = {
     saveSuccess: "Card updated.",
     saveFailed: "Could not save card.",
     summary: "Summary",
-    summaryHint: "2–3 sentences for AI agents - what this entity does.",
+    summaryHint:
+      "What agents should know beyond the name — role, offerings, and context (2–5 sentences).",
+    agentDiscoveryTitle: "For AI agents",
+    agentDiscoveryIntro:
+      "Identity is not enough — tell agents what this entity does and what else exists (products, profiles, links).",
     products: "Products & services",
+    productsHint:
+      "Things this organization offers — agents read these before scraping the website.",
     productName: "Name",
     productDescription: "Description",
     productUrl: "URL (optional)",
@@ -479,6 +540,13 @@ const en = {
     removeProduct: "Remove",
     sameAs: "Profiles (sameAs)",
     sameAsHint: "One URL per line - LinkedIn, Instagram, GitHub, etc.",
+    personLinks: "Links & projects",
+    personLinksHint:
+      "Portfolio, publications, tools — agents see these as link actions (label + URL).",
+    linkLabel: "Label",
+    linkUrl: "URL",
+    addLink: "+ Add link",
+    removeLink: "Remove",
     website: "Website",
     phone: "Phone",
     email: "Email",
@@ -582,7 +650,7 @@ const en = {
     deleteConfirm: "Delete card “{handle}”? This cannot be undone.",
     actionFailed: "Action failed. Try again.",
     verification: "Verification queue",
-    verificationSubtitle: "Pending DNS and domain verifications",
+    verificationSubtitle: "Unverified cards awaiting domain or DNS verification",
     auditLog: "Audit log",
     auditSubtitle: "Admin actions on the platform",
     pendingVerifications: "Pending verifications",
@@ -609,7 +677,11 @@ const en = {
     auditAction: "Action",
     auditTarget: "Target",
     auditDetails: "Details",
-    noPendingVerifications: "No pending verifications",
+    noPendingVerifications: "No unverified cards in queue",
+    queueStatus: "Queue status",
+    queueDnsPending: "DNS TXT pending",
+    queueAwaitingDns: "Awaiting DNS start",
+    queueNeedsDomain: "Domain not set",
     statusFailed: "Failed",
     cardIdLabel: "Card ID",
     analytics: "Analytics",
@@ -632,6 +704,9 @@ const en = {
     auditActionCardDelete: "Delete card",
     auditActionCardDnsCheck: "DNS recheck",
     plan: "Plan",
+    planExpires: "Plan expires",
+    planExpiredBadge: "expired",
+    planEffective: "Effective tier",
     changePlan: "Change plan",
     planUpdated: "Plan updated.",
     tierFree: "Free",
@@ -671,8 +746,23 @@ const en = {
     settingsPlatformTitle: "Platform",
     settingsAppUrl: "Public app URL",
     settingsPlatformHint: "Used in emails, checkout return URLs, and discovery links.",
+    settingsOperatorTitle: "Registry operator account",
+    settingsOperatorBody:
+      "The platform operator is a separate dashboard user from customers (e.g. Sinyalle). It owns reserved handles and the registry domain when you publish EIL Card itself.",
+    settingsOperatorEmail: "Expected email (PLATFORM_OPERATOR_EMAIL)",
+    settingsOperatorStatus: "Status",
+    settingsOperatorReady: "Designated",
+    settingsOperatorPending: "User not registered",
+    settingsOperatorMismatch: "Registered but not designated — run ensure-platform-operator script",
+    settingsOperatorCards: "Operator cards",
+    settingsOperatorSetupHint:
+      "1. Register at /register with the email above · 2. Run: node apps/web/scripts/ensure-platform-operator.mjs on the server",
+    platformOperatorBadge: "Platform",
+    customerBadge: "Customer",
+    reservedHandleError: "This handle is reserved for the platform operator account.",
+    reservedDomainError: "This domain is reserved for the platform operator account.",
   },
-} ;
+};
 
 export type Messages = typeof en;
 
@@ -792,11 +882,6 @@ const tr: Messages = {
     copy: "Kodu kopyala",
     copied: "Kopyalandı",
   },
-  contact: {
-    title: "İletişim",
-    body: "Hesap, fatura veya entegrasyon sorularınız için bize yazın — genelde bir iş günü içinde yanıtlarız.",
-    label: "İletişim",
-  },
   footer: {
     tagline: "Makine kimliği - kullanıcı girişi değil.",
     product: "EIL Card",
@@ -838,6 +923,60 @@ const tr: Messages = {
     contactBodyWithEmail:
       "Destek, fatura ve hesap konuları için bize e-posta gönderebilirsiniz. Hata ve entegrasyon fikirleri için GitHub Issues da açıktır.",
     backHome: "← Ana sayfaya dön",
+  },
+  publicCard: {
+    verified: "Doğrulanmış",
+    products: "Ürün ve hizmetler",
+    profiles: "Profiller",
+    links: "Linkler",
+    email: "E-posta",
+    phone: "Telefon",
+    website: "Web sitesi",
+    notFound: "Kart bulunamadı",
+    footer: "Dijital kart",
+  },
+  exampleCard: {
+    metaTitle: "Kart örneği — EIL Card",
+    metaDescription:
+      "İnsan yüzü dijital kart önizlemesi. Yalnızca temalı demo — canlı registry kaydı değil.",
+    eyebrow: "Örnek",
+    title: "Dijital kart nasıl görünür",
+    intro:
+      "Bu sayfa ziyaretçiler için temalı bir düzen önizlemesidir. Registry'de kayıtlı değildir ve JSON API'si yoktur. Doğrulanmış müşteriler kendi handle'larıyla /kart/{handle} adresinde yayınlanır.",
+    demoBadge: "Demo · yalnızca örnek",
+    footerNote: "Örnek düzen · registry'de değil",
+    livePilot: "Canlı doğrulanmış pilot",
+    livePilotHint: "Sinyal 24 — DNS doğrulamalı gerçek registry kartı.",
+    landingTitle: "İnsan kartı önizlemesi",
+    landingBody:
+      "Ziyaretçiler sade bir kimlik sayfası görür; agent'lar registry'den canonical JSON okur.",
+    landingLink: "Tam örneği aç",
+    card: {
+      nameOfficial: "Northwind Studio",
+      nameShort: "Northwind",
+      tagline: "Ürün tasarımı ve marka sistemleri",
+      summary:
+        "Northwind Studio, SaaS ekiplerine tutarlı ürün arayüzü ve marka sistemleri sunar. Bu kart; kurum adı, özet, ürünler ve iletişimin insanlara nasıl göründüğünü gösterir — agent'lar aynı alanları resolve() ile JSON olarak okur.",
+      products: [
+        {
+          name: "Tasarım sistemleri",
+          description: "Ürün ekipleri için bileşen kütüphaneleri ve Figma token'ları.",
+        },
+        {
+          name: "Marka kimliği",
+          description: "Logo, tipografi ve ses tonu rehberleri.",
+        },
+      ],
+      links: [
+        { label: "Portfolyo", url: "https://example.com/work" },
+        { label: "Görüşme planla", url: "https://example.com/contact" },
+      ],
+      sameAs: ["https://github.com/example", "https://linkedin.com/company/example"],
+      contact: {
+        email: "hello@northwind.example",
+        website: "https://northwind.example",
+      },
+    },
   },
   docs: {
     metaTitle: "Dokümantasyon - EIL Card",
@@ -999,8 +1138,8 @@ const tr: Messages = {
       "Domain veya registry handle girin - agent'ların kullandığı resolve() yolunu çalıştırın: registry API, süre ölçümü ve domain well-known kontrolü.",
     modeDomain: "Domain ile",
     modeHandle: "Handle ile",
-    domainPlaceholder: "sinyalle.com",
-    handlePlaceholder: "sinyal24",
+    domainPlaceholder: "example.com",
+    handlePlaceholder: "mycompany",
     resolveButton: "Resolve",
     resolving: "Çözümleniyor…",
     resolveFailed: "Registry'ye ulaşılamadı.",
@@ -1101,6 +1240,11 @@ const tr: Messages = {
     planPro: "Pro",
     signOut: "Çıkış",
     planLabel: "Plan",
+    planExpiredNote: "süresi doldu — Ücretsiz limitler",
+    platformOperatorBanner:
+      "Platform operatör hesabı — buradaki registry kartları EIL Card'ın kendisi içindir, müşteri pilotları değil. Ziyaretçi demo düzeni /example adresindedir.",
+    reservedHandleError: "Bu handle platform operatör hesabına ayrılmıştır.",
+    reservedDomainError: "Bu domain platform operatör hesabına ayrılmıştır.",
     backToCards: "← Kartlarım",
     backToCard: "← Karta dön",
     qrCode: "QR kod",
@@ -1113,6 +1257,7 @@ const tr: Messages = {
     newCardTitle: "Yeni Kart",
     cardType: "Kart tipi",
     handleLabel: "Handle",
+    handlePlaceholder: "mycompany",
     officialName: "Resmi ad *",
     shortName: "Kısa ad",
     fullName: "Ad soyad *",
@@ -1145,8 +1290,14 @@ const tr: Messages = {
     saveSuccess: "Kart güncellendi.",
     saveFailed: "Kart kaydedilemedi.",
     summary: "Özet",
-    summaryHint: "AI agent'lar için 2–3 cümle - bu kurum ne yapar?",
+    summaryHint:
+      "Agent'ların isim dışında bilmesi gerekenler — rol, sunduklarınız, bağlam (2–5 cümle).",
+    agentDiscoveryTitle: "AI agent'lar için",
+    agentDiscoveryIntro:
+      "Kimlik tek başına yetmez — agent'lara ne yaptığınızı ve başka neleriniz olduğunu yazın (ürünler, profiller, linkler).",
     products: "Ürün ve hizmetler",
+    productsHint:
+      "Kurumun sunduğu şeyler — agent'lar site taramadan önce bunları okur.",
     productName: "Ad",
     productDescription: "Açıklama",
     productUrl: "URL (opsiyonel)",
@@ -1154,6 +1305,13 @@ const tr: Messages = {
     removeProduct: "Kaldır",
     sameAs: "Profiller (sameAs)",
     sameAsHint: "Her satıra bir URL - LinkedIn, Instagram, GitHub vb.",
+    personLinks: "Linkler ve projeler",
+    personLinksHint:
+      "Portfolyo, yayın, araçlar — agent'lar bunları link action olarak görür (etiket + URL).",
+    linkLabel: "Etiket",
+    linkUrl: "URL",
+    addLink: "+ Link ekle",
+    removeLink: "Kaldır",
     website: "Web sitesi",
     phone: "Telefon",
     email: "E-posta",
@@ -1257,7 +1415,7 @@ const tr: Messages = {
     deleteConfirm: "“{handle}” kartı silinsin mi? Bu işlem geri alınamaz.",
     actionFailed: "İşlem başarısız. Tekrar deneyin.",
     verification: "Doğrulama kuyruğu",
-    verificationSubtitle: "Bekleyen DNS ve domain doğrulamaları",
+    verificationSubtitle: "Domain veya DNS doğrulaması bekleyen doğrulanmamış kartlar",
     auditLog: "Denetim günlüğü",
     auditSubtitle: "Platformdaki admin işlemleri",
     pendingVerifications: "Bekleyen doğrulamalar",
@@ -1284,7 +1442,11 @@ const tr: Messages = {
     auditAction: "İşlem",
     auditTarget: "Hedef",
     auditDetails: "Detay",
-    noPendingVerifications: "Bekleyen doğrulama yok",
+    noPendingVerifications: "Kuyrukta doğrulanmamış kart yok",
+    queueStatus: "Kuyruk durumu",
+    queueDnsPending: "DNS TXT bekliyor",
+    queueAwaitingDns: "DNS başlatılmadı",
+    queueNeedsDomain: "Domain tanımlı değil",
     statusFailed: "Başarısız",
     cardIdLabel: "Kart ID",
     analytics: "Analitik",
@@ -1307,6 +1469,9 @@ const tr: Messages = {
     auditActionCardDelete: "Kart sil",
     auditActionCardDnsCheck: "DNS kontrol",
     plan: "Plan",
+    planExpires: "Plan bitiş",
+    planExpiredBadge: "süresi doldu",
+    planEffective: "Efektif plan",
     changePlan: "Planı değiştir",
     planUpdated: "Plan güncellendi.",
     tierFree: "Ücretsiz",
@@ -1346,6 +1511,21 @@ const tr: Messages = {
     settingsPlatformTitle: "Platform",
     settingsAppUrl: "Genel uygulama URL'si",
     settingsPlatformHint: "E-postalarda, checkout dönüş URL'lerinde ve keşif linklerinde kullanılır.",
+    settingsOperatorTitle: "Registry operatör hesabı",
+    settingsOperatorBody:
+      "Platform operatörü müşterilerden (ör. Sinyalle) ayrı bir panel kullanıcısıdır. EIL Card'ın kendisini registry'de yayınlarken rezerve handle ve domain'e sahip olur.",
+    settingsOperatorEmail: "Beklenen e-posta (PLATFORM_OPERATOR_EMAIL)",
+    settingsOperatorStatus: "Durum",
+    settingsOperatorReady: "Atandı",
+    settingsOperatorPending: "Kullanıcı kayıtlı değil",
+    settingsOperatorMismatch: "Kayıtlı ama atanmadı — ensure-platform-operator script'ini çalıştırın",
+    settingsOperatorCards: "Operatör kartları",
+    settingsOperatorSetupHint:
+      "1. Yukarıdaki e-postayla /register · 2. Sunucuda: node apps/web/scripts/ensure-platform-operator.mjs",
+    platformOperatorBadge: "Platform",
+    customerBadge: "Müşteri",
+    reservedHandleError: "Bu handle platform operatör hesabına ayrılmıştır.",
+    reservedDomainError: "Bu domain platform operatör hesabına ayrılmıştır.",
   },
 };
 

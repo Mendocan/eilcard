@@ -41,6 +41,13 @@ export default async function EditCardPage({ params }: Props) {
     summary?: string;
   };
   const sameAs = (body.same_as as string[] | undefined) ?? [];
+  const rawActions =
+    (body.actions as Array<{
+      type: string;
+      label: string;
+      value?: string;
+      url?: string;
+    }>) ?? [];
   const products =
     card.type === "organization"
       ? ((body.products as Array<{
@@ -81,6 +88,10 @@ export default async function EditCardPage({ params }: Props) {
           website: contact.website ?? "",
           domain: card.domain ?? "",
           sameAsText: sameAs.join("\n"),
+          links: rawActions
+            .filter((a) => a.type === "link" && a.url)
+            .map((a) => ({ label: a.label, url: a.url! })),
+          preservedActions: rawActions.filter((a) => a.type !== "link"),
         };
 
   return (

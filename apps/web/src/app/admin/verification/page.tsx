@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdminSession } from "@/lib/admin-auth";
 import { listVerificationQueue } from "@/lib/admin-queries";
+import { verificationQueueStateLabel } from "@/lib/admin-labels";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 import { buildTxtRecord } from "@/lib/dns-verify";
@@ -54,12 +55,13 @@ export default async function AdminVerificationPage({ searchParams }: Props) {
             {a.noPendingVerifications}
           </p>
         ) : (
-          <table className="w-full min-w-[800px] text-left text-sm">
+          <table className="w-full min-w-[880px] text-left text-sm">
             <thead className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
               <tr>
                 <th className="px-4 py-3 font-medium">{a.handle}</th>
                 <th className="px-4 py-3 font-medium">{a.domain}</th>
                 <th className="px-4 py-3 font-medium">{a.owner}</th>
+                <th className="px-4 py-3 font-medium">{a.queueStatus}</th>
                 <th className="px-4 py-3 font-medium">{a.method}</th>
                 <th className="px-4 py-3 font-medium">{a.txtRecord}</th>
                 <th className="px-4 py-3 font-medium">{a.created}</th>
@@ -68,7 +70,7 @@ export default async function AdminVerificationPage({ searchParams }: Props) {
             <tbody>
               {data.rows.map((row) => (
                 <tr
-                  key={row.verificationId}
+                  key={row.cardId}
                   className="border-b border-[var(--color-border)] last:border-0"
                 >
                   <td className="px-4 py-3 font-mono text-xs">
@@ -79,16 +81,23 @@ export default async function AdminVerificationPage({ searchParams }: Props) {
                       {row.handle}
                     </Link>
                   </td>
-                  <td className="px-4 py-3">{row.domain}</td>
+                  <td className="px-4 py-3">{row.domain ?? "—"}</td>
                   <td className="px-4 py-3 text-[var(--color-text-muted)]">
                     {row.userEmail}
                   </td>
-                  <td className="px-4 py-3">{row.method.toUpperCase()}</td>
+                  <td className="px-4 py-3">
+                    {verificationQueueStateLabel(row.queueState, a)}
+                  </td>
+                  <td className="px-4 py-3">
+                    {row.method ? row.method.toUpperCase() : "—"}
+                  </td>
                   <td className="max-w-xs truncate px-4 py-3 font-mono text-xs">
-                    {row.method === "dns" ? buildTxtRecord(row.token) : "—"}
+                    {row.method === "dns" && row.token
+                      ? buildTxtRecord(row.token)
+                      : "—"}
                   </td>
                   <td className="px-4 py-3 text-[var(--color-text-muted)]">
-                    {row.createdAt.toISOString().slice(0, 10)}
+                    {row.cardCreatedAt.toISOString().slice(0, 10)}
                   </td>
                 </tr>
               ))}

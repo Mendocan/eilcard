@@ -9,10 +9,14 @@ import {
 } from "@/lib/tier-limits";
 
 export type UserPlanInfo = {
+  /** Tier stored in the database (billing/subscription record). */
+  subscribedTier: PlanTier;
+  /** Tier used for limits and quotas (may downgrade when expired). */
   tier: PlanTier;
   limits: TierLimits;
   startedAt: Date | null;
   expiresAt: Date | null;
+  planExpired: boolean;
 };
 
 export type CardCreateCheck = {
@@ -23,6 +27,17 @@ export type CardCreateCheck = {
   currentCards: number;
   currentOrgCards: number;
 };
+
+export function getEffectiveTier(
+  subscribedTier: PlanTier,
+  expiresAt: Date | null,
+  now: Date = new Date()
+): PlanTier {
+  if (expiresAt && expiresAt.getTime() <= now.getTime()) {
+    return "free";
+  }
+  return subscribedTier;
+}
 
 export async function getUserPlan(userId: string): Promise<UserPlanInfo> {
   const [row] = await db
@@ -35,13 +50,22 @@ export async function getUserPlan(userId: string): Promise<UserPlanInfo> {
     .where(eq(userPlans.userId, userId))
     .limit(1);
 
-  const tier = (row?.tier ?? "free") as PlanTier;
+  const subscribedTier = (row?.tier ?? "free") as PlanTier;
+  const expiresAt = row?.expiresAt ?? null;
+  const tier = getEffectiveTier(subscribedTier, expiresAt);
+  const planExpired =
+    subscribedTier !== "free" &&
+    tier === "free" &&
+    expiresAt !== null &&
+    expiresAt.getTime() <= Date.now();
 
   return {
+    subscribedTier,
     tier,
     limits: TIER_LIMITS[tier],
     startedAt: row?.startedAt ?? null,
-    expiresAt: row?.expiresAt ?? null,
+    expiresAt,
+    planExpired,
   };
 }
 

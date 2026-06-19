@@ -1,16 +1,31 @@
 // Self-contained migration runner — applies .sql files in ./drizzle in order.
 // No drizzle-kit needed at runtime. Tracks applied files in __migrations table.
+import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import dotenv from "dotenv";
 import postgres from "postgres";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const drizzleDir = join(__dirname, "..", "drizzle");
+const appRoot = join(__dirname, "..");
+const drizzleDir = join(appRoot, "drizzle");
+
+for (const [file, override] of [
+  [".env", false],
+  [".env.local", true],
+]) {
+  const path = join(appRoot, file);
+  if (existsSync(path)) {
+    dotenv.config({ path, override, quiet: true });
+  }
+}
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
-  console.error("[migrate] DATABASE_URL is not set");
+  console.error(
+    "[migrate] DATABASE_URL is not set (export it or add to apps/web/.env or .env.local)"
+  );
   process.exit(1);
 }
 

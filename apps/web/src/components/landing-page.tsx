@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { CodeSnippet } from "@/components/code-snippet";
+import { CardView } from "@/components/card-view";
 import { SiteFooter } from "@/components/site-footer";
 import type { Messages } from "@/lib/i18n/messages";
 import { GitHubIcon } from "@/components/icons/github-icon";
@@ -24,10 +25,32 @@ console.log(card.verified) // true`;
 type Props = {
   locale: Locale;
   m: Messages;
-  supportEmail: string;
 };
 
-export function LandingPage({ locale, m, supportEmail }: Props) {
+function CardPreview({ m }: { m: Messages }) {
+  const ex = m.exampleCard;
+  const card = ex.card;
+  return (
+    <CardView
+      labels={m.publicCard}
+      name={card.nameOfficial}
+      shortName={card.nameShort}
+      tagline={card.tagline}
+      summary={card.summary}
+      verified
+      products={card.products}
+      linkActions={card.links}
+      sameAs={card.sameAs}
+      contact={card.contact}
+      handle="example"
+      demo
+      demoBadge={ex.demoBadge}
+      footerNote={ex.footerNote}
+    />
+  );
+}
+
+export function LandingPage({ locale, m }: Props) {
   return (
     <div className="min-h-screen">
       {/* Hero */}
@@ -259,6 +282,33 @@ export function LandingPage({ locale, m, supportEmail }: Props) {
         </div>
       </section>
 
+      {/* Card example preview */}
+      <section className="border-y border-[var(--color-border)] bg-[var(--color-surface)]/20">
+        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight">
+                {m.exampleCard.landingTitle}
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-[var(--color-text-muted)] sm:text-base">
+                {m.exampleCard.landingBody}
+              </p>
+              <Link
+                href="/example"
+                className="mt-6 inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
+              >
+                {m.exampleCard.landingLink} →
+              </Link>
+            </div>
+            <div className="flex justify-center lg:justify-end">
+              <div className="w-full max-w-sm scale-[0.92] origin-top lg:scale-100">
+                <CardPreview m={m} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* SDK */}
       <section className="border-t border-[var(--color-border)] bg-[var(--color-surface)]/20">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
@@ -279,30 +329,7 @@ export function LandingPage({ locale, m, supportEmail }: Props) {
         </div>
       </section>
 
-      {/* Contact */}
-      <section className="border-t border-[var(--color-border)]">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-          <h2 className="text-sm font-medium uppercase tracking-wider text-[var(--color-text-muted)]">
-            {m.contact.title}
-          </h2>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[var(--color-text-muted)]">
-            {m.contact.body}
-          </p>
-          <p className="mt-6 text-sm">
-            <span className="text-[var(--color-text-muted)]">
-              {m.contact.label}:{" "}
-            </span>
-            <a
-              href={`mailto:${supportEmail}`}
-              className="font-medium text-[var(--color-accent)] transition hover:opacity-80"
-            >
-              {supportEmail}
-            </a>
-          </p>
-        </div>
-      </section>
-
-      <SiteFooter m={m.footer} supportEmail={supportEmail} />
+      <SiteFooter m={m.footer} />
     </div>
   );
 }

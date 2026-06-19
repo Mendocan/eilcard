@@ -16,6 +16,11 @@ type ProductRow = {
   url: string;
 };
 
+type LinkRow = {
+  label: string;
+  url: string;
+};
+
 type InitialOrg = {
   type: "organization";
   nameOfficial: string;
@@ -40,6 +45,13 @@ type InitialPerson = {
   website: string;
   domain: string;
   sameAsText: string;
+  links: LinkRow[];
+  preservedActions: Array<{
+    type: string;
+    label: string;
+    value?: string;
+    url?: string;
+  }>;
 };
 
 type Props = {
@@ -82,6 +94,24 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
   const [products, setProducts] = useState<ProductRow[]>(
     initial.type === "organization" ? initial.products : []
   );
+  const [links, setLinks] = useState<LinkRow[]>(
+    initial.type === "person" ? initial.links : []
+  );
+
+  function updateLink(index: number, field: keyof LinkRow, value: string) {
+    setLinks((rows) =>
+      rows.map((row, i) => (i === index ? { ...row, [field]: value } : row))
+    );
+  }
+
+  function addLink() {
+    if (links.length >= 10) return;
+    setLinks((rows) => [...rows, { label: "", url: "" }]);
+  }
+
+  function removeLink(index: number) {
+    setLinks((rows) => rows.filter((_, i) => i !== index));
+  }
 
   function updateProduct(index: number, field: keyof ProductRow, value: string) {
     setProducts((rows) =>
@@ -145,6 +175,14 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
         }));
     } else {
       body.name = { full: nameFull };
+      const linkActions = links
+        .filter((l) => l.label.trim() && l.url.trim())
+        .map((l) => ({
+          type: "link" as const,
+          label: l.label.trim(),
+          url: l.url.trim(),
+        }));
+      body.actions = [...initial.preservedActions, ...linkActions];
     }
 
     const res = await fetch(`/api/v1/cards/${handle}/update`, {
@@ -220,17 +258,133 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
         />
       </div>
 
-      <div>
-        <label className="mb-1 block text-sm font-medium">{m.summary}</label>
-        <textarea
-          rows={4}
-          maxLength={2000}
-          value={summary}
-          onChange={(e) => setSummary(e.target.value)}
-          className={inputClass}
-        />
-        <p className="mt-1.5 text-xs text-[var(--color-text-muted)]">{m.summaryHint}</p>
-      </div>
+      <fieldset className="space-y-4 rounded-lg border border-[var(--color-border)] p-4">
+        <legend className="px-2 text-sm font-semibold">{m.agentDiscoveryTitle}</legend>
+        <p className="text-xs text-[var(--color-text-muted)]">{m.agentDiscoveryIntro}</p>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">{m.summary}</label>
+          <textarea
+            rows={4}
+            maxLength={2000}
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+            className={inputClass}
+          />
+          <p className="mt-1.5 text-xs text-[var(--color-text-muted)]">{m.summaryHint}</p>
+        </div>
+
+        {initial.type === "organization" && (
+          <div className="space-y-3">
+            <div>
+              <p className="text-sm font-medium">{m.products}</p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">{m.productsHint}</p>
+            </div>
+            {products.map((product, index) => (
+              <div
+                key={`${product.id}-${index}`}
+                className="space-y-2 rounded-lg border border-[var(--color-border)]/60 p-3"
+              >
+                <input
+                  type="text"
+                  placeholder={m.productName}
+                  value={product.name}
+                  onChange={(e) => updateProduct(index, "name", e.target.value)}
+                  className={inputClass}
+                />
+                <input
+                  type="text"
+                  placeholder={m.productDescription}
+                  value={product.description}
+                  onChange={(e) => updateProduct(index, "description", e.target.value)}
+                  className={inputClass}
+                />
+                <input
+                  type="url"
+                  placeholder={m.productUrl}
+                  value={product.url}
+                  onChange={(e) => updateProduct(index, "url", e.target.value)}
+                  className={inputClass}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeProduct(index)}
+                  className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-error)]"
+                >
+                  {m.removeProduct}
+                </button>
+              </div>
+            ))}
+            {products.length < maxProducts && (
+              <button
+                type="button"
+                onClick={addProduct}
+                className="text-sm font-medium text-[var(--color-accent)] hover:opacity-80"
+              >
+                {m.addProduct}
+              </button>
+            )}
+          </div>
+        )}
+
+        {initial.type === "person" && (
+          <div className="space-y-3">
+            <div>
+              <p className="text-sm font-medium">{m.personLinks}</p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">{m.personLinksHint}</p>
+            </div>
+            {links.map((link, index) => (
+              <div
+                key={index}
+                className="space-y-2 rounded-lg border border-[var(--color-border)]/60 p-3"
+              >
+                <input
+                  type="text"
+                  placeholder={m.linkLabel}
+                  value={link.label}
+                  onChange={(e) => updateLink(index, "label", e.target.value)}
+                  className={inputClass}
+                />
+                <input
+                  type="url"
+                  placeholder={m.linkUrl}
+                  value={link.url}
+                  onChange={(e) => updateLink(index, "url", e.target.value)}
+                  className={inputClass}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeLink(index)}
+                  className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-error)]"
+                >
+                  {m.removeLink}
+                </button>
+              </div>
+            ))}
+            {links.length < 10 && (
+              <button
+                type="button"
+                onClick={addLink}
+                className="text-sm font-medium text-[var(--color-accent)] hover:opacity-80"
+              >
+                {m.addLink}
+              </button>
+            )}
+          </div>
+        )}
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">{m.sameAs}</label>
+          <textarea
+            rows={3}
+            value={sameAsText}
+            onChange={(e) => setSameAsText(e.target.value)}
+            className={inputClass}
+            placeholder="https://instagram.com/..."
+          />
+          <p className="mt-1.5 text-xs text-[var(--color-text-muted)]">{m.sameAsHint}</p>
+        </div>
+      </fieldset>
 
       <fieldset className="space-y-3 rounded-lg border border-[var(--color-border)] p-4">
         <legend className="px-2 text-sm font-medium">{m.contact}</legend>
@@ -265,68 +419,6 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
           onChange={(e) => setDomain(e.target.value)}
           className={inputClass}
         />
-      </div>
-
-      {initial.type === "organization" && (
-        <fieldset className="space-y-4 rounded-lg border border-[var(--color-border)] p-4">
-          <legend className="px-2 text-sm font-medium">{m.products}</legend>
-          {products.map((product, index) => (
-            <div
-              key={`${product.id}-${index}`}
-              className="space-y-2 rounded-lg border border-[var(--color-border)]/60 p-3"
-            >
-              <input
-                type="text"
-                placeholder={m.productName}
-                value={product.name}
-                onChange={(e) => updateProduct(index, "name", e.target.value)}
-                className={inputClass}
-              />
-              <input
-                type="text"
-                placeholder={m.productDescription}
-                value={product.description}
-                onChange={(e) => updateProduct(index, "description", e.target.value)}
-                className={inputClass}
-              />
-              <input
-                type="url"
-                placeholder={m.productUrl}
-                value={product.url}
-                onChange={(e) => updateProduct(index, "url", e.target.value)}
-                className={inputClass}
-              />
-              <button
-                type="button"
-                onClick={() => removeProduct(index)}
-                className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-error)]"
-              >
-                {m.removeProduct}
-              </button>
-            </div>
-          ))}
-          {products.length < maxProducts && (
-            <button
-              type="button"
-              onClick={addProduct}
-              className="text-sm font-medium text-[var(--color-accent)] hover:opacity-80"
-            >
-              {m.addProduct}
-            </button>
-          )}
-        </fieldset>
-      )}
-
-      <div>
-        <label className="mb-1 block text-sm font-medium">{m.sameAs}</label>
-        <textarea
-          rows={3}
-          value={sameAsText}
-          onChange={(e) => setSameAsText(e.target.value)}
-          className={inputClass}
-          placeholder="https://instagram.com/..."
-        />
-        <p className="mt-1.5 text-xs text-[var(--color-text-muted)]">{m.sameAsHint}</p>
       </div>
 
       {error && <p className="text-sm text-[var(--color-error)]">{error}</p>}
