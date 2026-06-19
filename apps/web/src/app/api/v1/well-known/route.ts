@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   getCardByDomain,
-  buildCardJson,
+  buildPublicCardJson,
   incrementResolveCount,
 } from "@/lib/card-service";
 import { normalizeDomain } from "@/lib/well-known";
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Card not found" }, { status: 404 });
   }
 
-  const card = buildCardJson(row);
+  const card = await buildPublicCardJson(row);
   incrementResolveCount(row.id).catch(() => {});
 
   return NextResponse.json(card, {

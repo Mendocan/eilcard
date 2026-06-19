@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCardByHandle, buildCardJson } from "@/lib/card-service";
+import { getCardByHandle, buildPublicCardJson } from "@/lib/card-service";
 import { getClientIp } from "@/lib/client-ip";
 import { checkRateLimit, rateLimitResponse, RATE_LIMITS } from "@/lib/rate-limit";
 
@@ -49,7 +49,7 @@ export async function GET(
     return NextResponse.json({ error: "Card not found" }, { status: 404 });
   }
 
-  const card = buildCardJson(row);
+  const card = await buildPublicCardJson(row);
   const vcf = toVCardString(card as unknown as Record<string, unknown>);
 
   return new NextResponse(vcf, {

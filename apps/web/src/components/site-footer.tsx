@@ -11,61 +11,70 @@ type Props = {
   supportEmail?: string;
 };
 
+function Dot() {
+  return <span className="hidden text-[var(--color-border)] sm:inline">·</span>;
+}
+
 export function SiteFooter({ m, supportEmail = DEFAULT_SUPPORT_EMAIL }: Props) {
+  const navLink =
+    "transition hover:text-[var(--color-text)]";
+
   return (
     <footer className="border-t border-[var(--color-border)]">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 py-10 text-sm text-[var(--color-text-muted)] sm:px-6">
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
           <span>{m.product}</span>
-          <span className="hidden text-[var(--color-border)] sm:inline">·</span>
-          <Link
-            href="/about"
-            className="transition hover:text-[var(--color-text)]"
-          >
+          <Dot />
+          <Link href="/about" className={navLink}>
             {m.about}
           </Link>
-          <span className="hidden text-[var(--color-border)] sm:inline">·</span>
-          <Link
-            href="/docs"
-            className="transition hover:text-[var(--color-text)]"
-          >
+          <Dot />
+          <Link href="/docs" className={navLink}>
             {m.docs}
           </Link>
-          <span className="hidden text-[var(--color-border)] sm:inline">·</span>
-          <Link
-            href="/insights/ai-agent-field-note"
-            className="transition hover:text-[var(--color-text)]"
-          >
+          <Dot />
+          <Link href="/pricing" className={navLink}>
+            {m.pricing}
+          </Link>
+          <Dot />
+          <Link href="/insights/ai-agent-field-note" className={navLink}>
             {m.insights}
           </Link>
-          <span className="hidden text-[var(--color-border)] sm:inline">·</span>
-          <Link
-            href="/insights/eil-whitepaper"
-            className="transition hover:text-[var(--color-text)]"
-          >
+          <Dot />
+          <Link href="/insights/eil-whitepaper" className={navLink}>
             {m.whitepaper}
           </Link>
-          <span className="hidden text-[var(--color-border)] sm:inline">·</span>
-          <Link
-            href="/playground"
-            className="transition hover:text-[var(--color-text)]"
-          >
+          <Dot />
+          <Link href="/playground" className={navLink}>
             {m.playground}
           </Link>
-          <span className="hidden text-[var(--color-border)] sm:inline">·</span>
+          <Dot />
           <a
             href={GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 transition hover:text-[var(--color-text)]"
+            className={`flex items-center gap-2 ${navLink}`}
           >
             <GitHubIcon className="h-4 w-4" />
             {m.github}
           </a>
         </div>
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs">
+          <Link href="/legal/terms" className={navLink}>
+            {m.terms}
+          </Link>
+          <Dot />
+          <Link href="/legal/privacy" className={navLink}>
+            {m.privacy}
+          </Link>
+          <Dot />
+          <Link href="/legal/refund" className={navLink}>
+            {m.refunds}
+          </Link>
+        </div>
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-center text-xs">
           <span>{m.tagline}</span>
-          <span className="hidden text-[var(--color-border)] sm:inline">·</span>
+          <Dot />
           <span>
             {m.contact}:{" "}
             <a

@@ -18,12 +18,17 @@ export function RegisterForm({ m }: Props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    if (!acceptedTerms) {
+      setError(m.termsRequired);
+      return;
+    }
     setLoading(true);
 
     const result = await signUp.email({ name, email, password });
@@ -104,11 +109,39 @@ export function RegisterForm({ m }: Props) {
           <p className="mt-1.5 text-xs text-[var(--color-text-muted)]">{m.passwordMin}</p>
         </div>
 
+        <label className="flex cursor-pointer gap-2.5 text-xs leading-relaxed text-[var(--color-text-muted)]">
+          <input
+            type="checkbox"
+            checked={acceptedTerms}
+            onChange={(e) => setAcceptedTerms(e.target.checked)}
+            className="mt-0.5 shrink-0 accent-[var(--color-accent)]"
+          />
+          <span>
+            {m.termsPrefix}{" "}
+            <Link
+              href="/legal/terms"
+              className="font-medium text-[var(--color-accent)] hover:opacity-80"
+              target="_blank"
+            >
+              {m.termsLink}
+            </Link>{" "}
+            {m.termsAnd}{" "}
+            <Link
+              href="/legal/privacy"
+              className="font-medium text-[var(--color-accent)] hover:opacity-80"
+              target="_blank"
+            >
+              {m.privacyLink}
+            </Link>
+            .
+          </span>
+        </label>
+
         {error && <p className="text-sm text-[var(--color-error)]">{error}</p>}
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || !acceptedTerms}
           className="w-full rounded-lg bg-[var(--color-text)] px-4 py-2.5 text-sm font-medium text-[var(--color-bg)] transition hover:opacity-90 disabled:opacity-50"
         >
           {loading ? m.registerLoading : m.registerSubmit}

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { cards } from "@/lib/db/schema";
-import { buildCardJson } from "@/lib/card-service";
+import { buildPublicCardJson } from "@/lib/card-service";
 import { requireSession } from "@/lib/session";
 import { eq, and } from "drizzle-orm";
 
@@ -28,7 +28,7 @@ export async function GET(
     return NextResponse.json({ error: "Card not found" }, { status: 404 });
   }
 
-  const card = buildCardJson(row);
+  const card = await buildPublicCardJson(row);
   const body = JSON.stringify(card, null, 2);
 
   return new NextResponse(body, {

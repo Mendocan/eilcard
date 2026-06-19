@@ -4,13 +4,20 @@ import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 import { getUserPlan } from "@/lib/user-plan";
 import { planDisplayLabel } from "@/lib/plan-labels";
+import { isPolarCheckoutConfigured } from "@/lib/polar-config";
+import { DashboardBillingPanel } from "@/components/dashboard-billing-panel";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-export default async function DashboardPage() {
+type Props = {
+  searchParams: Promise<{ checkout?: string }>;
+};
+
+export default async function DashboardPage({ searchParams }: Props) {
   const session = await getSession();
   if (!session) redirect("/login");
 
+  const sp = await searchParams;
   const locale = await getLocale();
   const d = t(locale).dashboard;
   const [userCards, plan] = await Promise.all([
@@ -30,6 +37,13 @@ export default async function DashboardPage() {
 
   return (
     <div>
+      <DashboardBillingPanel
+        plan={plan}
+        polarCheckoutEnabled={isPolarCheckoutConfigured()}
+        checkoutSuccess={sp.checkout === "success"}
+        m={d}
+      />
+
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold">{d.title}</h1>

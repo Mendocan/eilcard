@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getCardByHandle, buildCardJson } from "@/lib/card-service";
+import { getCardByHandle, buildPublicCardJson } from "@/lib/card-service";
 import { getCardContentLocale } from "@/lib/card-content-locale";
 import { CardView } from "@/components/card-view";
 import { getLocale } from "@/lib/i18n/get-locale";
@@ -42,7 +42,7 @@ export default async function CardPage({ params }: Props) {
   const row = await getCardByHandle(handle);
   if (!row) notFound();
 
-  const card = buildCardJson(row);
+  const card = await buildPublicCardJson(row);
   const body = row.body as Record<string, unknown>;
   const pageLocale = getCardContentLocale(body);
   const p = t(pageLocale).publicCard;

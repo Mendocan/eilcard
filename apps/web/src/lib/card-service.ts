@@ -54,12 +54,24 @@ export function mergeCardBody(
   return merged;
 }
 
-export function buildCardJson(row: typeof cards.$inferSelect): Card {
+import { getUserPlan } from "./user-plan";
+
+export type BuildCardJsonOptions = {
+  /** Hide verified in public JSON when paid subscription lapsed. */
+  subscriptionLapsed?: boolean;
+};
+
+export function buildCardJson(
+  row: typeof cards.$inferSelect,
+  options?: BuildCardJsonOptions
+): Card {
   const body = row.body as Record<string, unknown>;
+  const publicVerified =
+    row.verified && !options?.subscriptionLapsed;
   const methods =
     row.verificationMethod.length > 0
       ? row.verificationMethod
-      : row.verified
+      : publicVerified
         ? (["dns"] as Card["verification_method"])
         : [];
 
@@ -68,13 +80,18 @@ export function buildCardJson(row: typeof cards.$inferSelect): Card {
     schema_version: SCHEMA_VERSION,
     card_id: row.cardId,
     handle: row.handle,
-    verified: row.verified,
+    verified: publicVerified,
     verification_method: methods as Card["verification_method"],
     updated_at: row.updatedAt.toISOString(),
     created_at: row.createdAt.toISOString(),
     human_url: `${process.env.NEXT_PUBLIC_APP_URL}/kart/${row.handle}`,
     registry_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/cards/${row.handle}`,
   } as Card;
+}
+
+export async function buildPublicCardJson(row: typeof cards.$inferSelect) {
+  const plan = await getUserPlan(row.userId);
+  return buildCardJson(row, { subscriptionLapsed: plan.planExpired });
 }
 
 export async function incrementResolveCount(cardId: string) {

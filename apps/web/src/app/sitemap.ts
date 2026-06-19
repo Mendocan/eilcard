@@ -13,6 +13,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/insights/eil-whitepaper",
     "/playground",
     "/example",
+    "/pricing",
+    "/legal/terms",
+    "/legal/privacy",
+    "/legal/refund",
     "/login",
     "/register",
   ];

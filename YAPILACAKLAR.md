@@ -7,7 +7,7 @@
 
 ## Kuzey yıldızı (tek cümle)
 
-**Satılan şey JSON dosyası değil; süreli, yenilenebilir güven hizmetidir** — registry barındırma + DNS doğrulama + `verified: true` otoritesi + resolve kotası. SSL sertifikası gibi: dosya kalabilir, güven sinyali abonelikle yaşar.
+**Satılan şey JSON dosyası değil; süreli, yenilenebilir güven hizmetidir** — registry barındırma + DNS doğrulama + `verified: true` otoritesi + resolve kotası. Kart verisi kalabilir; güven sinyali ve premium limitler abonelik yenilenmedikçe düşer.
 
 ---
 
@@ -39,21 +39,23 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 - [x] **Domain değişiminde revoke** — `update/route.ts` + kuyruk senkronu
 - [x] **Doğrulama kuyruğu (kart merkezli)** — doğrulanmamış kartlar listelensin (deploy + test)
 - [x] **`card_change_logs` migration** — minimal: card_id, user_id, fields[], created_at
-- [ ] **Git commit + push** — birikmiş UI/operatör/kuyruk/Faz 0 değişiklikleri
+- [x] **Git commit + push** — birikmiş UI/operatör/kuyruk/Faz 0 değişiklikleri (`4622f3a`)
 
 ### Faz 1 — Ticari iskelet (Polar öncesi yasal zemin)
 
-- [ ] **`/pricing`** — tier tablosu + “abonelik bitince ne olur” kutusu
-- [ ] **`/legal/terms`** + **`/legal/refund`** — abonelik, export hakkı, verified süresi
-- [ ] **Footer linkleri** + kayıt Terms onayı
+- [x] **`/pricing`** — tier tablosu + “abonelik bitince ne olur” kutusu
+- [x] **`/legal/terms`** + **`/legal/refund`** — abonelik, export hakkı, verified süresi
+- [x] **`/legal/privacy`** — gizlilik politikası
+- [x] **Footer linkleri** + kayıt Terms onayı
 
 ### Faz 2 — Polar + churn otomasyonu
 
-- [ ] Polar ürünleri (Verified / Pro, yıllık + aylık)
-- [ ] Webhook → `tier`, `expires_at`, `polar_subscription_id`
-- [ ] Grace job veya webhook: bitince efektif free + verified revoke
-- [ ] Dashboard: plan bitiş tarihi, “Manage billing”, yenileme banner’ı
-- [ ] Resend: bitiş / grace / downgrade e-postaları
+- [ ] **Polar org + ürünler** — Verified/Pro product ID'leri → VPS `.env.prod` (yerel test: `apps/web/.env.local`)
+- [x] **Webhook** → `/api/webhook/polar` → `tier`, `expires_at`, `polar_subscription_id`
+- [x] **Grace + downgrade** — `SUBSCRIPTION_GRACE_DAYS`, cron `/api/cron/subscription-reconcile`, verified revoke
+- [x] **Checkout + portal** — `/api/billing/checkout`, `/portal`
+- [x] **Dashboard billing panel** — bitiş tarihi, upgrade, manage billing
+- [x] **Resend iskelet** — `billing-email.ts` (plan expiring notice)
 
 ### Faz 3 — Pilot müşteri + operatör kartı
 
@@ -107,7 +109,7 @@ Entegrasyon rehberi (`/docs/agents`) — **yayında** (kısa vade maddeleri tama
 - [x] **Footer** — `support@eilcard.com`; tagline + iletişim yan yana; landing’deki yinelenen İletişim bölümü kaldırıldı
 - [x] **`platform-config.ts`** — `SUPPORT_EMAIL` / `BILLING_EMAIL` varsayılanları
 - [x] **Deploy script** — `scripts/prod-deploy-eilcard.sh` (tarball → VPS → rebuild)
-- [ ] **Production `.env.prod`** — `SUPPORT_EMAIL`, `BILLING_EMAIL` değerlerini doğrula (Admin → Ayarlar)
+- [ ] **VPS `.env.prod`** — `SUPPORT_EMAIL`, `BILLING_EMAIL`, Polar anahtarları (yerelde yok; sadece sunucuda)
 - [ ] **Git commit + push** — kart UI, `/example`, locale düzeltmesi henüz commit edilmedi
 
 ---

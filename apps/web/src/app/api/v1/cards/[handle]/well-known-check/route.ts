@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { cards } from "@/lib/db/schema";
-import { buildCardJson } from "@/lib/card-service";
+import { buildPublicCardJson } from "@/lib/card-service";
 import { requireSession } from "@/lib/session";
 import {
   buildWellKnownSetup,
@@ -42,7 +42,7 @@ export async function GET(
   }
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://eilcard.com";
-  const registryCard = buildCardJson(row);
+  const registryCard = await buildPublicCardJson(row);
   const result = await checkDomainWellKnown(row.domain, registryCard);
   const setup = buildWellKnownSetup(appUrl, row.domain, handle);
 

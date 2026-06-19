@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   getCardByDomain,
   getCardByHandle,
-  buildCardJson,
+  buildPublicCardJson,
   incrementResolveCount,
 } from "@/lib/card-service";
 import { getClientIp } from "@/lib/client-ip";
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const card = buildCardJson(row);
+  const card = await buildPublicCardJson(row);
 
   incrementResolveCount(row.id).catch(() => {});
 
