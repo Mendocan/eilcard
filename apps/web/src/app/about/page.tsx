@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-header";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
+import { getPublicSupportEmail } from "@/lib/platform-config";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -17,6 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const locale = await getLocale();
   const m = t(locale);
+  const supportEmail = getPublicSupportEmail();
 
   return (
     <div className="min-h-screen">
@@ -63,15 +65,13 @@ export default async function AboutPage() {
         <section className="mt-12 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
           <h2 className="text-lg font-semibold">{m.about.contactTitle}</h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
-            {m.about.contactBody}
+            {m.about.contactBodyWithEmail}
           </p>
           <a
-            href={`${process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/Mendocan/eilcard"}/issues`}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`mailto:${supportEmail}`}
             className="mt-4 inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
           >
-            GitHub Issues →
+            {supportEmail}
           </a>
           <Link
             href="/"

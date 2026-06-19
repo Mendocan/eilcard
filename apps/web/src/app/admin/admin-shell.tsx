@@ -15,6 +15,7 @@ const NAV = [
   { href: "/admin/analytics", labelKey: "analytics" as const, exact: false },
   { href: "/admin/users", labelKey: "users" as const, exact: false },
   { href: "/admin/audit", labelKey: "auditLog" as const, exact: false },
+  { href: "/admin/settings", labelKey: "settings" as const, exact: false },
 ];
 
 type Props = {
@@ -39,7 +40,7 @@ export function AdminShell({ locale, m, children }: Props) {
               <h1 className="text-lg font-semibold">{m.title}</h1>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 lg:hidden">
             <LocaleSwitcher locale={locale} />
             <AdminSignOutButton label={m.signOut} />
           </div>

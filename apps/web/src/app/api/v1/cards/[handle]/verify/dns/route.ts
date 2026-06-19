@@ -9,6 +9,10 @@ import {
   verifyDnsTxt,
 } from "@/lib/dns-verify";
 import {
+  getLatestPendingVerification,
+  supersedePendingVerifications,
+} from "@/lib/domain-verification-queue";
+import {
   checkRateLimit,
   rateLimitResponse,
   RATE_LIMITS,
@@ -57,16 +61,7 @@ export async function POST(
   const action = (body as { action?: string }).action;
 
   if (action === "check") {
-    const [pending] = await db
-      .select()
-      .from(domainVerifications)
-      .where(
-        and(
-          eq(domainVerifications.cardId, card.id),
-          eq(domainVerifications.status, "pending")
-        )
-      )
-      .limit(1);
+    const pending = await getLatestPendingVerification(card.id);
 
     if (!pending) {
       return NextResponse.json(
@@ -82,6 +77,8 @@ export async function POST(
         .update(domainVerifications)
         .set({ status: "verified", verifiedAt: new Date() })
         .where(eq(domainVerifications.id, pending.id));
+
+      await supersedePendingVerifications(card.id);
 
       const methods = Array.from(
         new Set([...(card.verificationMethod ?? []), "dns"])
@@ -103,6 +100,8 @@ export async function POST(
   }
 
   const token = generateVerificationToken();
+
+  await supersedePendingVerifications(card.id);
 
   await db.insert(domainVerifications).values({
     cardId: card.id,

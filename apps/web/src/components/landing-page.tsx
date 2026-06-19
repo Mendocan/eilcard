@@ -24,9 +24,10 @@ console.log(card.verified) // true`;
 type Props = {
   locale: Locale;
   m: Messages;
+  supportEmail: string;
 };
 
-export function LandingPage({ locale, m }: Props) {
+export function LandingPage({ locale, m, supportEmail }: Props) {
   return (
     <div className="min-h-screen">
       {/* Hero */}
@@ -278,7 +279,30 @@ export function LandingPage({ locale, m }: Props) {
         </div>
       </section>
 
-      <SiteFooter m={m.footer} />
+      {/* Contact */}
+      <section className="border-t border-[var(--color-border)]">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+          <h2 className="text-sm font-medium uppercase tracking-wider text-[var(--color-text-muted)]">
+            {m.contact.title}
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {m.contact.body}
+          </p>
+          <p className="mt-6 text-sm">
+            <span className="text-[var(--color-text-muted)]">
+              {m.contact.label}:{" "}
+            </span>
+            <a
+              href={`mailto:${supportEmail}`}
+              className="font-medium text-[var(--color-accent)] transition hover:opacity-80"
+            >
+              {supportEmail}
+            </a>
+          </p>
+        </div>
+      </section>
+
+      <SiteFooter m={m.footer} supportEmail={supportEmail} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Messages } from "@/lib/i18n/messages";
+import { DEFAULT_SUPPORT_EMAIL } from "@/lib/platform-config";
 import { GitHubIcon } from "@/components/icons/github-icon";
 
 const GITHUB_URL =
@@ -7,9 +8,10 @@ const GITHUB_URL =
 
 type Props = {
   m: Messages["footer"];
+  supportEmail?: string;
 };
 
-export function SiteFooter({ m }: Props) {
+export function SiteFooter({ m, supportEmail = DEFAULT_SUPPORT_EMAIL }: Props) {
   return (
     <footer className="border-t border-[var(--color-border)]">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 py-10 text-sm text-[var(--color-text-muted)] sm:px-6">
@@ -61,6 +63,15 @@ export function SiteFooter({ m }: Props) {
             {m.github}
           </a>
         </div>
+        <p className="text-center text-xs">
+          {m.contact}:{" "}
+          <a
+            href={`mailto:${supportEmail}`}
+            className="text-[var(--color-text)] transition hover:text-[var(--color-accent)]"
+          >
+            {supportEmail}
+          </a>
+        </p>
         <p className="text-center text-xs">{m.tagline}</p>
         <p className="text-center text-xs">{m.copyright}</p>
       </div>

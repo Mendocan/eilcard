@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-auth";
 import { logAdminAction } from "@/lib/admin-audit";
 import { getCardByHandle } from "@/lib/card-service";
+import { closePendingVerifications } from "@/lib/domain-verification-queue";
 import { db } from "@/lib/db";
 import { cards } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -28,6 +29,10 @@ export async function PATCH(request: Request, { params }: Params) {
     .update(cards)
     .set({ verified: body.verified, updatedAt: new Date() })
     .where(eq(cards.handle, handle));
+
+  if (body.verified) {
+    await closePendingVerifications(card.id);
+  }
 
   await logAdminAction(
     body.verified ? "card.verify" : "card.revoke",

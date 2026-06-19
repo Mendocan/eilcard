@@ -19,6 +19,10 @@ import {
   users,
 } from "@/lib/db/schema";
 import { buildCardJson, getCardByHandle } from "@/lib/card-service";
+import {
+  actionablePendingCondition,
+  reconcileStaleVerifications,
+} from "@/lib/domain-verification-queue";
 import { getUserPlan } from "@/lib/user-plan";
 
 const PAGE_SIZE = 20;
@@ -31,6 +35,8 @@ export type CardListFilters = {
 };
 
 export async function getAdminOverview() {
+  await reconcileStaleVerifications();
+
   const today = new Date().toISOString().slice(0, 10);
 
   const [[userRow], [cardRow], [verifiedRow], [resolveRow], [pendingRow]] =
@@ -45,7 +51,8 @@ export async function getAdminOverview() {
       db
         .select({ c: count() })
         .from(domainVerifications)
-        .where(eq(domainVerifications.status, "pending")),
+        .innerJoin(cards, eq(domainVerifications.cardId, cards.id))
+        .where(actionablePendingCondition),
     ]);
 
   const [recentCards, recentUsers] = await Promise.all([
@@ -202,6 +209,8 @@ export async function getAdminCardDetail(handle: string) {
 }
 
 export async function listVerificationQueue(page: number) {
+  await reconcileStaleVerifications();
+
   const offset = (page - 1) * PAGE_SIZE;
 
   const rows = await db
@@ -220,7 +229,7 @@ export async function listVerificationQueue(page: number) {
     .from(domainVerifications)
     .innerJoin(cards, eq(domainVerifications.cardId, cards.id))
     .innerJoin(users, eq(cards.userId, users.id))
-    .where(eq(domainVerifications.status, "pending"))
+    .where(actionablePendingCondition)
     .orderBy(desc(domainVerifications.createdAt))
     .limit(PAGE_SIZE)
     .offset(offset);
@@ -228,7 +237,8 @@ export async function listVerificationQueue(page: number) {
   const [totalRow] = await db
     .select({ c: count() })
     .from(domainVerifications)
-    .where(eq(domainVerifications.status, "pending"));
+    .innerJoin(cards, eq(domainVerifications.cardId, cards.id))
+    .where(actionablePendingCondition);
 
   const total = totalRow?.c ?? 0;
 

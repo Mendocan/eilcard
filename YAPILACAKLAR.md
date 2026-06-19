@@ -1,7 +1,7 @@
 # YAPILACAKLAR
 
 > EIL Card — öncelikli iş listesi  
-> Son güncelleme: 2026-06-18
+> Son güncelleme: 2026-06-19
 
 ---
 
@@ -12,6 +12,69 @@ Entegrasyon rehberi (`/docs/agents`) — **yayında** (kısa vade maddeleri tama
 - [x] **eilcard.com kök `llms.txt`** — Registry'nin kendi agent keşif dosyası (`/llms.txt` route); resolve, well-known, docs ve pilot örnek linkleri.
 - [x] **`/docs/agents` sayfası** — OpenAI Actions, Anthropic tool use, Gemini function calling için copy-paste şablonları; curl + `@digitalcard/sdk` örnekleri.
 - [x] **Dashboard: `llms.txt` patch bloğu** — Domain'e eklenecek EIL bölümü (resolve, well-known, agent-card); Sinyalle pilotu için indirilebilir / kopyalanabilir snippet.
+
+---
+
+## Kısa vade — Ticari hazırlık (Polar + uyumluluk)
+
+Ödeme, iade ve chargeback riskini düşürmek için site ve operasyon tarafı tamamlanmalı.
+
+### Yasal ve şeffaflık sayfaları
+
+- [ ] **`/pricing`** — Free / Verified / Pro limit tablosu (`tier-limits.ts` ile senkron)
+- [ ] **`/legal/terms`** — hizmet koşulları, abonelik, hesap kullanımı (EN; checkout için)
+- [ ] **`/legal/privacy`** — toplanan veriler, saklama, üçüncü taraflar
+- [ ] **`/legal/refund`** — iade süresi, iptal, yenileme, destek kanalı
+- [ ] **Footer linkleri** — Pricing, Terms, Privacy, Refunds
+- [ ] **Kayıt onayı** — hesap oluştururken Terms/Privacy kabul metni
+
+### Polar entegrasyonu
+
+- [ ] Polar org + Verified/Pro ürünleri (USD)
+- [ ] Checkout + customer portal linki
+- [ ] Webhook → `user_plans.tier` + `polar_subscription_id`
+- [ ] Dashboard “Upgrade” ve “Manage billing”
+- [ ] Env: `POLAR_ACCESS_TOKEN`, webhook secret, product ID'leri
+- [ ] Polar account review öncesi site + ürün açıklaması hazır
+
+### Resmi iletişim kanalı (e-posta)
+
+İki katman gerekir: **gelen kutusu** (insan) + **işlem postası** (uygulama API).
+
+**Karar:** Gelen kutusu **Namecheap Private Email** ([namecheap.com/hosting/email](https://www.namecheap.com/hosting/email/)) — domain ve VPS zaten Namecheap'te; DNS çoğu durumda otomatik kurulur.
+
+| Katman | Amaç | Sağlayıcı |
+|--------|------|-----------|
+| **Gelen kutusu** | support@, billing@, hello@ | **Namecheap Private Email** |
+| **İşlem postası** | şifre sıfırlama, fatura bildirimi, sistem | **Resend** (`RESEND_API_KEY` hazır; ~3.000/ay ücretsiz) |
+
+**Önerilen plan (EIL Card başlangıç):** **Starter** — 1 mailbox + **10 alias** (yıllık ~$14.88 yenileme; ilk yıl promosyonlu daha düşük). Tek mailbox (`support@`) + alias'lar: `billing@`, `hello@`, `noreply@` yönlendirmesi. İleride moderatör için **Pro** (3 mailbox) veya **Ultimate** (5 mailbox).
+
+**Önerilen adresler:** `support@eilcard.com` (ana), `billing@eilcard.com` (alias), `hello@eilcard.com` (alias)
+
+**Kurulum sırası (Namecheap):**
+1. Namecheap → Domain List → `eilcard.com` → **Private Email** ekle (30 gün deneme; domain Namecheap'teyse MX genelde otomatik)
+2. Webmail'de mailbox + alias'ları tanımla
+3. SPF/DKIM — Namecheap panelinde Private Email için kayıtları doğrula
+4. **Resend** — aynı domain için ayrı SPF/DKIM (işlem postası; gelen kutusu ile çakışmaması için Resend dokümantasyonundaki birleşik SPF)
+5. Production `.env`: `SUPPORT_EMAIL=support@eilcard.com`, `BILLING_EMAIL=billing@eilcard.com`, `RESEND_API_KEY`
+6. About, footer, Terms/Refund sayfalarında support adresi
+7. Polar checkout + fatura bildirimlerinde `billing@`
+
+**Maliyet (başlangıç):** Private Email Starter ~**$1–1.25/ay** (yıllık faturalama) + Resend free tier ≈ **~$15/yıl** toplam.
+
+- [x] **Admin → Ayarlar** — iletişim env durumu, güvenlik notu, ekip rolleri yol haritası
+- [ ] **Namecheap Private Email** — Starter + alias'lar (`support@`, `billing@`, `hello@`)
+- [ ] Resend domain doğrulama + şifre sıfırlama / bildirim şablonları
+- [ ] `SUPPORT_EMAIL` / `BILLING_EMAIL` production `.env` ve About sayfası
+
+### Admin panel iyileştirmeleri
+
+- [x] **Doğrulama sayacı düzeltmesi** — yalnızca gerçekten bekleyen (kart henüz doğrulanmamış) DNS işlemleri; eski `pending` satırları temizlenir
+- [x] **Çift dil/çıkış butonu** — mobil üst / masaüstü sidebar tek konum
+- [x] **Ayarlar sayfası** (`/admin/settings`) — iletişim, güvenlik, ekip planı
+- [ ] **Rol tabanlı admin** — editör, moderatör, admin; davet + DB hesapları
+- [ ] **Admin şifre değiştirme UI** — `ADMIN_PASSWORD` yerine DB veya güvenli rotasyon akışı
 
 ---
 

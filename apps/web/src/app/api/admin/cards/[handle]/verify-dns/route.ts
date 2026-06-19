@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { isAdminRequest } from "@/lib/admin-auth";
 import { logAdminAction } from "@/lib/admin-audit";
 import { getCardByHandle } from "@/lib/card-service";
 import { db } from "@/lib/db";
 import { cards, domainVerifications } from "@/lib/db/schema";
 import { verifyDnsTxt } from "@/lib/dns-verify";
+import {
+  getLatestPendingVerification,
+  supersedePendingVerifications,
+} from "@/lib/domain-verification-queue";
 
 type Params = { params: Promise<{ handle: string }> };
 
@@ -24,16 +28,7 @@ export async function POST(request: Request, { params }: Params) {
     return NextResponse.json({ error: "No domain on card" }, { status: 400 });
   }
 
-  const [pending] = await db
-    .select()
-    .from(domainVerifications)
-    .where(
-      and(
-        eq(domainVerifications.cardId, card.id),
-        eq(domainVerifications.status, "pending")
-      )
-    )
-    .limit(1);
+  const pending = await getLatestPendingVerification(card.id);
 
   if (!pending) {
     return NextResponse.json({ error: "No pending verification" }, { status: 400 });
@@ -46,6 +41,8 @@ export async function POST(request: Request, { params }: Params) {
       .update(domainVerifications)
       .set({ status: "verified", verifiedAt: new Date() })
       .where(eq(domainVerifications.id, pending.id));
+
+    await supersedePendingVerifications(card.id);
 
     const methods = Array.from(
       new Set([...(card.verificationMethod ?? []), "dns"])

@@ -117,6 +117,11 @@ const en = {
     copy: "Copy code",
     copied: "Copied",
   },
+  contact: {
+    title: "Contact",
+    body: "Questions about your account, billing, or integrations? Email us — we typically reply within one business day.",
+    label: "Contact",
+  },
   footer: {
     tagline: "Entity identity for machines - not user login.",
     product: "EIL Card",
@@ -126,6 +131,7 @@ const en = {
     whitepaper: "Whitepaper",
     playground: "Playground",
     github: "GitHub",
+    contact: "Contact",
     copyright: "© 2026 EIL Card",
   },
   about: {
@@ -153,7 +159,9 @@ const en = {
     ],
     contactTitle: "Contact",
     contactBody:
-      "We do not publish a public support email. Use GitHub Issues on the project repository for bugs, ideas, and integration questions.",
+      "We do not publish a public support email yet. Use GitHub Issues on the project repository for bugs, ideas, and integration questions.",
+    contactBodyWithEmail:
+      "For support, billing questions, and account issues, email us. You can also open GitHub Issues for bugs and integration ideas.",
     backHome: "← Back to home",
   },
   docs: {
@@ -631,6 +639,38 @@ const en = {
     tierPro: "Pro",
     suspended: "Suspended",
     auditActionUserPlan: "Change user plan",
+    settings: "Settings",
+    settingsSubtitle: "Platform contact channels, security, and team operations",
+    settingsContactTitle: "Contact & email",
+    settingsContactBody:
+      "Official support and billing addresses are required before paid plans, refunds, and Polar checkout. Configure inboxes on your domain, then set environment variables on the server.",
+    settingsSupportEmail: "Support email (SUPPORT_EMAIL)",
+    settingsBillingEmail: "Billing email (BILLING_EMAIL)",
+    settingsResend: "Transactional email (RESEND_API_KEY)",
+    settingsConfigured: "Configured",
+    settingsNotConfigured: "Not configured",
+    settingsContactEnvHint:
+      "Set SUPPORT_EMAIL and BILLING_EMAIL in production .env after your mailbox provider is live. RESEND_API_KEY powers password resets and system mail from the app.",
+    settingsRecommendedAddresses: "Recommended addresses for eilcard.com",
+    settingsSecurityTitle: "Admin security",
+    settingsSecurityBody:
+      "Admin access currently uses a single shared password stored in server environment variables — not per-user accounts yet.",
+    settingsAdminPassword: "ADMIN_PASSWORD",
+    settingsSecurityEnvHint:
+      "Rotate ADMIN_PASSWORD in .env and redeploy. UI password change and multi-admin accounts will ship with the team roles feature below.",
+    settingsTeamTitle: "Team & roles",
+    settingsTeamBody:
+      "Moderator and editor roles are not implemented yet. Today, anyone with the admin password has full platform access.",
+    settingsTeamPlanned: [
+      "Editor — help users fix card JSON and discovery settings",
+      "Moderator — review verification queue and abuse reports",
+      "Admin — billing, plans, user suspension, settings",
+    ],
+    settingsTeamNote:
+      "Planned: role-based admin accounts in the database, invitation flow, and audit log per operator. Until then, limit who has ADMIN_PASSWORD.",
+    settingsPlatformTitle: "Platform",
+    settingsAppUrl: "Public app URL",
+    settingsPlatformHint: "Used in emails, checkout return URLs, and discovery links.",
   },
 } ;
 
@@ -752,6 +792,11 @@ const tr: Messages = {
     copy: "Kodu kopyala",
     copied: "Kopyalandı",
   },
+  contact: {
+    title: "İletişim",
+    body: "Hesap, fatura veya entegrasyon sorularınız için bize yazın — genelde bir iş günü içinde yanıtlarız.",
+    label: "İletişim",
+  },
   footer: {
     tagline: "Makine kimliği - kullanıcı girişi değil.",
     product: "EIL Card",
@@ -761,6 +806,7 @@ const tr: Messages = {
     whitepaper: "Whitepaper",
     playground: "Playground",
     github: "GitHub",
+    contact: "İletişim",
     copyright: "© 2026 EIL Card",
   },
   about: {
@@ -789,6 +835,8 @@ const tr: Messages = {
     contactTitle: "İletişim",
     contactBody:
       "Herkese açık destek e-postası yayınlamıyoruz. Hata, fikir ve entegrasyon soruları için GitHub Issues kullanın.",
+    contactBodyWithEmail:
+      "Destek, fatura ve hesap konuları için bize e-posta gönderebilirsiniz. Hata ve entegrasyon fikirleri için GitHub Issues da açıktır.",
     backHome: "← Ana sayfaya dön",
   },
   docs: {
@@ -1266,6 +1314,38 @@ const tr: Messages = {
     tierPro: "Pro",
     suspended: "Askıya alındı",
     auditActionUserPlan: "Kullanıcı planı değiştir",
+    settings: "Ayarlar",
+    settingsSubtitle: "İletişim kanalları, güvenlik ve ekip operasyonları",
+    settingsContactTitle: "İletişim ve e-posta",
+    settingsContactBody:
+      "Ücretli planlar, iadeler ve Polar checkout öncesi resmi destek ve fatura adresleri gerekir. Önce domain üzerinde posta kutularını açın, ardından sunucu ortam değişkenlerini tanımlayın.",
+    settingsSupportEmail: "Destek e-postası (SUPPORT_EMAIL)",
+    settingsBillingEmail: "Fatura e-postası (BILLING_EMAIL)",
+    settingsResend: "İşlem e-postası (RESEND_API_KEY)",
+    settingsConfigured: "Yapılandırıldı",
+    settingsNotConfigured: "Yapılandırılmadı",
+    settingsContactEnvHint:
+      "Posta kutusu sağlayıcınız hazır olduktan sonra production .env içinde SUPPORT_EMAIL ve BILLING_EMAIL ayarlayın. RESEND_API_KEY uygulama şifre sıfırlama ve sistem mailleri için kullanılır.",
+    settingsRecommendedAddresses: "eilcard.com için önerilen adresler",
+    settingsSecurityTitle: "Admin güvenliği",
+    settingsSecurityBody:
+      "Admin erişimi şu an sunucu ortam değişkeninde tutulan tek paylaşımlı şifre ile çalışır — henüz kullanıcı bazlı hesap yok.",
+    settingsAdminPassword: "ADMIN_PASSWORD",
+    settingsSecurityEnvHint:
+      "ADMIN_PASSWORD değerini .env içinde değiştirip yeniden deploy edin. Arayüzden şifre değiştirme ve çoklu admin hesapları aşağıdaki ekip rolleri özelliğiyle gelecek.",
+    settingsTeamTitle: "Ekip ve roller",
+    settingsTeamBody:
+      "Moderatör ve editör rolleri henüz yok. Bugün admin şifresine sahip olan herkes tam platform erişimine sahiptir.",
+    settingsTeamPlanned: [
+      "Editör — kullanıcıların kart JSON ve keşif ayarlarında yardım",
+      "Moderatör — doğrulama kuyruğu ve kötüye kullanım incelemesi",
+      "Admin — faturalama, planlar, kullanıcı askıya alma, ayarlar",
+    ],
+    settingsTeamNote:
+      "Planlanan: veritabanında rol tabanlı admin hesapları, davet akışı ve operatör başına denetim günlüğü. O zamana kadar ADMIN_PASSWORD erişimini sınırlayın.",
+    settingsPlatformTitle: "Platform",
+    settingsAppUrl: "Genel uygulama URL'si",
+    settingsPlatformHint: "E-postalarda, checkout dönüş URL'lerinde ve keşif linklerinde kullanılır.",
   },
 };
 
