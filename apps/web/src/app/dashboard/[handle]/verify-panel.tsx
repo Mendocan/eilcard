@@ -8,12 +8,19 @@ type Props = {
   handle: string;
   domain: string | null;
   verified: boolean;
+  pendingTxtRecord?: string | null;
   m: Messages["dashboard"];
 };
 
-export function VerifyPanel({ handle, domain, verified, m }: Props) {
+export function VerifyPanel({
+  handle,
+  domain,
+  verified,
+  pendingTxtRecord,
+  m,
+}: Props) {
   const router = useRouter();
-  const [txtRecord, setTxtRecord] = useState("");
+  const [txtRecord, setTxtRecord] = useState(pendingTxtRecord ?? "");
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -82,7 +89,7 @@ export function VerifyPanel({ handle, domain, verified, m }: Props) {
         </div>
       )}
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <button
           type="button"
           onClick={startVerification}
@@ -91,16 +98,14 @@ export function VerifyPanel({ handle, domain, verified, m }: Props) {
         >
           {m.verifyStart}
         </button>
-        {txtRecord && (
-          <button
-            type="button"
-            onClick={checkVerification}
-            disabled={loading}
-            className="rounded-lg bg-[var(--color-primary)] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[var(--color-primary-dark)] disabled:opacity-50"
-          >
-            {m.verifyCheck}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={checkVerification}
+          disabled={loading}
+          className="rounded-lg bg-[var(--color-primary)] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[var(--color-primary-dark)] disabled:opacity-50"
+        >
+          {m.verifyCheck}
+        </button>
       </div>
 
       {status && (

@@ -8,6 +8,8 @@ import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 import { VerifyPanel } from "./verify-panel";
 import { DiscoveryPanel } from "./discovery-panel";
+import { buildTxtRecord } from "@/lib/dns-verify";
+import { getLatestPendingVerification } from "@/lib/domain-verification-queue";
 
 interface Props {
   params: Promise<{ handle: string }>;
@@ -28,6 +30,13 @@ export default async function CardDetailPage({ params }: Props) {
     .limit(1);
 
   if (!card) notFound();
+
+  const pendingVerification = card.verified
+    ? null
+    : await getLatestPendingVerification(card.id);
+  const pendingTxtRecord = pendingVerification
+    ? buildTxtRecord(pendingVerification.token)
+    : null;
 
   const [stats] = await db
     .select({ total: sql<number>`coalesce(sum(${resolveEvents.count}), 0)` })
@@ -134,6 +143,7 @@ export default async function CardDetailPage({ params }: Props) {
             handle={card.handle}
             domain={card.domain}
             verified={card.verified}
+            pendingTxtRecord={pendingTxtRecord}
             m={d}
           />
         </section>
