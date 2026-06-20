@@ -13,10 +13,21 @@ const sql = postgres(connectionString, { max: 1 });
 
 try {
   const rows = await sql`
-    SELECT id, user_id FROM cards WHERE handle = ${HANDLE} LIMIT 1
+    SELECT c.id, c.user_id, u.is_platform_operator
+    FROM cards c
+    INNER JOIN users u ON u.id = c.user_id
+    WHERE c.handle = ${HANDLE}
+    LIMIT 1
   `;
   if (rows.length === 0) {
     console.log(`[delete-eilcard] No card @${HANDLE} — nothing to do`);
+    process.exit(0);
+  }
+
+  if (rows[0].is_platform_operator) {
+    console.log(
+      `[delete-eilcard] @${HANDLE} belongs to platform operator — keeping official registry card`
+    );
     process.exit(0);
   }
 
