@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Messages } from "@/lib/i18n/messages";
+import { mapDashboardApiError } from "@/lib/i18n/map-dashboard-api-error";
 import { PublicDataNotice } from "@/components/public-data-notice";
 
 const inputClass =
@@ -159,19 +160,10 @@ export function NewCardForm({ m, maxOrgCards, maxProducts, atCardLimit }: Props)
     if (!res.ok) {
       const data = (await res.json()) as {
         error?: string;
+        code?: string;
         reason?: string;
       };
-      if (data.reason === "org_limit") {
-        setError(m.orgNotAllowed);
-      } else if (data.reason === "card_limit") {
-        setError(m.limitReached);
-      } else if (data.reason === "reserved_handle") {
-        setError(m.reservedHandleError);
-      } else if (data.reason === "reserved_domain") {
-        setError(m.reservedDomainError);
-      } else {
-        setError(data.error ?? m.createFailed);
-      }
+      setError(mapDashboardApiError(data, m, m.createFailed));
       return;
     }
 

@@ -17,6 +17,7 @@ import {
   rateLimitResponse,
   RATE_LIMITS,
 } from "@/lib/rate-limit";
+import { API_ERROR_CODES } from "@/lib/api-error-codes";
 
 export async function POST(
   request: NextRequest,
@@ -26,7 +27,10 @@ export async function POST(
   try {
     session = await requireSession();
   } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Unauthorized", code: API_ERROR_CODES.UNAUTHORIZED },
+      { status: 401 }
+    );
   }
 
   const dnsLimit = checkRateLimit(
@@ -47,12 +51,15 @@ export async function POST(
     .limit(1);
 
   if (!card) {
-    return NextResponse.json({ error: "Card not found" }, { status: 404 });
+    return NextResponse.json(
+      { error: "Card not found", code: API_ERROR_CODES.CARD_NOT_FOUND },
+      { status: 404 }
+    );
   }
 
   if (!card.domain) {
     return NextResponse.json(
-      { error: "No domain set for this card" },
+      { error: "No domain set for this card", code: API_ERROR_CODES.NO_DOMAIN },
       { status: 400 }
     );
   }
@@ -65,7 +72,10 @@ export async function POST(
 
     if (!pending) {
       return NextResponse.json(
-        { error: "No pending verification" },
+        {
+          error: "No pending verification",
+          code: API_ERROR_CODES.NO_PENDING_VERIFICATION,
+        },
         { status: 400 }
       );
     }
@@ -96,7 +106,7 @@ export async function POST(
       return NextResponse.json({ status: "verified" });
     }
 
-    return NextResponse.json({ status: "pending", message: "TXT record not found yet" });
+    return NextResponse.json({ status: "pending" });
   }
 
   const token = generateVerificationToken();

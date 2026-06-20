@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { API_ERROR_CODES } from "@/lib/api-error-codes";
 
 export type RateLimitResult = {
   success: boolean;
@@ -58,7 +59,11 @@ export function rateLimitResponse(result: RateLimitResult): NextResponse {
   );
 
   return NextResponse.json(
-    { error: "Too many requests", retry_after: retryAfterSec },
+    {
+      error: "Too many requests",
+      code: API_ERROR_CODES.RATE_LIMIT,
+      retry_after: retryAfterSec,
+    },
     {
       status: 429,
       headers: {

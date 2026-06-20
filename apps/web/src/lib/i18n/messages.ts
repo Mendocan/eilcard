@@ -532,6 +532,16 @@ const en = {
     verifyPending:
       "TXT record not found yet. DNS propagation may take a few minutes.",
     verifyFailed: "Could not start verification.",
+    apiValidationFailed:
+      "Some fields are invalid. Check your input and try again.",
+    apiDomainTaken: "This domain is already registered to another card.",
+    apiProductLimit: "Your plan limit for products has been reached.",
+    apiRegistryCardIdTaken: "This registry card ID is already in use.",
+    apiNoPendingVerification:
+      "No pending DNS verification. Generate a TXT record first.",
+    apiCardNotFound: "Card not found.",
+    apiUnauthorized: "Your session expired. Sign in again.",
+    apiRateLimit: "Too many requests. Please wait a moment and try again.",
     verifySuccess: "Verified!",
     publicDataNoticeTitle: "Public JSON - read by anyone",
     publicDataNoticeBody:
@@ -1319,6 +1329,17 @@ const tr: Messages = {
     verifyStartHint: "TXT kaydını domain DNS ayarlarınıza ekleyin, sonra kontrol edin.",
     verifyPending: "TXT kaydı henüz bulunamadı. DNS yayılması birkaç dakika sürebilir.",
     verifyFailed: "Doğrulama başlatılamadı.",
+    apiValidationFailed:
+      "Bazı alanlar geçersiz. Girdilerinizi kontrol edip tekrar deneyin.",
+    apiDomainTaken: "Bu domain başka bir karta kayıtlı.",
+    apiProductLimit: "Planınızdaki ürün limitine ulaşıldı.",
+    apiRegistryCardIdTaken: "Bu registry kart kimliği zaten kullanımda.",
+    apiNoPendingVerification:
+      "Bekleyen DNS doğrulaması yok. Önce TXT kaydı oluşturun.",
+    apiCardNotFound: "Kart bulunamadı.",
+    apiUnauthorized: "Oturumunuz sona erdi. Tekrar giriş yapın.",
+    apiRateLimit:
+      "Çok fazla istek. Lütfen kısa bir süre bekleyip tekrar deneyin.",
     verifySuccess: "Doğrulandı!",
     publicDataNoticeTitle: "Herkese açık JSON - herkes okuyabilir",
     publicDataNoticeBody:

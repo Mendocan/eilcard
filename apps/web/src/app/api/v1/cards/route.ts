@@ -15,13 +15,17 @@ import {
   rateLimitResponse,
   RATE_LIMITS,
 } from "@/lib/rate-limit";
+import { API_ERROR_CODES } from "@/lib/api-error-codes";
 
 export async function POST(request: NextRequest) {
   let session;
   try {
     session = await requireSession();
   } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Unauthorized", code: API_ERROR_CODES.UNAUTHORIZED },
+      { status: 401 }
+    );
   }
 
   const ip = getClientIp(request);
@@ -39,7 +43,11 @@ export async function POST(request: NextRequest) {
 
   if (!parsed.success) {
     return NextResponse.json(
-      { error: "Validation failed", issues: parsed.error.flatten() },
+      {
+        error: "Validation failed",
+        code: API_ERROR_CODES.VALIDATION_FAILED,
+        issues: parsed.error.flatten(),
+      },
       { status: 400 }
     );
   }
@@ -54,6 +62,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: "Reserved for platform operator",
+        code: API_ERROR_CODES.RESERVED_PLATFORM,
         reason: resourceCheck.reason,
       },
       { status: 403 }
@@ -66,6 +75,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: "Plan limit reached",
+        code: API_ERROR_CODES.PLAN_LIMIT,
         reason: createCheck.reason,
         tier: createCheck.tier,
         limits: createCheck.limits,
@@ -84,6 +94,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: "Product limit reached",
+        code: API_ERROR_CODES.PRODUCT_LIMIT,
         tier: createCheck.tier,
         limit: createCheck.limits.maxProducts,
         count: productCount,
@@ -94,7 +105,10 @@ export async function POST(request: NextRequest) {
 
   if (data.domain && (await isDomainTaken(data.domain))) {
     return NextResponse.json(
-      { error: "Domain already registered to another card" },
+      {
+        error: "Domain already registered to another card",
+        code: API_ERROR_CODES.DOMAIN_TAKEN,
+      },
       { status: 409 }
     );
   }

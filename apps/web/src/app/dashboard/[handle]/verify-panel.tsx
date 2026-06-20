@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Messages } from "@/lib/i18n/messages";
+import { mapDashboardApiError } from "@/lib/i18n/map-dashboard-api-error";
 
 type Props = {
   handle: string;
@@ -37,8 +38,10 @@ export function VerifyPanel({
     if (data.txt_record) {
       setTxtRecord(data.txt_record);
       setStatus(m.verifyStartHint);
+    } else if (!res.ok) {
+      setStatus(mapDashboardApiError(data, m, m.verifyFailed));
     } else {
-      setStatus(data.error ?? m.verifyFailed);
+      setStatus(m.verifyFailed);
     }
   }
 
@@ -55,8 +58,12 @@ export function VerifyPanel({
     if (data.status === "verified") {
       setStatus(m.verifySuccess);
       router.refresh();
+    } else if (data.status === "pending") {
+      setStatus(m.verifyPending);
+    } else if (!res.ok) {
+      setStatus(mapDashboardApiError(data, m, m.verifyFailed));
     } else {
-      setStatus(data.message ?? m.verifyPending);
+      setStatus(m.verifyPending);
     }
   }
 

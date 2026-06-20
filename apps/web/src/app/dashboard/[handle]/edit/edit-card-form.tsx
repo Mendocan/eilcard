@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Messages } from "@/lib/i18n/messages";
+import { mapDashboardApiError } from "@/lib/i18n/map-dashboard-api-error";
 import { PublicDataNotice } from "@/components/public-data-notice";
 
 const inputClass =
@@ -194,8 +195,12 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
     setLoading(false);
 
     if (!res.ok) {
-      const data = (await res.json()) as { error?: string };
-      setError(data.error ?? m.saveFailed);
+      const data = (await res.json()) as {
+        error?: string;
+        code?: string;
+        reason?: string;
+      };
+      setError(mapDashboardApiError(data, m, m.saveFailed));
       return;
     }
 
