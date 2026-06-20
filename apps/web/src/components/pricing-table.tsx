@@ -5,6 +5,7 @@ const TIERS: PlanTier[] = ["free", "verified", "pro"];
 
 type Props = {
   copy: PricingCopy;
+  checkoutEnabled?: boolean;
 };
 
 function tierLabel(tier: PlanTier, copy: PricingCopy): string {
@@ -17,7 +18,7 @@ function formatNum(n: number): string {
   return n.toLocaleString("en-US");
 }
 
-export function PricingTable({ copy }: Props) {
+export function PricingTable({ copy, checkoutEnabled = false }: Props) {
   const rows: {
     label: string;
     values: (string | boolean)[];
@@ -87,14 +88,16 @@ export function PricingTable({ copy }: Props) {
               ))}
             </tr>
           ))}
-          <tr className="bg-[var(--color-surface)]">
-            <td className="px-4 py-3 font-medium">{copy.comingSoon}</td>
-            {TIERS.map((tier) => (
-              <td key={tier} className="px-4 py-3 text-[var(--color-text-muted)]">
-                {tier === "free" ? copy.included : "—"}
-              </td>
-            ))}
-          </tr>
+          {!checkoutEnabled ? (
+            <tr className="bg-[var(--color-surface)]">
+              <td className="px-4 py-3 font-medium">{copy.comingSoon}</td>
+              {TIERS.map((tier) => (
+                <td key={tier} className="px-4 py-3 text-[var(--color-text-muted)]">
+                  {tier === "free" ? copy.included : "—"}
+                </td>
+              ))}
+            </tr>
+          ) : null}
         </tbody>
       </table>
     </div>

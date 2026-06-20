@@ -11,13 +11,18 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
   const locale = await getLocale();
   const m = t(locale).auth;
+  const sp = await searchParams;
 
   return (
     <AuthShell locale={locale}>
-      <LoginForm m={m} />
+      <LoginForm m={m} nextPath={sp.next} />
     </AuthShell>
   );
 }

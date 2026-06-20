@@ -13,6 +13,7 @@ import {
 import { db } from "@/lib/db";
 import {
   adminAuditLogs,
+  cardChangeLogs,
   cards,
   domainVerifications,
   resolveEvents,
@@ -371,6 +372,38 @@ export async function listAdminAuditLogs(page: number) {
     .offset(offset);
 
   const [totalRow] = await db.select({ c: count() }).from(adminAuditLogs);
+  const total = totalRow?.c ?? 0;
+
+  return {
+    rows,
+    total,
+    page,
+    pageSize: PAGE_SIZE,
+    totalPages: Math.max(1, Math.ceil(total / PAGE_SIZE)),
+  };
+}
+
+export async function listCardChangeLogs(page: number) {
+  const offset = (page - 1) * PAGE_SIZE;
+
+  const rows = await db
+    .select({
+      id: cardChangeLogs.id,
+      cardId: cardChangeLogs.cardId,
+      userId: cardChangeLogs.userId,
+      changedFields: cardChangeLogs.changedFields,
+      createdAt: cardChangeLogs.createdAt,
+      handle: cards.handle,
+      userEmail: users.email,
+    })
+    .from(cardChangeLogs)
+    .innerJoin(cards, eq(cardChangeLogs.cardId, cards.id))
+    .innerJoin(users, eq(cardChangeLogs.userId, users.id))
+    .orderBy(desc(cardChangeLogs.createdAt))
+    .limit(PAGE_SIZE)
+    .offset(offset);
+
+  const [totalRow] = await db.select({ c: count() }).from(cardChangeLogs);
   const total = totalRow?.c ?? 0;
 
   return {

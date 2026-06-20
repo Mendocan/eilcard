@@ -209,3 +209,25 @@ git add apps/web/drizzle && git commit
 | Migration çalışmadı | `docker compose logs migrate` — DATABASE_URL doğru mu? |
 | SSL alınamıyor | A kaydı VPS IP'sine yönleniyor mu? 80/443 açık mı? `docker compose logs caddy` |
 | Türkçe karakter bozuk | API UTF-8 ister; gerçek tarayıcı formu sorunsuz |
+
+---
+
+## Abonelik cron (grace / downgrade)
+
+Polar webhook anlık plan günceller; süresi dolmuş abonelikler için günlük reconcile gerekir.
+
+1. Repodaki script: `scripts/cron-subscription-reconcile.sh`
+2. VPS'te çalıştırılabilir yap: `chmod +x /opt/digital_card/scripts/cron-subscription-reconcile.sh`
+3. `.env.prod` içinde `CRON_SECRET` tanımlı olmalı (app ile aynı değer)
+4. Crontab (her gün 03:00 UTC):
+
+```bash
+0 3 * * * /opt/digital_card/scripts/cron-subscription-reconcile.sh >> /var/log/eilcard-cron.log 2>&1
+```
+
+Manuel test:
+
+```bash
+CRON_SECRET="$(grep ^CRON_SECRET= /opt/digital_card/.env.prod | cut -d= -f2-)"
+curl -X POST -H "Authorization: Bearer $CRON_SECRET" https://eilcard.com/api/cron/subscription-reconcile
+```

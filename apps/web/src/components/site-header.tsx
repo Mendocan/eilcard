@@ -12,9 +12,10 @@ const GITHUB_URL =
 type Props = {
   locale: Locale;
   m: Messages["nav"];
+  user?: { email: string } | null;
 };
 
-export function SiteNav({ locale, m }: Props) {
+export function SiteNav({ locale, m, user }: Props) {
   const router = useRouter();
 
   async function setLocale(next: Locale) {
@@ -70,18 +71,34 @@ export function SiteNav({ locale, m }: Props) {
           <GitHubIcon className="h-5 w-5" />
         </a>
 
-        <Link
-          href="/login"
-          className="hidden rounded-lg px-3 py-2 text-sm text-[var(--color-text-muted)] transition hover:text-[var(--color-text)] sm:inline"
-        >
-          {m.signIn}
-        </Link>
-        <Link
-          href="/register"
-          className="rounded-lg bg-[var(--color-text)] px-3.5 py-2 text-sm font-medium text-[var(--color-bg)] transition hover:opacity-90"
-        >
-          {m.getStarted}
-        </Link>
+        {user ? (
+          <>
+            <span className="hidden max-w-[12rem] truncate text-sm text-[var(--color-text-muted)] md:inline">
+              {user.email}
+            </span>
+            <Link
+              href="/dashboard"
+              className="rounded-lg border border-[var(--color-border)] px-3.5 py-2 text-sm font-medium transition hover:border-[var(--color-accent)]"
+            >
+              {m.dashboard}
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              className="hidden rounded-lg px-3 py-2 text-sm text-[var(--color-text-muted)] transition hover:text-[var(--color-text)] sm:inline"
+            >
+              {m.signIn}
+            </Link>
+            <Link
+              href="/register"
+              className="rounded-lg bg-[var(--color-text)] px-3.5 py-2 text-sm font-medium text-[var(--color-bg)] transition hover:opacity-90"
+            >
+              {m.getStarted}
+            </Link>
+          </>
+        )}
       </nav>
     </header>
   );

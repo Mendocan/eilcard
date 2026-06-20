@@ -12,6 +12,7 @@ const NAV = [
   { href: "/admin", labelKey: "overview" as const, exact: true },
   { href: "/admin/cards", labelKey: "cards" as const, exact: false },
   { href: "/admin/verification", labelKey: "verification" as const, exact: false },
+  { href: "/admin/changes", labelKey: "changeLog" as const, exact: false },
   { href: "/admin/analytics", labelKey: "analytics" as const, exact: false },
   { href: "/admin/users", labelKey: "users" as const, exact: false },
   { href: "/admin/audit", labelKey: "auditLog" as const, exact: false },

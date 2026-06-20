@@ -9,11 +9,19 @@ import { signIn } from "@/lib/auth-client";
 const inputClass =
   "w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]";
 
+function safeNextPath(next: string | undefined): string {
+  if (!next || !next.startsWith("/") || next.startsWith("//")) {
+    return "/dashboard";
+  }
+  return next;
+}
+
 type Props = {
   m: Messages["auth"];
+  nextPath?: string;
 };
 
-export function LoginForm({ m }: Props) {
+export function LoginForm({ m, nextPath }: Props) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,7 +41,7 @@ export function LoginForm({ m }: Props) {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(safeNextPath(nextPath));
   }
 
   return (

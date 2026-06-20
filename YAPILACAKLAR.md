@@ -50,18 +50,20 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 
 ### Faz 2 — Polar + churn otomasyonu
 
-- [ ] **Polar org + ürünler** — Verified/Pro product ID'leri → VPS `.env.prod` (yerel test: `apps/web/.env.local`)
+- [x] **Polar org + ürünler** — Verified/Pro product ID'leri → VPS `.env.prod` (canlı E2E: ödeme → Verified plan → kart oluşturma)
 - [x] **Webhook** → `/api/webhook/polar` → `tier`, `expires_at`, `polar_subscription_id`
 - [x] **Grace + downgrade** — `SUBSCRIPTION_GRACE_DAYS`, cron `/api/cron/subscription-reconcile`, verified revoke
 - [x] **Checkout + portal** — `/api/billing/checkout`, `/portal`
 - [x] **Dashboard billing panel** — bitiş tarihi, upgrade, manage billing
 - [x] **Resend iskelet** — `billing-email.ts` (plan expiring notice)
+- [x] **VPS cron script** — `scripts/cron-subscription-reconcile.sh` (crontab kurulumu sunucuda)
 
 ### Faz 3 — Pilot müşteri + operatör kartı
 
 - [ ] Production operatör: `@eilcard` DNS doğrulama
 - [ ] Sinyalle pilot: abonelik senaryosu test (grace simülasyonu)
-- [ ] Admin: son müşteri değişikliği + kuyruk durumu
+- [x] Admin: son müşteri değişikliği — `/admin/changes` (`card_change_logs`)
+- [x] Admin: kuyruk durumu — `/admin/verification`
 
 ### Faz 4 — Genişleme (temel oturduktan sonra)
 
@@ -109,8 +111,8 @@ Entegrasyon rehberi (`/docs/agents`) — **yayında** (kısa vade maddeleri tama
 - [x] **Footer** — `support@eilcard.com`; tagline + iletişim yan yana; landing’deki yinelenen İletişim bölümü kaldırıldı
 - [x] **`platform-config.ts`** — `SUPPORT_EMAIL` / `BILLING_EMAIL` varsayılanları
 - [x] **Deploy script** — `scripts/prod-deploy-eilcard.sh` (tarball → VPS → rebuild)
-- [ ] **VPS `.env.prod`** — `SUPPORT_EMAIL`, `BILLING_EMAIL`, Polar anahtarları (yerelde yok; sadece sunucuda)
-- [ ] **Git commit + push** — kart UI, `/example`, locale düzeltmesi henüz commit edilmedi
+- [x] **VPS `.env.prod`** — Polar, CRON_SECRET, SUPPORT_EMAIL (sunucuda; repoda yok)
+- [ ] **VPS crontab** — günlük `scripts/cron-subscription-reconcile.sh` (deploy sonrası bir kez)
 
 ---
 

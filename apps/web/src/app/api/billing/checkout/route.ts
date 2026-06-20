@@ -22,7 +22,10 @@ export async function GET(request: NextRequest) {
   try {
     session = await requireSession();
   } catch {
-    redirect("/login?next=/pricing");
+    const returnTo = encodeURIComponent(
+      `${request.nextUrl.pathname}${request.nextUrl.search}`
+    );
+    redirect(`/login?next=${returnTo}`);
   }
 
   const tierParam = request.nextUrl.searchParams.get("tier") ?? "verified";
@@ -41,13 +44,27 @@ export async function GET(request: NextRequest) {
   const appUrl = getAppBaseUrl();
   const polar = getPolarClient();
 
-  const checkout = await polar.checkouts.create({
-    products: [productId],
-    customerEmail: session.user.email,
-    externalCustomerId: session.user.id,
-    successUrl: `${appUrl}/dashboard?checkout=success`,
-    returnUrl: `${appUrl}/pricing`,
-  });
+  let checkout;
+  try {
+    checkout = await polar.checkouts.create({
+      products: [productId],
+      customerEmail: session.user.email,
+      externalCustomerId: session.user.id,
+      successUrl: `${appUrl}/dashboard?checkout=success`,
+      returnUrl: `${appUrl}/pricing`,
+    });
+  } catch (err) {
+    console.error("[polar] checkout.create failed", err);
+    const message =
+      err instanceof Error ? err.message : "Polar checkout failed";
+    return NextResponse.json(
+      {
+        error: "Checkout could not be started. Check Polar payout setup and product IDs.",
+        detail: message,
+      },
+      { status: 502 }
+    );
+  }
 
   if (!checkout.url) {
     return NextResponse.json(

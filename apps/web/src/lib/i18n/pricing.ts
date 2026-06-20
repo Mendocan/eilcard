@@ -6,6 +6,7 @@ export type PricingCopy = {
   eyebrow: string;
   title: string;
   subtitle: string;
+  subtitleLive: string;
   tierFree: string;
   tierVerified: string;
   tierPro: string;
@@ -29,6 +30,7 @@ export type PricingCopy = {
   checkoutVerified: string;
   checkoutPro: string;
   checkoutSignIn: string;
+  backDashboard: string;
   backHome: string;
 };
 
@@ -41,6 +43,8 @@ export const pricingMessages: Record<Locale, PricingCopy> = {
     title: "Plans for verified entity identity",
     subtitle:
       "Limits sync with tier-limits.ts. Paid checkout launches with Polar; until then, contact support for upgrades.",
+    subtitleLive:
+      "Limits sync with tier-limits.ts. Subscribe to Verified or Pro via Polar checkout — manage billing from your dashboard.",
     tierFree: "Free",
     tierVerified: "Verified",
     tierPro: "Pro",
@@ -72,6 +76,7 @@ export const pricingMessages: Record<Locale, PricingCopy> = {
     checkoutVerified: "Subscribe — Verified",
     checkoutPro: "Subscribe — Pro",
     checkoutSignIn: "Sign in to subscribe",
+    backDashboard: "Back to dashboard",
     backHome: "← Back to home",
   },
   tr: {
@@ -82,6 +87,8 @@ export const pricingMessages: Record<Locale, PricingCopy> = {
     title: "Doğrulanmış varlık kimliği planları",
     subtitle:
       "Limitler tier-limits.ts ile senkron. Ücretli ödeme Polar ile açılacak; şimdilik yükseltme için destek ile iletişime geçin.",
+    subtitleLive:
+      "Limitler tier-limits.ts ile senkron. Verified veya Pro için Polar checkout ile abone olun — faturalandırmayı panelden yönetin.",
     tierFree: "Ücretsiz",
     tierVerified: "Verified",
     tierPro: "Pro",
@@ -113,6 +120,7 @@ export const pricingMessages: Record<Locale, PricingCopy> = {
     checkoutVerified: "Abone ol — Verified",
     checkoutPro: "Abone ol — Pro",
     checkoutSignIn: "Abone olmak için giriş yapın",
+    backDashboard: "Panele dön",
     backHome: "← Ana sayfaya dön",
   },
 };

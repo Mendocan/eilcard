@@ -27,7 +27,11 @@ export default async function PricingPage() {
 
   return (
     <div className="min-h-screen">
-      <SiteNav locale={locale} m={m.nav} />
+      <SiteNav
+        locale={locale}
+        m={m.nav}
+        user={session?.user ?? null}
+      />
 
       <main className="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-20">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-accent)]">
@@ -37,11 +41,11 @@ export default async function PricingPage() {
           {p.title}
         </h1>
         <p className="mt-4 leading-relaxed text-[var(--color-text-muted)]">
-          {p.subtitle}
+          {polarCheckout ? p.subtitleLive : p.subtitle}
         </p>
 
         <div className="mt-10">
-          <PricingTable copy={p} />
+          <PricingTable copy={p} checkoutEnabled={polarCheckout} />
         </div>
 
         <section className="mt-12 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
@@ -85,6 +89,13 @@ export default async function PricingPage() {
                 className="inline-flex rounded-lg bg-[var(--color-text)] px-4 py-2.5 text-sm font-medium text-[var(--color-bg)] transition hover:opacity-90"
               >
                 {p.checkoutSignIn}
+              </Link>
+            ) : session ? (
+              <Link
+                href="/dashboard"
+                className="inline-flex rounded-lg bg-[var(--color-text)] px-4 py-2.5 text-sm font-medium text-[var(--color-bg)] transition hover:opacity-90"
+              >
+                {p.backDashboard}
               </Link>
             ) : (
               <Link
