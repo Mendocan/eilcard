@@ -60,10 +60,11 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 
 ### Faz 3 — Pilot müşteri + operatör kartı
 
-- [ ] Production operatör: `@eilcard` DNS doğrulama
-- [ ] Sinyalle pilot: abonelik senaryosu test (grace simülasyonu)
+- [ ] Production operatör: `@eilcard` DNS doğrulama (kart seed edildi → panelden TXT + verify)
+- [ ] Sinyalle pilot: abonelik senaryosu test — `simulate-subscription-lapse.mjs` + cron reconcile
 - [x] Admin: son müşteri değişikliği — `/admin/changes` (`card_change_logs`)
 - [x] Admin: kuyruk durumu — `/admin/verification`
+- [x] Operatör script'leri — `seed-platform-operator-card.mjs`, deploy hook
 
 ### Faz 4 — Genişleme (temel oturduktan sonra)
 
@@ -82,7 +83,8 @@ Strateji: Mevcut şema v1.0 alanlarıyla zengin kart içeriği; şema v1.1 (`off
 - [x] **Landing kart önizlemesi** — ana sayfada mini demo + `/example` linki
 - [x] **Yanlış `@eilcard` registry kartı kaldırıldı** — platform kartı müşteri hesabında (Sinyalle) olmamalı; demo yalnızca `/example`
 - [x] **Platform operatör hesabı** — `is_platform_operator` + `PLATFORM_OPERATOR_EMAIL`; rezerve handle/domain; admin ayarları; `ensure-platform-operator.mjs`
-- [ ] **Operatör hesabını production'da kur** — `platform@eilcard.com` ile kayıt → ensure script → isteğe bağlı `@eilcard` org kartı
+- [x] **Operatör hesabını production'da kur** — `platform@eilcard.com` kayıtlı + ensure script (`Cards: 0` → seed script ile `@eilcard`)
+- [ ] **`@eilcard` DNS doğrulama** — seed sonrası panelden TXT kaydı (Namecheap)
 - [ ] **Şema v1.1** — birleşik `offerings[]`, `content_locale` (veya eşdeğeri); UI ile senkron
 
 **Canlı referanslar**
@@ -112,7 +114,7 @@ Entegrasyon rehberi (`/docs/agents`) — **yayında** (kısa vade maddeleri tama
 - [x] **`platform-config.ts`** — `SUPPORT_EMAIL` / `BILLING_EMAIL` varsayılanları
 - [x] **Deploy script** — `scripts/prod-deploy-eilcard.sh` (tarball → VPS → rebuild)
 - [x] **VPS `.env.prod`** — Polar, CRON_SECRET, SUPPORT_EMAIL (sunucuda; repoda yok)
-- [ ] **VPS crontab** — günlük `scripts/cron-subscription-reconcile.sh` (deploy sonrası bir kez)
+- [x] **VPS crontab** — günlük `scripts/cron-subscription-reconcile.sh`
 
 ---
 

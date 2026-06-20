@@ -231,3 +231,20 @@ Manuel test:
 CRON_SECRET="$(grep ^CRON_SECRET= /opt/digital_card/.env.prod | cut -d= -f2-)"
 curl -X POST -H "Authorization: Bearer $CRON_SECRET" https://eilcard.com/api/cron/subscription-reconcile
 ```
+
+### Grace pilot (Sinyalle)
+
+DB-only simulation — Polar'a dokunmaz:
+
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm migrate \
+  node apps/web/scripts/simulate-subscription-lapse.mjs sinyal24 --grace-active
+
+docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm migrate \
+  node apps/web/scripts/simulate-subscription-lapse.mjs sinyal24 --grace-expired
+
+/opt/digital_card/scripts/cron-subscription-reconcile.sh
+
+docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm migrate \
+  node apps/web/scripts/simulate-subscription-lapse.mjs sinyal24 --restore
+```
