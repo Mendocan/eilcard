@@ -1,4 +1,4 @@
-import { promises as dns } from "node:dns";
+import { Resolver } from "node:dns/promises";
 import { randomBytes } from "node:crypto";
 
 const TOKEN_PREFIX = "digitalcard-verify=";
@@ -16,7 +16,9 @@ export async function verifyDnsTxt(
   token: string
 ): Promise<boolean> {
   try {
-    const records = await dns.resolveTxt(domain);
+    const resolver = new Resolver();
+    resolver.setServers(["8.8.8.8", "1.1.1.1", "8.8.4.4"]);
+    const records = await resolver.resolveTxt(domain);
     const expected = buildTxtRecord(token);
     return records.some((entry) => entry.join("").includes(expected));
   } catch {

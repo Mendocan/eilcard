@@ -2,7 +2,7 @@
  * One-off: run DNS check for a card's latest pending verification (same logic as dashboard).
  * Usage: node apps/web/scripts/verify-card-dns.mjs eilcard
  */
-import { promises as dns } from "node:dns";
+import { Resolver } from "node:dns/promises";
 import postgres from "postgres";
 
 const handle = process.argv[2];
@@ -51,7 +51,9 @@ try {
   }
 
   const expected = `${TOKEN_PREFIX}${pending[0].token}`;
-  const records = await dns.resolveTxt(card.domain);
+  const resolver = new Resolver();
+  resolver.setServers(["8.8.8.8", "1.1.1.1", "8.8.4.4"]);
+  const records = await resolver.resolveTxt(card.domain);
   const ok = records.some((entry) => entry.join("").includes(expected));
 
   if (!ok) {
