@@ -32,3 +32,6 @@ echo "--- migrate ---"
 docker compose -f docker-compose.prod.yml --env-file .env.prod logs migrate --tail 30
 echo "--- app ---"
 docker compose -f docker-compose.prod.yml --env-file .env.prod logs app --tail 15
+
+echo "--- prune docker build cache ---"
+docker builder prune -af
