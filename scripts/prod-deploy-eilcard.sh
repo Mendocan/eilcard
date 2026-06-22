@@ -48,6 +48,13 @@ cd /opt/digital_card
 docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm migrate node apps/web/scripts/seed-platform-operator-card.mjs || true
 REMOTE
 
+echo "==> backfill email_verified for existing users"
+ssh -i "$KEY" "$HOST" bash <<'REMOTE'
+set -euo pipefail
+cd /opt/digital_card
+docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm migrate node apps/web/scripts/backfill-email-verified.mjs || true
+REMOTE
+
 echo "==> verify"
 curl -sf -o /dev/null -w "example=%{http_code}\n" "https://eilcard.com/example"
 curl -sf -o /dev/null -w "eilcard-gone=%{http_code}\n" "https://eilcard.com/api/v1/resolve?handle=eilcard" || true
