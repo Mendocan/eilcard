@@ -17,6 +17,8 @@ export type UserPlanInfo = {
   startedAt: Date | null;
   expiresAt: Date | null;
   planExpired: boolean;
+  /** Set when the user subscribed via Polar checkout (enables /portal). */
+  polarSubscriptionId: string | null;
 };
 
 export type CardCreateCheck = {
@@ -45,6 +47,7 @@ export async function getUserPlan(userId: string): Promise<UserPlanInfo> {
       tier: userPlans.tier,
       startedAt: userPlans.startedAt,
       expiresAt: userPlans.expiresAt,
+      polarSubscriptionId: userPlans.polarSubscriptionId,
     })
     .from(userPlans)
     .where(eq(userPlans.userId, userId))
@@ -66,6 +69,7 @@ export async function getUserPlan(userId: string): Promise<UserPlanInfo> {
     startedAt: row?.startedAt ?? null,
     expiresAt,
     planExpired,
+    polarSubscriptionId: row?.polarSubscriptionId ?? null,
   };
 }
 

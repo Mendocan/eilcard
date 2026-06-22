@@ -31,6 +31,9 @@ export function DashboardBillingPanel({
     daysUntil(plan.expiresAt) >= 0;
 
   const showUpgrade = plan.tier === "free" || plan.planExpired;
+  const hasPolarBilling = Boolean(plan.polarSubscriptionId);
+  const showManualBillingHint =
+    plan.subscribedTier !== "free" && !plan.planExpired && !hasPolarBilling;
 
   return (
     <section className="mb-8 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
@@ -42,6 +45,10 @@ export function DashboardBillingPanel({
 
       {portalError && (
         <p className="mt-2 text-sm text-[var(--color-error)]">{m.billingPortalError}</p>
+      )}
+
+      {showManualBillingHint && (
+        <p className="mt-2 text-sm text-[var(--color-text-muted)]">{m.billingManualHint}</p>
       )}
 
       {plan.planExpired && (
@@ -91,7 +98,7 @@ export function DashboardBillingPanel({
             {m.billingViewPricing}
           </Link>
         )}
-        {polarCheckoutEnabled && plan.subscribedTier !== "free" && (
+        {polarCheckoutEnabled && plan.subscribedTier !== "free" && hasPolarBilling && (
           <Link
             href="/portal"
             className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-xs font-medium text-[var(--color-text-muted)] transition hover:text-[var(--color-text)]"

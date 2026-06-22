@@ -501,6 +501,8 @@ const en = {
     checkoutSuccess: "Payment received — your plan will update shortly.",
     billingPortalError:
       "Could not open the billing portal. If your plan was not purchased via checkout, manage billing by emailing billing@eilcard.com.",
+    billingManualHint:
+      "This plan was assigned manually. For billing changes or cancellation, email billing@eilcard.com.",
     deleteCardButton: "Delete card",
     deleteCardConfirm:
       'Delete \u201c{handle}\u201d? All data (resolve stats, domain verification) will be permanently removed. This cannot be undone.',
@@ -1321,6 +1323,8 @@ const tr: Messages = {
     checkoutSuccess: "Ödeme alındı — planınız kısa süre içinde güncellenecek.",
     billingPortalError:
       "Faturalandırma portalı açılamadı. Planınız checkout üzerinden satın alınmadıysa billing@eilcard.com adresine yazarak yönetebilirsiniz.",
+    billingManualHint:
+      "Bu plan manuel atandı. Faturalandırma veya iptal için billing@eilcard.com adresine yazın.",
     deleteCardButton: "Kartı sil",
     deleteCardConfirm:
       '\u201c{handle}\u201d silinsin mi? T\u00fcm veriler (resolve istatistikleri, domain do\u011frulama) kal\u0131c\u0131 olarak kald\u0131r\u0131lacak. Bu i\u015flem geri al\u0131namaz.',
