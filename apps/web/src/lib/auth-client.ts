@@ -16,4 +16,5 @@ export const {
   signUp,
   signOut,
   useSession,
+  sendVerificationEmail,
 } = authClient;

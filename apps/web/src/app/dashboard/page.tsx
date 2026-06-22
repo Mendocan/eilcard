@@ -10,7 +10,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 type Props = {
-  searchParams: Promise<{ checkout?: string }>;
+  searchParams: Promise<{ checkout?: string; portal_error?: string }>;
 };
 
 export default async function DashboardPage({ searchParams }: Props) {
@@ -41,6 +41,7 @@ export default async function DashboardPage({ searchParams }: Props) {
         plan={plan}
         polarCheckoutEnabled={isPolarCheckoutConfigured()}
         checkoutSuccess={sp.checkout === "success"}
+        portalError={sp.portal_error === "1"}
         m={d}
       />
 

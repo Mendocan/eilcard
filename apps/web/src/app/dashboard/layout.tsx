@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import { BrandLogo } from "@/components/brand-logo";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { PlatformOperatorBanner } from "@/components/platform-operator-banner";
+import { EmailVerificationBanner } from "@/components/email-verification-banner";
 import { DashboardSignOutButton } from "./dashboard-sign-out";
 
 export default async function DashboardLayout({
@@ -21,6 +22,7 @@ export default async function DashboardLayout({
 
   const locale = await getLocale();
   const d = t(locale).dashboard;
+  const a = t(locale).auth;
   const plan = await getUserPlan(session.user.id);
   const isOperator = await isPlatformOperatorUser(session.user.id);
 
@@ -50,6 +52,17 @@ export default async function DashboardLayout({
       </header>
       <main className="mx-auto max-w-5xl px-4 py-8">
         {isOperator && <PlatformOperatorBanner message={d.platformOperatorBanner} />}
+        {!session.user.emailVerified && (
+          <EmailVerificationBanner
+            email={session.user.email}
+            title={a.verifyEmailBannerTitle}
+            body={a.verifyEmailBannerBody.replace("{email}", session.user.email)}
+            resendLabel={a.verifyEmailResend}
+            resendingLabel={a.verifyEmailResending}
+            sentLabel={a.verifyEmailSent}
+            failedLabel={a.verifyEmailFailed}
+          />
+        )}
         {children}
       </main>
     </div>

@@ -52,7 +52,7 @@ try {
   `;
 
   await sql`
-    UPDATE users SET is_platform_operator = true, updated_at = now() WHERE id = ${user.id}
+    UPDATE users SET is_platform_operator = true, email_verified = true, updated_at = now() WHERE id = ${user.id}
   `;
 
   const [plan] = await sql`

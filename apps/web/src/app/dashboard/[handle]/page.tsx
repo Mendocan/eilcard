@@ -8,6 +8,7 @@ import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 import { VerifyPanel } from "./verify-panel";
 import { DiscoveryPanel } from "./discovery-panel";
+import { DeleteCardButton } from "./delete-card-button";
 import { buildTxtRecord } from "@/lib/dns-verify";
 import { getLatestPendingVerification } from "@/lib/domain-verification-queue";
 
@@ -155,6 +156,10 @@ export default async function CardDetailPage({ params }: Props) {
           appUrl={appUrl ?? "https://eilcard.com"}
           m={d}
         />
+
+        <section className="sm:col-span-2">
+          <DeleteCardButton handle={card.handle} m={d} />
+        </section>
       </div>
     </div>
   );

@@ -31,5 +31,10 @@ export async function GET(request: NextRequest) {
     redirect("/login?next=/portal");
   }
 
-  return portalHandler(request);
+  try {
+    return await portalHandler(request);
+  } catch (err) {
+    console.error("[portal] Polar customer portal error", err);
+    redirect("/dashboard?portal_error=1");
+  }
 }

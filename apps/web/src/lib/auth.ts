@@ -2,6 +2,8 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
 import * as schema from "./db/schema";
+import { sendEmailVerificationMail } from "./email-verification-mail";
+import { localeFromRequest } from "./i18n/locale-from-request";
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
@@ -14,6 +16,19 @@ export const auth = betterAuth({
       verification: schema.verifications,
     },
   }),
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }, request) => {
+      const locale = localeFromRequest(request);
+      await sendEmailVerificationMail({
+        to: user.email,
+        userName: user.name,
+        url,
+        locale,
+      });
+    },
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+  },
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,

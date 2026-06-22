@@ -39,6 +39,12 @@ export function RegisterForm({ m }: Props) {
       return;
     }
 
+    const user = result.data?.user;
+    if (user && !user.emailVerified) {
+      router.push("/verify-email");
+      return;
+    }
+
     router.push("/dashboard");
   }
 

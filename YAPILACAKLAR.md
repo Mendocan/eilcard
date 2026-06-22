@@ -209,7 +209,8 @@ Entegrasyon rehberi (`/docs/agents`) — **yayında** (kısa vade maddeleri tama
 - [x] **Namecheap Private Email** — Starter; `support@` çalışıyor; `billing@` alias
 - [x] **Footer + About** — `support@eilcard.com` görünür
 - [x] **Admin → Ayarlar** — iletişim env durumu, güvenlik notu, ekip yol haritası
-- [ ] **Resend** — domain doğrulama + şifre sıfırlama / bildirim şablonları
+- [ ] **Resend** — şifre sıfırlama / bildirim şablonları
+- [x] **E-posta doğrulama** — kayıt sonrası Resend + `/verify-email` + dashboard banner
 - [ ] **`hello@` alias** (opsiyonel)
 - [ ] Polar checkout + fatura bildirimlerinde `billing@`
 

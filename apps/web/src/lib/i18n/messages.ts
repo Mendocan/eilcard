@@ -39,8 +39,21 @@ const en = {
     loginSubmit: "Sign in",
     loginLoading: "Signing in…",
     loginFailed: "Sign in failed.",
+    loginEmailNotVerified:
+      "Verify your email before signing in. Check your inbox or resend the link from the registration page.",
     noAccount: "No account yet?",
     registerLink: "Create account",
+    verifyEmailTitle: "Verify your email",
+    verifyEmailSubtitle:
+      "We sent a verification link to your inbox. Click it to confirm your account.",
+    verifyEmailBannerTitle: "Email not verified",
+    verifyEmailBannerBody:
+      "Confirm {email} to secure your account. Check your inbox (and spam) for the verification link.",
+    verifyEmailResend: "Resend verification email",
+    verifyEmailResending: "Sending…",
+    verifyEmailSent: "Verification email sent.",
+    verifyEmailFailed: "Could not send email. Try again later.",
+    verifyEmailContinue: "Continue to dashboard →",
   },
   hero: {
     eyebrow: "EIL — Entity Identity Layer",
@@ -486,6 +499,15 @@ const en = {
     billingManage: "Manage billing",
     billingViewPricing: "View pricing",
     checkoutSuccess: "Payment received — your plan will update shortly.",
+    billingPortalError:
+      "Could not open the billing portal. If your plan was not purchased via checkout, manage billing by emailing billing@eilcard.com.",
+    deleteCardButton: "Delete card",
+    deleteCardConfirm:
+      'Delete \u201c{handle}\u201d? All data (resolve stats, domain verification) will be permanently removed. This cannot be undone.',
+    deleteCardDeleting: "Deleting…",
+    deleteCardSuccess: "Card deleted.",
+    deleteCardFailed: "Could not delete the card.",
+    cancelLabel: "Cancel",
     organization: "Organization",
     person: "Person",
     verified: "Verified",
@@ -836,8 +858,21 @@ const tr: Messages = {
     loginSubmit: "Giriş yap",
     loginLoading: "Giriş yapılıyor…",
     loginFailed: "Giriş başarısız.",
+    loginEmailNotVerified:
+      "Giriş yapmadan önce e-postanızı doğrulayın. Gelen kutunuzu kontrol edin veya kayıt sayfasından linki yeniden gönderin.",
     noAccount: "Henüz hesabınız yok mu?",
     registerLink: "Hesap oluşturun",
+    verifyEmailTitle: "E-postanızı doğrulayın",
+    verifyEmailSubtitle:
+      "Gelen kutunuza bir doğrulama bağlantısı gönderdik. Hesabınızı onaylamak için tıklayın.",
+    verifyEmailBannerTitle: "E-posta doğrulanmadı",
+    verifyEmailBannerBody:
+      "{email} adresini onaylayın. Doğrulama bağlantısı için gelen kutunuzu (ve spam klasörünü) kontrol edin.",
+    verifyEmailResend: "Doğrulama e-postasını yeniden gönder",
+    verifyEmailResending: "Gönderiliyor…",
+    verifyEmailSent: "Doğrulama e-postası gönderildi.",
+    verifyEmailFailed: "E-posta gönderilemedi. Daha sonra tekrar deneyin.",
+    verifyEmailContinue: "Panele devam et →",
   },
   hero: {
     eyebrow: "EIL - Entity Identity Layer",
@@ -1284,6 +1319,15 @@ const tr: Messages = {
     billingManage: "Faturalandırmayı yönet",
     billingViewPricing: "Fiyatlandırmayı gör",
     checkoutSuccess: "Ödeme alındı — planınız kısa süre içinde güncellenecek.",
+    billingPortalError:
+      "Faturalandırma portalı açılamadı. Planınız checkout üzerinden satın alınmadıysa billing@eilcard.com adresine yazarak yönetebilirsiniz.",
+    deleteCardButton: "Kartı sil",
+    deleteCardConfirm:
+      '\u201c{handle}\u201d silinsin mi? T\u00fcm veriler (resolve istatistikleri, domain do\u011frulama) kal\u0131c\u0131 olarak kald\u0131r\u0131lacak. Bu i\u015flem geri al\u0131namaz.',
+    deleteCardDeleting: "Siliniyor…",
+    deleteCardSuccess: "Kart silindi.",
+    deleteCardFailed: "Kart silinemedi.",
+    cancelLabel: "Vazgeç",
     organization: "Kurum",
     person: "Kişi",
     verified: "Doğrulanmış",

@@ -8,6 +8,7 @@ type Props = {
   plan: UserPlanInfo;
   polarCheckoutEnabled: boolean;
   checkoutSuccess: boolean;
+  portalError?: boolean;
   m: Messages["dashboard"];
 };
 
@@ -19,6 +20,7 @@ export function DashboardBillingPanel({
   plan,
   polarCheckoutEnabled,
   checkoutSuccess,
+  portalError,
   m,
 }: Props) {
   const expiringSoon =
@@ -36,6 +38,10 @@ export function DashboardBillingPanel({
 
       {checkoutSuccess && (
         <p className="mt-2 text-sm text-[var(--color-success)]">{m.checkoutSuccess}</p>
+      )}
+
+      {portalError && (
+        <p className="mt-2 text-sm text-[var(--color-error)]">{m.billingPortalError}</p>
       )}
 
       {plan.planExpired && (
