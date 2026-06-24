@@ -1,6 +1,17 @@
 import { z } from "zod";
 
 export const SCHEMA_VERSION = "1.0" as const;
+export const SUPPORTED_SCHEMA_VERSIONS = ["1.0", "1.1"] as const;
+export type SchemaVersion = (typeof SUPPORTED_SCHEMA_VERSIONS)[number];
+
+export const editionEnum = z.enum(["core", "business", "registry_plus"]);
+export type CardEdition = z.infer<typeof editionEnum>;
+
+export const EDITION_SCHEMA_MAP: Record<CardEdition, SchemaVersion> = {
+  core: "1.0",
+  business: "1.1",
+  registry_plus: "1.1",
+};
 
 export const cardTypeEnum = z.enum(["organization", "person"]);
 export type CardType = z.infer<typeof cardTypeEnum>;
@@ -104,7 +115,8 @@ export const cardModeSchema = z.object({
 export type CardMode = z.infer<typeof cardModeSchema>;
 
 const cardBaseFields = {
-  schema_version: z.literal(SCHEMA_VERSION),
+  schema_version: z.enum(SUPPORTED_SCHEMA_VERSIONS),
+  edition: editionEnum.default("core"),
   card_id: z.string().min(1).max(100),
   handle: z
     .string()
@@ -155,6 +167,7 @@ export type Card = z.infer<typeof cardSchema>;
 
 export const createOrganizationCardSchema = z.object({
   type: z.literal("organization"),
+  edition: editionEnum.default("core"),
   handle: z
     .string()
     .min(2)
@@ -174,6 +187,7 @@ export const createOrganizationCardSchema = z.object({
 
 export const createPersonCardSchema = z.object({
   type: z.literal("person"),
+  edition: editionEnum.default("core"),
   handle: z
     .string()
     .min(2)
@@ -198,6 +212,7 @@ export const createCardSchema = z.discriminatedUnion("type", [
 // --- Patch schemas (dashboard edit -> API body) ---
 
 export const patchOrganizationCardSchema = z.object({
+  edition: editionEnum.optional(),
   domain: z.string().max(253).optional(),
   name: organizationNameSchema.partial().optional(),
   contact: contactSchema.partial().optional(),
@@ -211,6 +226,7 @@ export const patchOrganizationCardSchema = z.object({
 });
 
 export const patchPersonCardSchema = z.object({
+  edition: editionEnum.optional(),
   domain: z.string().max(253).optional(),
   name: personNameSchema.partial().optional(),
   contact: contactSchema.partial().optional(),

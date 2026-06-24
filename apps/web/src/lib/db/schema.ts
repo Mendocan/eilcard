@@ -29,6 +29,12 @@ export const verificationMethodEnum = pgEnum("verification_method_type", [
 
 export const planTierEnum = pgEnum("plan_tier", ["free", "verified", "pro"]);
 
+export const cardEditionEnum = pgEnum("card_edition", [
+  "core",
+  "business",
+  "registry_plus",
+]);
+
 // --- Better Auth tables ---
 
 export const users = pgTable("users", {
@@ -95,6 +101,10 @@ export const cards = pgTable(
     handle: varchar("handle", { length: 50 }).notNull().unique(),
     cardId: varchar("card_id", { length: 100 }).notNull().unique(),
     type: cardTypeEnum("type").notNull(),
+    edition: cardEditionEnum("edition").notNull().default("core"),
+    schemaVersion: varchar("schema_version", { length: 10 })
+      .notNull()
+      .default("1.0"),
     body: jsonb("body").notNull(),
     verified: boolean("verified").notNull().default(false),
     verificationMethod: text("verification_method")

@@ -5,7 +5,11 @@ import { mergeCardBody } from "@/lib/card-service";
 import { collectChangedFields, logCardChange } from "@/lib/card-change-log";
 import { closePendingVerifications } from "@/lib/domain-verification-queue";
 import { requireSession } from "@/lib/session";
-import { getUserTierLimits, validateProductCount } from "@/lib/user-plan";
+import { getUserPlan, getUserTierLimits, validateProductCount } from "@/lib/user-plan";
+import {
+  getSchemaVersionForEdition,
+  validateEditionForTier,
+} from "@/lib/edition-gate";
 import {
   patchOrganizationCardSchema,
   patchPersonCardSchema,
@@ -63,7 +67,24 @@ export async function PATCH(
     );
   }
 
-  const { domain, ...updates } = parsed.data;
+  const { domain, edition, ...updates } = parsed.data;
+
+  if (edition !== undefined) {
+    const plan = await getUserPlan(session.user.id);
+    const editionCheck = validateEditionForTier(plan.tier, edition);
+    if (!editionCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: "Edition not allowed for current plan",
+          code: API_ERROR_CODES.EDITION_NOT_ALLOWED,
+          edition: editionCheck.edition,
+          requiredTier: editionCheck.requiredTier,
+          tier: plan.tier,
+        },
+        { status: 403 }
+      );
+    }
+  }
 
   const nextDomain =
     domain !== undefined
@@ -136,19 +157,32 @@ export async function PATCH(
   }
 
   const currentBody = existing.body as Record<string, unknown>;
-  const nextBody = mergeCardBody(currentBody, updates as Record<string, unknown>);
+  const { edition: _editionField, ...bodyUpdates } = updates as Record<
+    string,
+    unknown
+  >;
+  const nextBody = mergeCardBody(currentBody, bodyUpdates);
 
   const verificationRevoked = domainChanged && existing.verified;
   if (domainChanged) {
     await closePendingVerifications(existing.id);
   }
 
+  const nextEdition = edition ?? existing.edition;
+  const editionChanged = edition !== undefined && edition !== existing.edition;
+  const nextSchemaVersion = editionChanged
+    ? getSchemaVersionForEdition(nextEdition)
+    : existing.schemaVersion;
+
   const changedFields = collectChangedFields(
     currentBody,
     nextBody,
-    Object.keys(updates),
+    Object.keys(bodyUpdates),
     domainChanged
   );
+  if (editionChanged && !changedFields.includes("edition")) {
+    changedFields.push("edition");
+  }
   if (verificationRevoked && !changedFields.includes("verified")) {
     changedFields.push("verified");
   }
@@ -159,6 +193,8 @@ export async function PATCH(
       body: nextBody,
       domain: nextDomain,
       cardId: domainChanged ? nextCardId : existing.cardId,
+      edition: nextEdition,
+      schemaVersion: nextSchemaVersion,
       verified: verificationRevoked ? false : existing.verified,
       updatedAt: new Date(),
     })

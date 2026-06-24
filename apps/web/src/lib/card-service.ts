@@ -1,7 +1,6 @@
 import { db } from "./db";
 import { cards, resolveEvents } from "./db/schema";
 import { eq, sql } from "drizzle-orm";
-import { SCHEMA_VERSION } from "@digitalcard/schema";
 import type { Card } from "@digitalcard/schema";
 
 export async function getCardByHandle(handle: string) {
@@ -77,7 +76,8 @@ export function buildCardJson(
 
   return {
     ...body,
-    schema_version: SCHEMA_VERSION,
+    schema_version: row.schemaVersion,
+    edition: row.edition,
     card_id: row.cardId,
     handle: row.handle,
     verified: publicVerified,

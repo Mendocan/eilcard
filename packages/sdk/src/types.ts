@@ -4,6 +4,10 @@
  */
 
 export const SCHEMA_VERSION = '1.0' as const;
+export const SUPPORTED_SCHEMA_VERSIONS = ['1.0', '1.1'] as const;
+export type SchemaVersion = (typeof SUPPORTED_SCHEMA_VERSIONS)[number];
+
+export type CardEdition = 'core' | 'business' | 'registry_plus';
 
 export type CardType = 'organization' | 'person';
 
@@ -91,7 +95,8 @@ export interface CardMode {
 }
 
 export interface CardBase {
-  schema_version: typeof SCHEMA_VERSION;
+  schema_version: SchemaVersion;
+  edition: CardEdition;
   card_id: string;
   type: CardType;
   handle?: string;

@@ -7,6 +7,8 @@ import {
   type PlanTier,
   type TierLimits,
 } from "@/lib/tier-limits";
+import type { CardEdition } from "@digitalcard/schema";
+import { getAllowedEditionsForTier } from "@/lib/edition-gate";
 
 export type UserPlanInfo = {
   /** Tier stored in the database (billing/subscription record). */
@@ -14,6 +16,8 @@ export type UserPlanInfo = {
   /** Tier used for limits and quotas (may downgrade when expired). */
   tier: PlanTier;
   limits: TierLimits;
+  /** Editions the user may assign to cards at the effective tier. */
+  allowedEditions: CardEdition[];
   startedAt: Date | null;
   expiresAt: Date | null;
   planExpired: boolean;
@@ -66,6 +70,7 @@ export async function getUserPlan(userId: string): Promise<UserPlanInfo> {
     subscribedTier,
     tier,
     limits: TIER_LIMITS[tier],
+    allowedEditions: getAllowedEditionsForTier(tier),
     startedAt: row?.startedAt ?? null,
     expiresAt,
     planExpired,

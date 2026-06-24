@@ -4,9 +4,14 @@ import { cards } from "@/lib/db/schema";
 import { requireSession } from "@/lib/session";
 import {
   canCreateCard,
+  getUserPlan,
   validateProductCount,
 } from "@/lib/user-plan";
 import { createCardSchema } from "@digitalcard/schema";
+import {
+  getSchemaVersionForEdition,
+  validateEditionForTier,
+} from "@/lib/edition-gate";
 import { isDomainTaken } from "@/lib/domain-check";
 import { checkPlatformResourceAccess } from "@/lib/platform-operator";
 import { getClientIp } from "@/lib/client-ip";
@@ -86,6 +91,21 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const edition = data.edition ?? "core";
+  const editionCheck = validateEditionForTier(createCheck.tier, edition);
+  if (!editionCheck.allowed) {
+    return NextResponse.json(
+      {
+        error: "Edition not allowed for current plan",
+        code: API_ERROR_CODES.EDITION_NOT_ALLOWED,
+        edition: editionCheck.edition,
+        requiredTier: editionCheck.requiredTier,
+        tier: createCheck.tier,
+      },
+      { status: 403 }
+    );
+  }
+
   const productCount =
     data.type === "organization" && "products" in data
       ? (data.products?.length ?? 0)
@@ -114,7 +134,8 @@ export async function POST(request: NextRequest) {
   }
 
   const cardId = data.domain ?? data.handle;
-  const { handle, domain, type, ...cardBody } = data;
+  const { handle, domain, type, edition: _edition, ...cardBody } = data;
+  const schemaVersion = getSchemaVersionForEdition(edition);
 
   const [created] = await db
     .insert(cards)
@@ -123,6 +144,8 @@ export async function POST(request: NextRequest) {
       handle,
       cardId,
       type,
+      edition,
+      schemaVersion,
       domain: domain ?? null,
       body: { ...cardBody, type },
     })

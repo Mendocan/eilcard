@@ -10,7 +10,8 @@
 
 | Alan | Değer |
 |------|-------|
-| **Versiyon** | `1.0` |
+| **Versiyon** | `1.0` (Core edition); `1.1` (Business / Registry+) |
+| **Edition** | `core` \| `business` \| `registry_plus` — kart zenginliği katmanı |
 | **Format** | JSON (UTF-8) |
 | **Tipler** | `organization`, `person` |
 | **JSON Schema** | `v1.0.schema.json` (draft 2020-12) |
@@ -18,11 +19,28 @@
 
 ---
 
+## 1b. Edition modeli (Eksen 2)
+
+Edition, kartın şema zenginliğini belirler. Abonelik planı (tier) hangi edition'ların kullanılabileceğini sınırlar.
+
+| Edition | `schema_version` | Min. plan | Kim için |
+|---------|------------------|-----------|----------|
+| **core** | `1.0` | Free | KOBİ, pilot, tek marka |
+| **business** | `1.1` | Verified+ | Holding, çok iş kolu |
+| **registry_plus** | `1.1` | Pro | Finans, kamu, yüksek güven |
+
+- `edition` registry'de kart seviyesinde saklanır (kullanıcı planından bağımsız alan).
+- Plan düşerse edition etiketi kalır; Eksen 1 kuralları (verified revoke, limit) uygulanır.
+- Business / Registry+ alanları (`offerings[]` vb.) E2-C'de tanımlanır.
+
+---
+
 ## 2. Ortak Alanlar
 
 | Alan | Zorunlu | Tip | Açıklama |
 |------|---------|-----|----------|
-| `schema_version` | ✅ | `"1.0"` | Şema sürümü |
+| `schema_version` | ✅ | `"1.0"` \| `"1.1"` | Şema sürümü (edition ile eşleşir) |
+| `edition` | ✅ | enum | `core` \| `business` \| `registry_plus` (default: `core`) |
 | `card_id` | ✅ | string | Canonical ID — genelde domain (org) veya benzersiz handle (person) |
 | `type` | ✅ | enum | `organization` \| `person` |
 | `handle` | ❌ | string | Registry kısa adı (`sinyalle`) |
@@ -189,7 +207,9 @@ SDK `toSchemaOrg(card)` bu dönüşümü uygular.
 | `structure.*` (org şeması) | v1.1 — kamu/üniversite |
 | `address` (tam adres) | v1.1 |
 | `modes[]` (person) | v1.1 — MVP sonrası |
-| `signatures` (JWS) | v1.2 — A2A uyumu |
+| `signatures` (JWS) | v1.2 — Registry+ edition |
+| `capabilities` (agent gateway) | v1.2+ — Eksen 3, reserved extension |
+| `offerings[]` | v1.1 — Business edition |
 | `locations[]` (şubeler) | v1.1 — KOBİ |
 | `opening_hours` | v1.1 — KOBİ |
 

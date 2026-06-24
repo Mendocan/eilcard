@@ -19,6 +19,7 @@ export type {
   Card,
   CardAction,
   CardBase,
+  CardEdition,
   CardMode,
   CardType,
   Contact,
@@ -35,6 +36,7 @@ export type {
   ResolveMeta,
   ResolveResult,
   ResolveSource,
+  SchemaVersion,
   VerificationMethod,
 } from './types.js';
-export { SCHEMA_VERSION } from './types.js';
+export { SCHEMA_VERSION, SUPPORTED_SCHEMA_VERSIONS } from './types.js';

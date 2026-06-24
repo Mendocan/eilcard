@@ -1,5 +1,8 @@
 export {
   SCHEMA_VERSION,
+  SUPPORTED_SCHEMA_VERSIONS,
+  EDITION_SCHEMA_MAP,
+  editionEnum,
   cardTypeEnum,
   verificationMethodEnum,
   legalTypeEnum,
@@ -24,6 +27,8 @@ export {
 } from "./card";
 
 export type {
+  SchemaVersion,
+  CardEdition,
   CardType,
   VerificationMethod,
   LegalType,

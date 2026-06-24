@@ -560,6 +560,8 @@ const en = {
       "Some fields are invalid. Check your input and try again.",
     apiDomainTaken: "This domain is already registered to another card.",
     apiProductLimit: "Your plan limit for products has been reached.",
+    apiEditionNotAllowed:
+      "This card edition requires a higher plan. Upgrade to Verified or Pro.",
     apiRegistryCardIdTaken: "This registry card ID is already in use.",
     apiNoPendingVerification:
       "No pending DNS verification. Generate a TXT record first.",
@@ -1381,6 +1383,8 @@ const tr: Messages = {
       "Bazı alanlar geçersiz. Girdilerinizi kontrol edip tekrar deneyin.",
     apiDomainTaken: "Bu domain başka bir karta kayıtlı.",
     apiProductLimit: "Planınızdaki ürün limitine ulaşıldı.",
+    apiEditionNotAllowed:
+      "Bu kart edition'ı için daha yüksek bir plan gerekir. Verified veya Pro'ya yükseltin.",
     apiRegistryCardIdTaken: "Bu registry kart kimliği zaten kullanımda.",
     apiNoPendingVerification:
       "Bekleyen DNS doğrulaması yok. Önce TXT kaydı oluşturun.",

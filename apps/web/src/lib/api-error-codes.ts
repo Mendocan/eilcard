@@ -10,6 +10,7 @@ export const API_ERROR_CODES = {
   PLAN_LIMIT: "plan_limit",
   RESERVED_PLATFORM: "reserved_platform",
   RATE_LIMIT: "rate_limit",
+  EDITION_NOT_ALLOWED: "edition_not_allowed",
 } as const;
 
 export type ApiErrorCode =
