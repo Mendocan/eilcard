@@ -58,6 +58,48 @@ Detay: `docs/core-edition.md`
 
 ---
 
+## 1d. Business edition (şema v1.1)
+
+Business ve Registry+ kartları `schema_version: "1.1"` kullanır.
+
+### Yeni alanlar (organization)
+
+| Alan | Zorunlu | Açıklama |
+|------|---------|----------|
+| `content_locale` | ❌ | Kart içeriği dili: `en` \| `tr` |
+| `offerings[]` | ❌ | İş kolu / ürün / hizmet hiyerarşisi |
+
+### `offerings[]` yapısı
+
+```json
+{
+  "id": "digital",
+  "name": "Digital division",
+  "kind": "line",
+  "description": "Software and platforms",
+  "url": "https://example.com/digital",
+  "items": [
+    {
+      "id": "platform",
+      "name": "Main platform",
+      "kind": "product",
+      "url": "https://example.com/app"
+    }
+  ]
+}
+```
+
+| `kind` | Anlam |
+|--------|--------|
+| `line` | İş kolu / division |
+| `product` | Ürün |
+| `service` | Hizmet |
+
+- Core kartlarda `products[]` kullanılır; Business'ta `offerings[]` tercih edilir (ikisi birlikte de olabilir).
+- API, Core edition'da `offerings` ve `content_locale` gönderimini reddeder.
+
+---
+
 ## 2. Ortak Alanlar
 
 | Alan | Zorunlu | Tip | Açıklama |

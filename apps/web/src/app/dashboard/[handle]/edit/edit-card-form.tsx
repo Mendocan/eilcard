@@ -6,6 +6,9 @@ import { useState } from "react";
 import type { Messages } from "@/lib/i18n/messages";
 import { mapDashboardApiError } from "@/lib/i18n/map-dashboard-api-error";
 import { PublicDataNotice } from "@/components/public-data-notice";
+import type { CardEdition, OfferingKind } from "@digitalcard/schema";
+import { isBusinessEdition, countOfferingNodes } from "@/lib/offering-validation";
+import type { Offering } from "@digitalcard/schema";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]";
@@ -22,6 +25,23 @@ type LinkRow = {
   url: string;
 };
 
+type OfferingItemRow = {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  kind: OfferingKind;
+};
+
+type OfferingRow = {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  kind: OfferingKind;
+  items: OfferingItemRow[];
+};
+
 type InitialOrg = {
   type: "organization";
   nameOfficial: string;
@@ -33,6 +53,8 @@ type InitialOrg = {
   website: string;
   domain: string;
   products: ProductRow[];
+  offerings: OfferingRow[];
+  contentLocale: "en" | "tr" | "";
   sameAsText: string;
 };
 
@@ -58,9 +80,45 @@ type InitialPerson = {
 type Props = {
   handle: string;
   initial: InitialOrg | InitialPerson;
+  edition: CardEdition;
+  allowedEditions: CardEdition[];
   maxProducts: number;
+  maxOfferings: number;
   m: Messages["dashboard"];
 };
+
+function editionLabel(edition: CardEdition, m: Messages["dashboard"]) {
+  if (edition === "business") return m.editionBusiness;
+  if (edition === "registry_plus") return m.editionRegistryPlus;
+  return m.editionCore;
+}
+
+function serializeOfferings(rows: OfferingRow[]): Offering[] {
+  return rows
+    .filter((row) => row.name.trim())
+    .map((row, index) => ({
+      id: row.id.trim() || slugId(row.name, index),
+      name: row.name.trim(),
+      kind: row.kind,
+      ...(row.description.trim() && { description: row.description.trim() }),
+      ...(row.url.trim() && { url: row.url.trim() }),
+      ...(row.items.some((item) => item.name.trim())
+        ? {
+            items: row.items
+              .filter((item) => item.name.trim())
+              .map((item, itemIndex) => ({
+                id: item.id.trim() || slugId(item.name, itemIndex),
+                name: item.name.trim(),
+                kind: item.kind,
+                ...(item.description.trim() && {
+                  description: item.description.trim(),
+                }),
+                ...(item.url.trim() && { url: item.url.trim() }),
+              })),
+          }
+        : {}),
+    }));
+}
 
 function slugId(name: string, index: number) {
   const base = name
@@ -70,7 +128,15 @@ function slugId(name: string, index: number) {
   return base || `product-${index + 1}`;
 }
 
-export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
+export function EditCardForm({
+  handle,
+  initial,
+  edition: initialEdition,
+  allowedEditions,
+  maxProducts,
+  maxOfferings,
+  m,
+}: Props) {
   const router = useRouter();
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
@@ -94,6 +160,13 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
   const [sameAsText, setSameAsText] = useState(initial.sameAsText);
   const [products, setProducts] = useState<ProductRow[]>(
     initial.type === "organization" ? initial.products : []
+  );
+  const [offerings, setOfferings] = useState<OfferingRow[]>(
+    initial.type === "organization" ? initial.offerings : []
+  );
+  const [cardEdition, setCardEdition] = useState<CardEdition>(initialEdition);
+  const [contentLocale, setContentLocale] = useState<"en" | "tr" | "">(
+    initial.type === "organization" ? initial.contentLocale : ""
   );
   const [links, setLinks] = useState<LinkRow[]>(
     initial.type === "person" ? initial.links : []
@@ -132,6 +205,90 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
     setProducts((rows) => rows.filter((_, i) => i !== index));
   }
 
+  function updateOffering(
+    index: number,
+    field: keyof OfferingRow,
+    value: string | OfferingKind
+  ) {
+    setOfferings((rows) =>
+      rows.map((row, i) => (i === index ? { ...row, [field]: value } : row))
+    );
+  }
+
+  function updateOfferingItem(
+    offeringIndex: number,
+    itemIndex: number,
+    field: keyof OfferingItemRow,
+    value: string | OfferingKind
+  ) {
+    setOfferings((rows) =>
+      rows.map((row, i) =>
+        i === offeringIndex
+          ? {
+              ...row,
+              items: row.items.map((item, j) =>
+                j === itemIndex ? { ...item, [field]: value } : item
+              ),
+            }
+          : row
+      )
+    );
+  }
+
+  function addOffering() {
+    const serialized = serializeOfferings(offerings);
+    if (countOfferingNodes(serialized) >= maxOfferings) return;
+    setOfferings((rows) => [
+      ...rows,
+      {
+        id: `line-${rows.length + 1}`,
+        name: "",
+        description: "",
+        url: "",
+        kind: "line",
+        items: [],
+      },
+    ]);
+  }
+
+  function removeOffering(index: number) {
+    setOfferings((rows) => rows.filter((_, i) => i !== index));
+  }
+
+  function addOfferingItem(offeringIndex: number) {
+    const serialized = serializeOfferings(offerings);
+    if (countOfferingNodes(serialized) >= maxOfferings) return;
+    setOfferings((rows) =>
+      rows.map((row, i) =>
+        i === offeringIndex
+          ? {
+              ...row,
+              items: [
+                ...row.items,
+                {
+                  id: `item-${row.items.length + 1}`,
+                  name: "",
+                  description: "",
+                  url: "",
+                  kind: "product",
+                },
+              ],
+            }
+          : row
+      )
+    );
+  }
+
+  function removeOfferingItem(offeringIndex: number, itemIndex: number) {
+    setOfferings((rows) =>
+      rows.map((row, i) =>
+        i === offeringIndex
+          ? { ...row, items: row.items.filter((_, j) => j !== itemIndex) }
+          : row
+      )
+    );
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -166,6 +323,7 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
         official: nameOfficial,
         ...(nameShort && { short: nameShort }),
       };
+      body.edition = cardEdition;
       body.products = products
         .filter((p) => p.name.trim())
         .map((p, index) => ({
@@ -174,6 +332,12 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
           ...(p.description.trim() && { description: p.description.trim() }),
           ...(p.url.trim() && { url: p.url.trim() }),
         }));
+      if (isBusinessEdition(cardEdition)) {
+        if (contentLocale) {
+          body.content_locale = contentLocale;
+        }
+        body.offerings = serializeOfferings(offerings);
+      }
     } else {
       body.name = { full: nameFull };
       const linkActions = links
@@ -238,6 +402,26 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
               className={inputClass}
             />
           </div>
+
+          {allowedEditions.length > 1 && (
+            <div>
+              <label className="mb-1 block text-sm font-medium">{m.edition}</label>
+              <select
+                value={cardEdition}
+                onChange={(e) => setCardEdition(e.target.value as CardEdition)}
+                className={inputClass}
+              >
+                {allowedEditions.map((value) => (
+                  <option key={value} value={value}>
+                    {editionLabel(value, m)}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1.5 text-xs text-[var(--color-text-muted)]">
+                {m.editionHint}
+              </p>
+            </div>
+          )}
         </>
       ) : (
         <div>
@@ -327,6 +511,163 @@ export function EditCardForm({ handle, initial, maxProducts, m }: Props) {
                 className="text-sm font-medium text-[var(--color-accent)] hover:opacity-80"
               >
                 {m.addProduct}
+              </button>
+            )}
+          </div>
+        )}
+
+        {initial.type === "organization" && isBusinessEdition(cardEdition) && (
+          <div className="space-y-3">
+            <div>
+              <label className="mb-1 block text-sm font-medium">{m.contentLocale}</label>
+              <select
+                value={contentLocale}
+                onChange={(e) =>
+                  setContentLocale(e.target.value as "en" | "tr" | "")
+                }
+                className={inputClass}
+              >
+                <option value="">—</option>
+                <option value="en">English</option>
+                <option value="tr">Türkçe</option>
+              </select>
+              <p className="mt-1.5 text-xs text-[var(--color-text-muted)]">
+                {m.contentLocaleHint}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-sm font-medium">{m.offerings}</p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+                {m.offeringsHint}
+              </p>
+            </div>
+            {offerings.map((offering, offeringIndex) => (
+              <div
+                key={`${offering.id}-${offeringIndex}`}
+                className="space-y-2 rounded-lg border border-[var(--color-border)]/60 p-3"
+              >
+                <select
+                  value={offering.kind}
+                  onChange={(e) =>
+                    updateOffering(
+                      offeringIndex,
+                      "kind",
+                      e.target.value as OfferingKind
+                    )
+                  }
+                  className={inputClass}
+                >
+                  <option value="line">{m.offeringKindLine}</option>
+                  <option value="product">{m.offeringKindProduct}</option>
+                  <option value="service">{m.offeringKindService}</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder={m.offeringName}
+                  value={offering.name}
+                  onChange={(e) =>
+                    updateOffering(offeringIndex, "name", e.target.value)
+                  }
+                  className={inputClass}
+                />
+                <input
+                  type="text"
+                  placeholder={m.offeringDescription}
+                  value={offering.description}
+                  onChange={(e) =>
+                    updateOffering(offeringIndex, "description", e.target.value)
+                  }
+                  className={inputClass}
+                />
+                <input
+                  type="url"
+                  placeholder={m.offeringUrl}
+                  value={offering.url}
+                  onChange={(e) =>
+                    updateOffering(offeringIndex, "url", e.target.value)
+                  }
+                  className={inputClass}
+                />
+                {offering.items.map((item, itemIndex) => (
+                  <div
+                    key={`${item.id}-${itemIndex}`}
+                    className="ml-3 space-y-2 border-l border-[var(--color-border)] pl-3"
+                  >
+                    <input
+                      type="text"
+                      placeholder={m.offeringItemName}
+                      value={item.name}
+                      onChange={(e) =>
+                        updateOfferingItem(
+                          offeringIndex,
+                          itemIndex,
+                          "name",
+                          e.target.value
+                        )
+                      }
+                      className={inputClass}
+                    />
+                    <input
+                      type="text"
+                      placeholder={m.offeringDescription}
+                      value={item.description}
+                      onChange={(e) =>
+                        updateOfferingItem(
+                          offeringIndex,
+                          itemIndex,
+                          "description",
+                          e.target.value
+                        )
+                      }
+                      className={inputClass}
+                    />
+                    <input
+                      type="url"
+                      placeholder={m.offeringUrl}
+                      value={item.url}
+                      onChange={(e) =>
+                        updateOfferingItem(
+                          offeringIndex,
+                          itemIndex,
+                          "url",
+                          e.target.value
+                        )
+                      }
+                      className={inputClass}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeOfferingItem(offeringIndex, itemIndex)}
+                      className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-error)]"
+                    >
+                      {m.removeOfferingItem}
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => addOfferingItem(offeringIndex)}
+                  className="text-xs font-medium text-[var(--color-accent)] hover:opacity-80"
+                >
+                  {m.addOfferingItem}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeOffering(offeringIndex)}
+                  className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-error)]"
+                >
+                  {m.removeOffering}
+                </button>
+              </div>
+            ))}
+            {countOfferingNodes(serializeOfferings(offerings)) < maxOfferings && (
+              <button
+                type="button"
+                onClick={addOffering}
+                className="text-sm font-medium text-[var(--color-accent)] hover:opacity-80"
+              >
+                {m.addOffering}
               </button>
             )}
           </div>

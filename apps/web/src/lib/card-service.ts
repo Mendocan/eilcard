@@ -2,6 +2,7 @@ import { db } from "./db";
 import { cards, resolveEvents } from "./db/schema";
 import { eq, sql } from "drizzle-orm";
 import type { Card } from "@digitalcard/schema";
+import { isBusinessEdition } from "./offering-validation";
 
 export async function getCardByHandle(handle: string) {
   const [row] = await db
@@ -64,7 +65,13 @@ export function buildCardJson(
   row: typeof cards.$inferSelect,
   options?: BuildCardJsonOptions
 ): Card {
-  const body = row.body as Record<string, unknown>;
+  const rawBody = row.body as Record<string, unknown>;
+  const publicBody = { ...rawBody };
+  if (!isBusinessEdition(row.edition)) {
+    delete publicBody.offerings;
+    delete publicBody.content_locale;
+  }
+
   const publicVerified =
     row.verified && !options?.subscriptionLapsed;
   const methods =
@@ -75,7 +82,7 @@ export function buildCardJson(
         : [];
 
   return {
-    ...body,
+    ...publicBody,
     schema_version: row.schemaVersion,
     edition: row.edition,
     card_id: row.cardId,

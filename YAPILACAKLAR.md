@@ -100,12 +100,12 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 
 #### E2-C — Business edition (şema v1.1)
 
-- [ ] **`offerings[]`** — birleşik ürün/hizmet hiyerarşisi (`schema/SCHEMA.md` v1.1 taslağı)
-- [ ] **`content_locale`** (veya eşdeğeri) — kart içeriği dili
-- [ ] **Dashboard UI** — offering editörü, org kartı / iş kolu hiyerarşisi
-- [ ] **Public kart + resolve** — v1.1 alanları export (schema.org, llms.txt güncellemesi)
-- [ ] **Validasyon** — Business edition + Verified+ plan zorunluluğu
-- [ ] **Migration** — v1.0 kartlar Core olarak kalır; v1.1 opt-in yükseltme
+- [x] **`offerings[]`** — birleşik ürün/hizmet hiyerarşisi (`schema/SCHEMA.md` v1.1 taslağı)
+- [x] **`content_locale`** (veya eşdeğeri) — kart içeriği dili
+- [x] **Dashboard UI** — offering editörü, org kartı / iş kolu hiyerarşisi
+- [x] **Public kart + resolve** — v1.1 alanları export (schema.org, llms.txt güncellemesi)
+- [x] **Validasyon** — Business edition + Verified+ plan zorunluluğu
+- [x] **Migration** — v1.0 kartlar Core olarak kalır; v1.1 opt-in yükseltme
 
 #### E2-D — Registry+ edition (enterprise / ileri)
 

@@ -7,6 +7,21 @@ export type CardViewProduct = {
   url?: string;
 };
 
+export type CardViewOfferingItem = {
+  name: string;
+  description?: string;
+  url?: string;
+  kind?: string;
+};
+
+export type CardViewOffering = {
+  name: string;
+  description?: string;
+  url?: string;
+  kind?: string;
+  items?: CardViewOfferingItem[];
+};
+
 export type CardViewLink = {
   label: string;
   url: string;
@@ -26,6 +41,7 @@ type Props = {
   summary?: string;
   verified?: boolean;
   products?: CardViewProduct[];
+  offerings?: CardViewOffering[];
   linkActions?: CardViewLink[];
   sameAs?: string[];
   contact?: CardViewContact;
@@ -52,6 +68,7 @@ export function CardView({
   summary,
   verified,
   products = [],
+  offerings = [],
   linkActions = [],
   sameAs = [],
   contact,
@@ -86,6 +103,66 @@ export function CardView({
           </p>
         )}
       </div>
+
+      {offerings.length > 0 && (
+        <div className="mb-6 space-y-3">
+          <p className="text-xs font-medium uppercase tracking-wider text-[var(--color-text-muted)]">
+            {labels.offerings}
+          </p>
+          <ul className="space-y-3">
+            {offerings.map((offering) => (
+              <li
+                key={offering.name}
+                className="rounded-lg border border-[var(--color-border)] px-4 py-3 text-sm"
+              >
+                {offering.url ? (
+                  <a
+                    href={offering.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-[var(--color-accent)] hover:opacity-80"
+                  >
+                    {offering.name}
+                  </a>
+                ) : (
+                  <p className="font-medium">{offering.name}</p>
+                )}
+                {offering.description && (
+                  <p className="mt-1 text-[var(--color-text-muted)]">
+                    {offering.description}
+                  </p>
+                )}
+                {offering.items && offering.items.length > 0 && (
+                  <ul className="mt-2 space-y-1 border-l border-[var(--color-border)] pl-3">
+                    {offering.items.map((item) => (
+                      <li key={item.name} className="text-sm">
+                        {item.url ? (
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[var(--color-accent)] hover:opacity-80"
+                          >
+                            {item.name}
+                          </a>
+                        ) : (
+                          <span>{item.name}</span>
+                        )}
+                        {item.description && (
+                          <span className="text-[var(--color-text-muted)]">
+                            {" "}
+                            — {item.description}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {products.length > 0 && (
         <div className="mb-6 space-y-2">

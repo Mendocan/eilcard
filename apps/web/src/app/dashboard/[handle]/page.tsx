@@ -66,6 +66,9 @@ export default async function CardDetailPage({ params }: Props) {
         <div>
           <h1 className="text-2xl font-bold">{name ?? card.handle}</h1>
           <p className="text-sm text-[var(--color-text-muted)]">@{card.handle}</p>
+          <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+            {card.edition} · schema {card.schemaVersion}
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <Link

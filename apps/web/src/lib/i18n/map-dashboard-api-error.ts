@@ -39,6 +39,10 @@ export function mapDashboardApiError(
       return m.limitReached;
     case "edition_not_allowed":
       return m.apiEditionNotAllowed;
+    case "business_fields_not_allowed":
+      return m.apiBusinessFieldsNotAllowed;
+    case "offering_limit":
+      return m.apiOfferingLimit;
     case "reserved_platform":
       return m.reservedDomainError;
     default:

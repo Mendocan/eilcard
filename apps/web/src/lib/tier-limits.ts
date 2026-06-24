@@ -6,6 +6,7 @@ export type TierLimits = {
   maxCards: number;
   maxOrgCards: number;
   maxProducts: number;
+  maxOfferings: number;
   resolveLimit: number;
   allowedEditions: CardEdition[];
 };
@@ -15,6 +16,7 @@ export const TIER_LIMITS: Record<PlanTier, TierLimits> = {
     maxCards: 1,
     maxOrgCards: 0,
     maxProducts: 2,
+    maxOfferings: 0,
     resolveLimit: 1000,
     allowedEditions: ["core"],
   },
@@ -22,6 +24,7 @@ export const TIER_LIMITS: Record<PlanTier, TierLimits> = {
     maxCards: 2,
     maxOrgCards: 1,
     maxProducts: 10,
+    maxOfferings: 20,
     resolveLimit: 10000,
     allowedEditions: ["core", "business"],
   },
@@ -29,6 +32,7 @@ export const TIER_LIMITS: Record<PlanTier, TierLimits> = {
     maxCards: 99,
     maxOrgCards: 5,
     maxProducts: 50,
+    maxOfferings: 50,
     resolveLimit: 50000,
     allowedEditions: ["core", "business", "registry_plus"],
   },

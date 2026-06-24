@@ -38,6 +38,20 @@ export function toSchemaOrg(card: Card): SchemaOrgDocument {
       .join(' — ');
     if (desc) doc.description = desc;
 
+    if (card.offerings?.length) {
+      doc.hasOfferCatalog = {
+        '@type': 'OfferCatalog',
+        name: `${card.name.official} offerings`,
+        itemListElement: card.offerings.map((offering, index) => ({
+          '@type': 'Offer',
+          position: index + 1,
+          name: offering.name,
+          ...(offering.description && { description: offering.description }),
+          ...(offering.url && { url: offering.url }),
+        })),
+      };
+    }
+
     return doc;
   }
 
@@ -111,7 +125,20 @@ export function toLlmsTxtSection(card: Card): string {
   if (card.description?.tagline) lines.push(`> ${card.description.tagline}`, '');
   if (card.description?.summary) lines.push(card.description.summary, '');
 
-  if (isOrganization(card) && card.products?.length) {
+  if (isOrganization(card) && card.offerings?.length) {
+    lines.push('## Offerings', '');
+    for (const o of card.offerings) {
+      lines.push(`- ${o.name}${o.description ? `: ${o.description}` : ''}`);
+      if (o.items?.length) {
+        for (const item of o.items) {
+          lines.push(
+            `  - ${item.name}${item.description ? `: ${item.description}` : ''}`
+          );
+        }
+      }
+    }
+    lines.push('');
+  } else if (isOrganization(card) && card.products?.length) {
     lines.push('## Products', '');
     for (const p of card.products) {
       lines.push(`- ${p.name}${p.description ? `: ${p.description}` : ''}`);

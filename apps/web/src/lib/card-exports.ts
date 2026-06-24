@@ -71,8 +71,31 @@ export function toAgentCard(card: Card, appBaseUrl: string): EilAgentCard {
         }))
       : [];
 
+  const offeringSkills =
+    isOrganization(card) && card.offerings?.length
+      ? card.offerings.flatMap((o) => {
+          const parent = {
+            id: o.id,
+            name: o.name,
+            description: o.description ?? o.name,
+            tags: ["offering", o.kind ?? "line"],
+          };
+          const children =
+            o.items?.map((item) => ({
+              id: item.id,
+              name: item.name,
+              description: item.description ?? item.name,
+              tags: ["offering", item.kind ?? "product"],
+            })) ?? [];
+          return [parent, ...children];
+        })
+      : [];
+
+  const catalogSkills =
+    offeringSkills.length > 0 ? offeringSkills : productSkills;
+
   const skills =
-    productSkills.length > 0 ? [identitySkill, ...productSkills] : [identitySkill];
+    catalogSkills.length > 0 ? [identitySkill, ...catalogSkills] : [identitySkill];
 
   const website = card.contact.website;
   const agentCardUrl = registryAgentCardUrl(base, handle);

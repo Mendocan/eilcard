@@ -11,6 +11,8 @@ export const API_ERROR_CODES = {
   RESERVED_PLATFORM: "reserved_platform",
   RATE_LIMIT: "rate_limit",
   EDITION_NOT_ALLOWED: "edition_not_allowed",
+  BUSINESS_FIELDS_NOT_ALLOWED: "business_fields_not_allowed",
+  OFFERING_LIMIT: "offering_limit",
 } as const;
 
 export type ApiErrorCode =

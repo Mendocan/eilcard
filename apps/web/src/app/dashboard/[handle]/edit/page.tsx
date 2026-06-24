@@ -6,7 +6,9 @@ import { cards } from "@/lib/db/schema";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 import { getSession } from "@/lib/session";
-import { getUserTierLimits } from "@/lib/user-plan";
+import { getUserPlan } from "@/lib/user-plan";
+import type { CardEdition, Offering, OfferingKind } from "@digitalcard/schema";
+import { isBusinessEdition } from "@/lib/offering-validation";
 import { EditCardForm } from "./edit-card-form";
 
 interface Props {
@@ -29,7 +31,7 @@ export default async function EditCardPage({ params }: Props) {
 
   if (!card) notFound();
 
-  const { limits } = await getUserTierLimits(session.user.id);
+  const { limits, allowedEditions } = await getUserPlan(session.user.id);
   const body = card.body as Record<string, unknown>;
   const contact = (body.contact ?? {}) as {
     email?: string;
@@ -63,6 +65,30 @@ export default async function EditCardPage({ params }: Props) {
         }))
       : [];
 
+  const mapOffering = (o: Offering) => ({
+    id: o.id,
+    name: o.name,
+    description: o.description ?? "",
+    url: o.url ?? "",
+    kind: (o.kind ?? "line") as OfferingKind,
+    items: (o.items ?? []).map((item) => ({
+      id: item.id,
+      name: item.name,
+      description: item.description ?? "",
+      url: item.url ?? "",
+      kind: (item.kind ?? "product") as OfferingKind,
+    })),
+  });
+
+  const offerings =
+    card.type === "organization"
+      ? ((body.offerings as Offering[] | undefined) ?? []).map(mapOffering)
+      : [];
+
+  const rawLocale = body.content_locale;
+  const contentLocale: "en" | "tr" | "" =
+    rawLocale === "tr" ? "tr" : rawLocale === "en" ? "en" : "";
+
   const initial =
     card.type === "organization"
       ? {
@@ -76,6 +102,8 @@ export default async function EditCardPage({ params }: Props) {
           website: contact.website ?? "",
           domain: card.domain ?? "",
           products,
+          offerings,
+          contentLocale,
           sameAsText: sameAs.join("\n"),
         }
       : {
@@ -107,7 +135,10 @@ export default async function EditCardPage({ params }: Props) {
         <EditCardForm
           handle={handle}
           initial={initial}
+          edition={card.edition as CardEdition}
+          allowedEditions={allowedEditions}
           maxProducts={limits.maxProducts}
+          maxOfferings={limits.maxOfferings}
           m={d}
         />
       </div>

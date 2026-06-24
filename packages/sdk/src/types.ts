@@ -9,6 +9,8 @@ export type SchemaVersion = (typeof SUPPORTED_SCHEMA_VERSIONS)[number];
 
 export type CardEdition = 'core' | 'business' | 'registry_plus';
 
+export type ContentLocale = 'en' | 'tr';
+
 export type CardType = 'organization' | 'person';
 
 export type VerificationMethod =
@@ -106,6 +108,7 @@ export interface CardBase {
   description?: Description;
   actions?: CardAction[];
   same_as?: string[];
+  content_locale?: ContentLocale;
   updated_at: string;
   created_at?: string;
   human_url?: string;
@@ -117,8 +120,20 @@ export interface OrganizationCard extends CardBase {
   name: OrganizationName;
   legal?: Legal;
   products?: Product[];
+  offerings?: Offering[];
   apps?: Apps;
   logo_url?: string;
+}
+
+export type OfferingKind = 'line' | 'product' | 'service';
+
+export interface Offering {
+  id: string;
+  name: string;
+  description?: string;
+  url?: string;
+  kind?: OfferingKind;
+  items?: Offering[];
 }
 
 export interface PersonCard extends CardBase {

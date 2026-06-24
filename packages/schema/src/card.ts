@@ -92,6 +92,32 @@ export const productSchema = z.object({
 });
 export type Product = z.infer<typeof productSchema>;
 
+export const contentLocaleEnum = z.enum(["en", "tr"]);
+export type ContentLocale = z.infer<typeof contentLocaleEnum>;
+
+export const offeringKindEnum = z.enum(["line", "product", "service"]);
+export type OfferingKind = z.infer<typeof offeringKindEnum>;
+
+export type Offering = {
+  id: string;
+  name: string;
+  description?: string;
+  url?: string;
+  kind?: OfferingKind;
+  items?: Offering[];
+};
+
+export const offeringSchema: z.ZodType<Offering> = z.lazy(() =>
+  z.object({
+    id: z.string().min(1).max(50),
+    name: z.string().min(1).max(200),
+    description: z.string().max(500).optional(),
+    url: z.string().url().optional(),
+    kind: offeringKindEnum.optional(),
+    items: z.array(offeringSchema).max(15).optional(),
+  })
+);
+
 export const appsSchema = z.object({
   play_store: z.string().url().optional(),
   app_store: z.string().url().optional(),
@@ -130,6 +156,7 @@ const cardBaseFields = {
   description: descriptionSchema.optional(),
   actions: z.array(cardActionSchema).max(20).optional(),
   same_as: z.array(z.string().url()).optional(),
+  content_locale: contentLocaleEnum.optional(),
   updated_at: z.string().datetime(),
   created_at: z.string().datetime().optional(),
   human_url: z.string().url().optional(),
@@ -142,6 +169,7 @@ export const organizationCardSchema = z.object({
   name: organizationNameSchema,
   legal: legalSchema.optional(),
   products: z.array(productSchema).max(50).optional(),
+  offerings: z.array(offeringSchema).max(20).optional(),
   apps: appsSchema.optional(),
   logo_url: z.string().url().optional(),
 });
@@ -178,6 +206,8 @@ export const createOrganizationCardSchema = z.object({
   description: descriptionSchema.optional(),
   legal: legalSchema.optional(),
   products: z.array(productSchema).max(50).optional(),
+  offerings: z.array(offeringSchema).max(20).optional(),
+  content_locale: contentLocaleEnum.optional(),
   apps: appsSchema.optional(),
   logo_url: z.string().url().optional(),
   actions: z.array(cardActionSchema).max(20).optional(),
@@ -219,6 +249,8 @@ export const patchOrganizationCardSchema = z.object({
   description: descriptionSchema.optional(),
   legal: legalSchema.optional(),
   products: z.array(productSchema).max(50).optional(),
+  offerings: z.array(offeringSchema).max(20).optional(),
+  content_locale: contentLocaleEnum.optional(),
   apps: appsSchema.optional(),
   logo_url: z.string().url().optional(),
   actions: z.array(cardActionSchema).max(20).optional(),

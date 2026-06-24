@@ -12,6 +12,11 @@ import {
   getSchemaVersionForEdition,
   validateEditionForTier,
 } from "@/lib/edition-gate";
+import type { Offering } from "@digitalcard/schema";
+import {
+  validateBusinessFieldsForEdition,
+  validateOfferingCount,
+} from "@/lib/offering-validation";
 import { isDomainTaken } from "@/lib/domain-check";
 import { checkPlatformResourceAccess } from "@/lib/platform-operator";
 import { getClientIp } from "@/lib/client-ip";
@@ -104,6 +109,37 @@ export async function POST(request: NextRequest) {
       },
       { status: 403 }
     );
+  }
+
+  if (data.type === "organization") {
+    const orgPatch = data as Record<string, unknown>;
+    const businessCheck = validateBusinessFieldsForEdition(edition, orgPatch);
+    if (!businessCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: "Business edition fields require Business or Registry+ edition",
+          code: API_ERROR_CODES.BUSINESS_FIELDS_NOT_ALLOWED,
+          edition,
+        },
+        { status: 403 }
+      );
+    }
+
+    const offerings = (data as { offerings?: Offering[] }).offerings;
+    if (
+      offerings?.length &&
+      !validateOfferingCount(offerings, createCheck.limits.maxOfferings)
+    ) {
+      return NextResponse.json(
+        {
+          error: "Offering limit reached",
+          code: API_ERROR_CODES.OFFERING_LIMIT,
+          tier: createCheck.tier,
+          limit: createCheck.limits.maxOfferings,
+        },
+        { status: 403 }
+      );
+    }
   }
 
   const productCount =

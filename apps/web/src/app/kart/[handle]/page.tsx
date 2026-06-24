@@ -63,11 +63,27 @@ export default async function CardPage({ params }: Props) {
   const summary =
     (body.description as { summary?: string })?.summary ?? undefined;
   const products =
-    card.type === "organization"
+    card.type === "organization" && card.edition === "core"
       ? ((body.products as Array<{
           name: string;
           description?: string;
           url?: string;
+        }>) ?? [])
+      : [];
+  const offerings =
+    card.type === "organization" &&
+    (card.edition === "business" || card.edition === "registry_plus")
+      ? ((body.offerings as Array<{
+          name: string;
+          description?: string;
+          url?: string;
+          kind?: string;
+          items?: Array<{
+            name: string;
+            description?: string;
+            url?: string;
+            kind?: string;
+          }>;
         }>) ?? [])
       : [];
   const sameAs = (body.same_as as string[] | undefined) ?? [];
@@ -108,6 +124,7 @@ export default async function CardPage({ params }: Props) {
           summary={summary}
           verified={card.verified}
           products={products}
+          offerings={offerings}
           linkActions={linkActions}
           sameAs={sameAs}
           contact={contact}

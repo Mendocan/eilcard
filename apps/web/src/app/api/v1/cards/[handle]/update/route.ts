@@ -10,6 +10,12 @@ import {
   getSchemaVersionForEdition,
   validateEditionForTier,
 } from "@/lib/edition-gate";
+import type { Offering } from "@digitalcard/schema";
+import {
+  validateBusinessFieldsForEdition,
+  validateOfferingCount,
+  countOfferingNodes,
+} from "@/lib/offering-validation";
 import {
   patchOrganizationCardSchema,
   patchPersonCardSchema,
@@ -68,6 +74,7 @@ export async function PATCH(
   }
 
   const { domain, edition, ...updates } = parsed.data;
+  const nextEdition = edition ?? existing.edition;
 
   if (edition !== undefined) {
     const plan = await getUserPlan(session.user.id);
@@ -137,22 +144,50 @@ export async function PATCH(
     }
   }
 
-  if (
-    existing.type === "organization" &&
-    "products" in updates &&
-    updates.products
-  ) {
-    const { limits } = await getUserTierLimits(session.user.id);
-    if (!validateProductCount(updates.products.length, limits)) {
+  if (existing.type === "organization") {
+    const businessCheck = validateBusinessFieldsForEdition(
+      nextEdition,
+      updates as Record<string, unknown>
+    );
+    if (!businessCheck.allowed) {
       return NextResponse.json(
         {
-          error: "Product limit reached",
-          code: API_ERROR_CODES.PRODUCT_LIMIT,
-          limit: limits.maxProducts,
-          count: updates.products.length,
+          error: "Business edition fields require Business or Registry+ edition",
+          code: API_ERROR_CODES.BUSINESS_FIELDS_NOT_ALLOWED,
+          edition: nextEdition,
         },
         { status: 403 }
       );
+    }
+
+    if ("offerings" in updates && updates.offerings) {
+      const { limits } = await getUserTierLimits(session.user.id);
+      if (!validateOfferingCount(updates.offerings, limits.maxOfferings)) {
+        return NextResponse.json(
+          {
+            error: "Offering limit reached",
+            code: API_ERROR_CODES.OFFERING_LIMIT,
+            limit: limits.maxOfferings,
+            count: countOfferingNodes(updates.offerings),
+          },
+          { status: 403 }
+        );
+      }
+    }
+
+    if ("products" in updates && updates.products) {
+      const { limits } = await getUserTierLimits(session.user.id);
+      if (!validateProductCount(updates.products.length, limits)) {
+        return NextResponse.json(
+          {
+            error: "Product limit reached",
+            code: API_ERROR_CODES.PRODUCT_LIMIT,
+            limit: limits.maxProducts,
+            count: updates.products.length,
+          },
+          { status: 403 }
+        );
+      }
     }
   }
 
@@ -168,7 +203,6 @@ export async function PATCH(
     await closePendingVerifications(existing.id);
   }
 
-  const nextEdition = edition ?? existing.edition;
   const editionChanged = edition !== undefined && edition !== existing.edition;
   const nextSchemaVersion = editionChanged
     ? getSchemaVersionForEdition(nextEdition)

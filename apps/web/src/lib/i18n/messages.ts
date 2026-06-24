@@ -184,6 +184,7 @@ const en = {
   publicCard: {
     verified: "Verified",
     products: "Products & services",
+    offerings: "Offerings",
     profiles: "Profiles",
     links: "Links",
     email: "Email",
@@ -566,6 +567,9 @@ const en = {
     apiProductLimit: "Your plan limit for products has been reached.",
     apiEditionNotAllowed:
       "This card edition requires a higher plan. Upgrade to Verified or Pro.",
+    apiBusinessFieldsNotAllowed:
+      "Offerings and content language require Business edition. Upgrade the card edition first.",
+    apiOfferingLimit: "Your plan offering limit has been reached.",
     apiRegistryCardIdTaken: "This registry card ID is already in use.",
     apiNoPendingVerification:
       "No pending DNS verification. Generate a TXT record first.",
@@ -592,6 +596,29 @@ const en = {
     products: "Products & services",
     productsHint:
       "Things this organization offers — agents read these before scraping the website.",
+    edition: "Card edition",
+    editionHint:
+      "Core uses schema v1.0. Business unlocks offerings hierarchy (v1.1). Requires Verified+ plan.",
+    editionCore: "Core (v1.0)",
+    editionBusiness: "Business (v1.1)",
+    editionRegistryPlus: "Registry+ (v1.1)",
+    contentLocale: "Content language",
+    contentLocaleHint:
+      "Language of card text — used for public page labels (EN/TR).",
+    offerings: "Offerings (Business)",
+    offeringsHint:
+      "Business lines and nested products/services — holding-friendly hierarchy.",
+    offeringName: "Name",
+    offeringDescription: "Description",
+    offeringUrl: "URL (optional)",
+    offeringKindLine: "Business line",
+    offeringKindProduct: "Product",
+    offeringKindService: "Service",
+    addOffering: "+ Add business line",
+    removeOffering: "Remove line",
+    addOfferingItem: "+ Add item",
+    removeOfferingItem: "Remove item",
+    offeringItemName: "Item name",
     productName: "Name",
     productDescription: "Description",
     productUrl: "URL (optional)",
@@ -1011,6 +1038,7 @@ const tr: Messages = {
   publicCard: {
     verified: "Doğrulanmış",
     products: "Ürün ve hizmetler",
+    offerings: "İş kolu ve teklifler",
     profiles: "Profiller",
     links: "Linkler",
     email: "E-posta",
@@ -1393,6 +1421,9 @@ const tr: Messages = {
     apiProductLimit: "Planınızdaki ürün limitine ulaşıldı.",
     apiEditionNotAllowed:
       "Bu kart edition'ı için daha yüksek bir plan gerekir. Verified veya Pro'ya yükseltin.",
+    apiBusinessFieldsNotAllowed:
+      "Offerings ve içerik dili Business edition gerektirir. Önce kart edition'ını yükseltin.",
+    apiOfferingLimit: "Planınızdaki offering limitine ulaşıldı.",
     apiRegistryCardIdTaken: "Bu registry kart kimliği zaten kullanımda.",
     apiNoPendingVerification:
       "Bekleyen DNS doğrulaması yok. Önce TXT kaydı oluşturun.",
@@ -1421,6 +1452,29 @@ const tr: Messages = {
     products: "Ürün ve hizmetler",
     productsHint:
       "Kurumun sunduğu şeyler — agent'lar site taramadan önce bunları okur.",
+    edition: "Kart edition'ı",
+    editionHint:
+      "Core şema v1.0 kullanır. Business, offerings hiyerarşisini açar (v1.1). Verified+ plan gerekir.",
+    editionCore: "Core (v1.0)",
+    editionBusiness: "Business (v1.1)",
+    editionRegistryPlus: "Registry+ (v1.1)",
+    contentLocale: "İçerik dili",
+    contentLocaleHint:
+      "Kart metninin dili — public sayfa etiketleri için (EN/TR).",
+    offerings: "Offerings (Business)",
+    offeringsHint:
+      "İş kolu ve iç içe ürün/hizmetler — holding için hiyerarşik yapı.",
+    offeringName: "Ad",
+    offeringDescription: "Açıklama",
+    offeringUrl: "URL (opsiyonel)",
+    offeringKindLine: "İş kolu",
+    offeringKindProduct: "Ürün",
+    offeringKindService: "Hizmet",
+    addOffering: "+ İş kolu ekle",
+    removeOffering: "Satırı kaldır",
+    addOfferingItem: "+ Alt öğe ekle",
+    removeOfferingItem: "Öğeyi kaldır",
+    offeringItemName: "Alt öğe adı",
     productName: "Ad",
     productDescription: "Açıklama",
     productUrl: "URL (opsiyonel)",
