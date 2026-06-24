@@ -94,9 +94,9 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 
 #### E2-B — Core edition (mevcut durumun adlandırılması)
 
-- [ ] **Core = v1.0** — bugünkü kartlar resmi olarak Core edition sayılır (geriye uyumlu)
-- [ ] **Holding anlatımı** — docs: özet + `products[]` + URL’ler; tek dev JSON değil
-- [ ] **Pilot referansları güncelle** — Sinyalle + `@eilcard` = Core + Eksen 1 Verified/Pro
+- [x] **Core = v1.0** — bugünkü kartlar resmi olarak Core edition sayılır (geriye uyumlu)
+- [x] **Holding anlatımı** — docs: özet + `products[]` + URL’ler; tek dev JSON değil
+- [x] **Pilot referansları güncelle** — Sinyalle + `@eilcard` = Core + Eksen 1 Verified/Pro
 
 #### E2-C — Business edition (şema v1.1)
 
@@ -171,15 +171,17 @@ Strateji: Mevcut şema v1.0 alanlarıyla zengin kart içeriği; şema v1.1 (`off
 - [x] **`@eilcard` DNS doğrulama** — `eilcard.com` verified (2026-06-20)
 - [ ] **Şema v1.1 / Business edition** — → Faz 4 E2-C (`offerings[]`, `content_locale`)
 
-**Canlı referanslar**
+**Canlı referanslar (Core edition)**
 
-| Tür | URL |
-|-----|-----|
-| Demo (statik) | https://eilcard.com/example |
-| Pilot (gerçek, doğrulanmış) | https://eilcard.com/kart/sinyal24 |
-| Operatör (Core + verified) | https://eilcard.com/kart/eilcard |
-| Resolve (pilot) | https://eilcard.com/api/v1/resolve?domain=sinyalle.com |
-| Resolve (operatör) | https://eilcard.com/api/v1/resolve?domain=eilcard.com |
+| Tür | Edition | Plan | URL |
+|-----|---------|------|-----|
+| Demo (statik) | — | — | https://eilcard.com/example |
+| Pilot (gerçek, doğrulanmış) | Core | Verified | https://eilcard.com/kart/sinyal24 |
+| Operatör (registry) | Core | Pro | https://eilcard.com/kart/eilcard |
+| Resolve (pilot) | Core | Verified | https://eilcard.com/api/v1/resolve?domain=sinyalle.com |
+| Resolve (operatör) | Core | Pro | https://eilcard.com/api/v1/resolve?domain=eilcard.com |
+
+Detay: `docs/core-edition.md`
 
 ---
 
@@ -332,6 +334,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 ## İlgili belgeler
 
+- `docs/core-edition.md` — Core edition (v1.0), holding anlatımı, canlı referanslar
 - `docs/strateji-agent-cagi.md` — agent çağı stratejisi, üç eksen, E3 yol haritası
 - `kesif-stratejisi.md` — keşif stratejisi ve MVP kararları
 - `packages/sdk/SDK.md` — SDK spesifikasyonu

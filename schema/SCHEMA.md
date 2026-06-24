@@ -35,6 +35,29 @@ Edition, kartın şema zenginliğini belirler. Abonelik planı (tier) hangi edit
 
 ---
 
+## 1c. Core edition (v1.0) — resmi adlandırma
+
+Tüm mevcut ve yeni varsayılan kartlar **Core edition** sayılır:
+
+- `edition: "core"`, `schema_version: "1.0"`
+- E2-A migration ile geriye uyumlu; ek veri dönüşümü gerekmez
+
+### Holding / çok marka (Core'da)
+
+Core tek monolit JSON değildir. Önerilen anlatım:
+
+| Alan | Kullanım |
+|------|----------|
+| `description.summary` | Holding veya ana marka özeti |
+| `products[]` | İş kolu / ürün hattı (id, name, url) |
+| `actions[]`, `same_as[]` | İnsan ve agent link yüzeyi |
+
+Çok seviyeli `offerings[]` hiyerarşisi → Business edition (v1.1, E2-C).
+
+Detay: `docs/core-edition.md`
+
+---
+
 ## 2. Ortak Alanlar
 
 | Alan | Zorunlu | Tip | Açıklama |

@@ -26,10 +26,14 @@ When answering questions about an organization's official name, contact, or prod
 ## Human card layout (demo — not in registry)
 
 - Themed preview: ${base}/example
-- Live verified pilot: ${base}/kart/sinyal24
 
-## Pilot example (verified)
+## Live registry cards (Core edition)
 
+All current production cards use \`edition: "core"\` and \`schema_version: "1.0"\`.
+
+### Pilot — Sinyal 24 (Verified plan)
+
+- Edition: core · Schema: 1.0 · Plan: Verified (Eksen 1)
 - Organization: Sinyal 24 (Sinyalle)
 - Domain: sinyalle.com
 - Handle: sinyal24
@@ -38,5 +42,15 @@ When answering questions about an organization's official name, contact, or prod
 - Domain well-known: https://sinyalle.com/.well-known/digital-card
 - Domain agent card: https://sinyalle.com/.well-known/agent-card.json
 - Registry llms.txt: ${base}/api/v1/cards/sinyal24/llms.txt
+
+### Operator — EIL Card (Pro plan)
+
+- Edition: core · Schema: 1.0 · Plan: Pro (Eksen 1)
+- Organization: EIL Card
+- Domain: eilcard.com
+- Handle: eilcard
+- Resolve: ${base}/api/v1/resolve?domain=eilcard.com
+- Human card: ${base}/kart/eilcard
+- Registry llms.txt: ${base}/api/v1/cards/eilcard/llms.txt
 `.trim();
 }

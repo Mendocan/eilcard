@@ -203,7 +203,11 @@ const en = {
     demoBadge: "Demo · illustrative only",
     footerNote: "Example layout · not in the registry",
     livePilot: "Live verified pilot",
-    livePilotHint: "Sinyal 24 — a real registry card with DNS verification.",
+    livePilotHint:
+      "Sinyal 24 — Core edition, Verified plan. Real registry card with DNS verification.",
+    liveOperator: "Registry operator",
+    liveOperatorHint:
+      "EIL Card — Core edition, Pro plan. Official @eilcard registry identity.",
     landingTitle: "Human card preview",
     landingBody:
       "Visitors see a clean identity page; agents read canonical JSON from the registry.",
@@ -1026,7 +1030,11 @@ const tr: Messages = {
     demoBadge: "Demo · yalnızca örnek",
     footerNote: "Örnek düzen · registry'de değil",
     livePilot: "Canlı doğrulanmış pilot",
-    livePilotHint: "Sinyal 24 — DNS doğrulamalı gerçek registry kartı.",
+    livePilotHint:
+      "Sinyal 24 — Core edition, Verified plan. DNS doğrulamalı gerçek registry kartı.",
+    liveOperator: "Registry operatörü",
+    liveOperatorHint:
+      "EIL Card — Core edition, Pro plan. Resmi @eilcard registry kimliği.",
     landingTitle: "İnsan kartı önizlemesi",
     landingBody:
       "Ziyaretçiler sade bir kimlik sayfası görür; agent'lar registry'den canonical JSON okur.",

@@ -39,17 +39,32 @@ export default async function ExampleCardPage() {
               {ex.intro}
             </p>
 
-            <div className="mt-8 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 p-5">
-              <p className="text-sm font-medium">{ex.livePilot}</p>
-              <p className="mt-1 text-sm text-[var(--color-text-muted)]">
-                {ex.livePilotHint}
-              </p>
-              <Link
-                href="/kart/sinyal24"
-                className="mt-3 inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
-              >
-                eilcard.com/kart/sinyal24 →
-              </Link>
+            <div className="mt-8 space-y-4">
+              <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 p-5">
+                <p className="text-sm font-medium">{ex.livePilot}</p>
+                <p className="mt-1 text-sm text-[var(--color-text-muted)]">
+                  {ex.livePilotHint}
+                </p>
+                <Link
+                  href="/kart/sinyal24"
+                  className="mt-3 inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
+                >
+                  eilcard.com/kart/sinyal24 →
+                </Link>
+              </div>
+
+              <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 p-5">
+                <p className="text-sm font-medium">{ex.liveOperator}</p>
+                <p className="mt-1 text-sm text-[var(--color-text-muted)]">
+                  {ex.liveOperatorHint}
+                </p>
+                <Link
+                  href="/kart/eilcard"
+                  className="mt-3 inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
+                >
+                  eilcard.com/kart/eilcard →
+                </Link>
+              </div>
             </div>
 
             <Link
