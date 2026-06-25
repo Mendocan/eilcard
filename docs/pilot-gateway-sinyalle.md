@@ -80,7 +80,21 @@ Token payload (in-memory pilot): `sub`, `eil_card_id`, `scope`, `exp`.
 
 ---
 
-## Registry+ kart pointer
+## Production deploy (interim host)
+
+Pilot gateway runs as a **separate Docker service** on the Sinyalle/EIL VPS — not inside `apps/web`.
+
+| Adım | Komut / ayar |
+|------|----------------|
+| DNS | `agent-gateway.eilcard.com` → VPS A kaydı (geçici); hedef: `agent-gateway.sinyalle.com` |
+| Env | `.env.prod`: `GATEWAY_DOMAIN`, `GATEWAY_ISSUER`, `PILOT_EIL_CARD_ID=sinyalle.com` |
+| Deploy | `scripts/prod-deploy-eilcard.sh` (pilot-gateway container + Caddy site) |
+| Registry pointer | `node apps/web/scripts/seed-sinyalle-pilot-gateway.mjs` on VPS |
+| E2E | `GATEWAY_BASE=https://agent-gateway.eilcard.com pnpm --filter @digitalcard/pilot-gateway-sinyalle e2e` |
+
+When Sinyalle DNS is ready, set `GATEWAY_DOMAIN=agent-gateway.sinyalle.com`, re-deploy, and re-run the seed script with `PILOT_AGENT_GATEWAY_URL`.
+
+---
 
 Production'da gateway ayrı host'ta çalışır; kart JSON yalnızca pointer taşır:
 

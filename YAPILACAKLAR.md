@@ -17,7 +17,7 @@
 
 | # | İş | Neden şimdi | Çıktı |
 |---|-----|-------------|--------|
-| **1** | **Sinyalle pilot gateway — production** | E3-B referans kodu var; uçtan uca pilot döngüsü kapanmıyor | Gateway Sinyalle altyapısında deploy; `@sinyalle` Registry+ kartında canlı `capabilities.agent_gateway`; `read:profile` + `read:orders` E2E |
+| **1** | **Sinyalle pilot gateway — production** | read:* + revoke E2E hazır; Sinyalle DNS ve act kriterleri kaldı | Interim: `agent-gateway.eilcard.com`; hedef: `agent-gateway.sinyalle.com`; seed + E2E script |
 | **2** | **Resend işlem postası** | Kayıt doğrulama var; şifre sıfırlama ve fatura maili yok | `forgot-password` akışı + şablonlar; Polar/plan bildirimlerinde `billing@` gönderici |
 | **3** | **Rol tabanlı admin** | Tek `ADMIN_PASSWORD` ölçeklenmiyor | DB admin hesapları, editör/moderatör rolleri, davet akışı |
 | **4** | **EIL CLI** | Adoption tablosunda tek büyük boşluk | `eil-card init`, `verify`, `export well-known` (npm paketi veya `packages/cli`) |

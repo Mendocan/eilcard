@@ -7,12 +7,27 @@ services:
       - "443:443"
     environment:
       APP_DOMAIN: ${APP_DOMAIN}
+      GATEWAY_DOMAIN: ${GATEWAY_DOMAIN:-agent-gateway.eilcard.com}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddydata:/data
       - caddyconfig:/config
     depends_on:
       - app
+      - pilot-gateway
+
+  pilot-gateway:
+    build:
+      context: .
+      dockerfile: packages/pilot-gateway-sinyalle/Dockerfile
+    restart: unless-stopped
+    expose:
+      - "8787"
+    environment:
+      GATEWAY_PORT: "8787"
+      GATEWAY_ISSUER: ${GATEWAY_ISSUER:-https://agent-gateway.eilcard.com}
+      PILOT_EIL_CARD_ID: ${PILOT_EIL_CARD_ID:-sinyalle.com}
+      PILOT_CLIENT_ID: ${PILOT_CLIENT_ID:-eil-pilot-agent}
 
   app:
     build:

@@ -55,6 +55,14 @@ cd /opt/digital_card
 docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm migrate node apps/web/scripts/backfill-email-verified.mjs || true
 REMOTE
 
+echo "==> seed Sinyalle pilot gateway capabilities"
+ssh -i "$KEY" "$HOST" bash <<'REMOTE'
+set -euo pipefail
+cd /opt/digital_card
+docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm migrate node apps/web/scripts/seed-sinyalle-pilot-gateway.mjs || true
+REMOTE
+
 echo "==> verify"
 curl -sf -o /dev/null -w "example=%{http_code}\n" "https://eilcard.com/example"
 curl -sf -o /dev/null -w "eilcard-gone=%{http_code}\n" "https://eilcard.com/api/v1/resolve?handle=eilcard" || true
+curl -sf -o /dev/null -w "gateway-health=%{http_code}\n" "https://agent-gateway.eilcard.com/health" || echo "gateway-health=unreachable (add DNS A record for agent-gateway.eilcard.com)"

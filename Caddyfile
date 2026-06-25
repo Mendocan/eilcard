@@ -12,3 +12,15 @@
 
 	reverse_proxy app:3000
 }
+
+{$GATEWAY_DOMAIN} {
+	encode gzip zstd
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		-Server
+	}
+
+	reverse_proxy pilot-gateway:8787
+}

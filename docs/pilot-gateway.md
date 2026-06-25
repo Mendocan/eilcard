@@ -131,13 +131,13 @@ EIL Card bu endpoint'leri host etmez. Act pattern: [EIL Act Spec v0.1](./eil-act
 
 ## 6. Başarı kriterleri (pilot)
 
-- [ ] Registry+ kartta `agent_gateway` canlı URL
+- [x] Registry+ kartta `agent_gateway` canlı URL (seed script + `agent-gateway.eilcard.com` interim)
 - [x] Agent resolve → capabilities discovery uçtan uca (SDK + MCP)
-- [x] En az bir `read:*` scope ile consent + token (referans gateway)
+- [x] En az bir `read:*` scope ile consent + token (referans gateway + E2E script)
 - [ ] En az bir `write:` veya `act:` scope ile ayrı consent (E3-C)
 - [ ] Idempotent POST with `Idempotency-Key` replay test
-- [ ] Token `eil_card_id` claim ile domain'e bağlı
-- [ ] Revoke sonrası 401
+- [x] Token `eil_card_id` claim ile domain'e bağlı
+- [x] Revoke sonrası 401 (`POST /oauth/revoke` + E2E)
 - [ ] Audit log (platform tarafı)
 
 ---

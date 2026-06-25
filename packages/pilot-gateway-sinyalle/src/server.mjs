@@ -76,6 +76,7 @@ function wellKnownAgentGateway() {
     issuer: ISSUER,
     authorization_endpoint: `${ISSUER}/oauth/authorize`,
     token_endpoint: `${ISSUER}/oauth/token`,
+    revocation_endpoint: `${ISSUER}/oauth/revoke`,
     scopes_supported: ['read:profile', 'read:orders'],
     grant_types_supported: ['authorization_code'],
     code_challenge_methods_supported: ['S256'],
@@ -205,6 +206,17 @@ const server = createServer(async (req, res) => {
         expires_in: 3600,
         scope: entry.scope,
       });
+    }
+
+    if (method === 'POST' && path === '/oauth/revoke') {
+      const raw = await readBody(req);
+      const form = parseFormBody(raw);
+      const tokenStr = form.token ?? bearerToken(req);
+      if (!tokenStr) {
+        return json(res, 400, { error: 'invalid_request' });
+      }
+      accessTokens.delete(tokenStr);
+      return json(res, 200, { revoked: true });
     }
 
     if (method === 'GET' && path === '/v1/read/profile') {
