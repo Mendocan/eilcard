@@ -196,6 +196,7 @@ export const userPlans = pgTable(
     startedAt: timestamp("started_at").notNull().defaultNow(),
     expiresAt: timestamp("expires_at"),
     polarSubscriptionId: varchar("polar_subscription_id", { length: 255 }),
+    enterpriseAddon: boolean("enterprise_addon").notNull().default(false),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },

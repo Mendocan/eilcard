@@ -4,7 +4,7 @@
  */
 
 export const SCHEMA_VERSION = '1.0' as const;
-export const SUPPORTED_SCHEMA_VERSIONS = ['1.0', '1.1'] as const;
+export const SUPPORTED_SCHEMA_VERSIONS = ['1.0', '1.1', '1.2'] as const;
 export type SchemaVersion = (typeof SUPPORTED_SCHEMA_VERSIONS)[number];
 
 export type CardEdition = 'core' | 'business' | 'registry_plus';
@@ -109,6 +109,13 @@ export interface CardBase {
   actions?: CardAction[];
   same_as?: string[];
   content_locale?: ContentLocale;
+  signatures?: {
+    registry?: {
+      alg: 'RS256' | 'ES256' | 'EdDSA';
+      kid?: string;
+      jws: string;
+    };
+  };
   updated_at: string;
   created_at?: string;
   human_url?: string;

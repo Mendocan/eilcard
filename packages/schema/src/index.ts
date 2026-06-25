@@ -27,6 +27,9 @@ export {
   createCardSchema,
   patchOrganizationCardSchema,
   patchPersonCardSchema,
+  jwsSignatureAlgEnum,
+  jwsSignatureSchema,
+  cardSignaturesSchema,
 } from "./card";
 
 export type {
@@ -51,4 +54,7 @@ export type {
   OrganizationCard,
   PersonCard,
   Card,
+  JwsSignatureAlg,
+  JwsSignature,
+  CardSignatures,
 } from "./card";

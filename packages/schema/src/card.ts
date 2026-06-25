@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const SCHEMA_VERSION = "1.0" as const;
-export const SUPPORTED_SCHEMA_VERSIONS = ["1.0", "1.1"] as const;
+export const SUPPORTED_SCHEMA_VERSIONS = ["1.0", "1.1", "1.2"] as const;
 export type SchemaVersion = (typeof SUPPORTED_SCHEMA_VERSIONS)[number];
 
 export const editionEnum = z.enum(["core", "business", "registry_plus"]);
@@ -10,8 +10,25 @@ export type CardEdition = z.infer<typeof editionEnum>;
 export const EDITION_SCHEMA_MAP: Record<CardEdition, SchemaVersion> = {
   core: "1.0",
   business: "1.1",
-  registry_plus: "1.1",
+  registry_plus: "1.2",
 };
+
+export const jwsSignatureAlgEnum = z.enum(["RS256", "ES256", "EdDSA"]);
+export type JwsSignatureAlg = z.infer<typeof jwsSignatureAlgEnum>;
+
+export const jwsSignatureSchema = z.object({
+  alg: jwsSignatureAlgEnum,
+  kid: z.string().max(128).optional(),
+  /** Compact serialization (header.payload.signature) */
+  jws: z.string().min(10).max(16384),
+});
+export type JwsSignature = z.infer<typeof jwsSignatureSchema>;
+
+export const cardSignaturesSchema = z.object({
+  /** Registry attestation over canonical card JSON */
+  registry: jwsSignatureSchema.optional(),
+});
+export type CardSignatures = z.infer<typeof cardSignaturesSchema>;
 
 export const cardTypeEnum = z.enum(["organization", "person"]);
 export type CardType = z.infer<typeof cardTypeEnum>;
@@ -161,6 +178,7 @@ const cardBaseFields = {
   created_at: z.string().datetime().optional(),
   human_url: z.string().url().optional(),
   registry_url: z.string().url().optional(),
+  signatures: cardSignaturesSchema.optional(),
 };
 
 export const organizationCardSchema = z.object({
@@ -212,6 +230,7 @@ export const createOrganizationCardSchema = z.object({
   logo_url: z.string().url().optional(),
   actions: z.array(cardActionSchema).max(20).optional(),
   same_as: z.array(z.string().url()).optional(),
+  signatures: cardSignaturesSchema.optional(),
   domain: z.string().max(253).optional(),
 });
 
@@ -231,6 +250,7 @@ export const createPersonCardSchema = z.object({
   photo_url: z.string().url().optional(),
   actions: z.array(cardActionSchema).max(20).optional(),
   same_as: z.array(z.string().url()).optional(),
+  signatures: cardSignaturesSchema.optional(),
   domain: z.string().max(253).optional(),
 });
 
@@ -255,6 +275,7 @@ export const patchOrganizationCardSchema = z.object({
   logo_url: z.string().url().optional(),
   actions: z.array(cardActionSchema).max(20).optional(),
   same_as: z.array(z.string().url()).max(20).optional(),
+  signatures: cardSignaturesSchema.nullable().optional(),
 });
 
 export const patchPersonCardSchema = z.object({
@@ -268,4 +289,5 @@ export const patchPersonCardSchema = z.object({
   photo_url: z.string().url().optional(),
   actions: z.array(cardActionSchema).max(20).optional(),
   same_as: z.array(z.string().url()).max(20).optional(),
+  signatures: cardSignaturesSchema.nullable().optional(),
 });

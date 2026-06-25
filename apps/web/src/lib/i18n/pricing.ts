@@ -102,14 +102,14 @@ export const pricingMessages: Record<Locale, PricingCopy> = {
       },
       registry_plus: {
         name: "Registry+",
-        schema: "Schema v1.1+",
+        schema: "Schema v1.2",
         minPlan: "Pro + enterprise add-on",
         summary:
           "High-trust registry: cryptographic attestation and agent tooling for regulated use cases.",
         features: [
           "Everything in Business",
-          "JWS signature field (planned)",
-          "MCP resolve tools (planned)",
+          "JWS signature field",
+          "MCP resolve tools (@digitalcard/mcp)",
           "SLA and priority support (contract)",
         ],
         audience: "Finance, public sector, high assurance",
@@ -202,14 +202,14 @@ export const pricingMessages: Record<Locale, PricingCopy> = {
       },
       registry_plus: {
         name: "Registry+",
-        schema: "Şema v1.1+",
+        schema: "Şema v1.2",
         minPlan: "Pro + enterprise eklenti",
         summary:
           "Yüksek güven registry: kriptografik doğrulama ve agent araçları (regülasyonlu senaryolar).",
         features: [
           "Business'taki her şey",
-          "JWS imza alanı (planlanıyor)",
-          "MCP resolve araçları (planlanıyor)",
+          "JWS imza alanı",
+          "MCP resolve araçları (@digitalcard/mcp)",
           "SLA ve öncelikli destek (sözleşme)",
         ],
         audience: "Finans, kamu, yüksek güvence",

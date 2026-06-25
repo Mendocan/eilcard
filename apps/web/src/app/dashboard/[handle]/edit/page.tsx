@@ -89,6 +89,18 @@ export default async function EditCardPage({ params }: Props) {
   const contentLocale: "en" | "tr" | "" =
     rawLocale === "tr" ? "tr" : rawLocale === "en" ? "en" : "";
 
+  const registrySignature = (
+    body.signatures as { registry?: { alg?: string; kid?: string; jws?: string } } | undefined
+  )?.registry;
+  const signatureAlg: "RS256" | "ES256" | "EdDSA" | "" =
+    registrySignature?.alg === "ES256" ||
+    registrySignature?.alg === "EdDSA" ||
+    registrySignature?.alg === "RS256"
+      ? registrySignature.alg
+      : "";
+  const signatureKid = registrySignature?.kid ?? "";
+  const signatureJws = registrySignature?.jws ?? "";
+
   const initial =
     card.type === "organization"
       ? {
@@ -104,6 +116,9 @@ export default async function EditCardPage({ params }: Props) {
           products,
           offerings,
           contentLocale,
+          signatureAlg,
+          signatureKid,
+          signatureJws,
           sameAsText: sameAs.join("\n"),
         }
       : {

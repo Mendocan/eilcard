@@ -8,7 +8,7 @@ import {
   type TierLimits,
 } from "@/lib/tier-limits";
 import type { CardEdition } from "@digitalcard/schema";
-import { getAllowedEditionsForTier } from "@/lib/edition-gate";
+import { getAllowedEditionsForTier, filterAllowedEditionsForPlan } from "@/lib/edition-gate";
 
 export type UserPlanInfo = {
   /** Tier stored in the database (billing/subscription record). */
@@ -18,6 +18,8 @@ export type UserPlanInfo = {
   limits: TierLimits;
   /** Editions the user may assign to cards at the effective tier. */
   allowedEditions: CardEdition[];
+  /** Contract add-on required for Registry+ edition selection. */
+  enterpriseAddon: boolean;
   startedAt: Date | null;
   expiresAt: Date | null;
   planExpired: boolean;
@@ -52,6 +54,7 @@ export async function getUserPlan(userId: string): Promise<UserPlanInfo> {
       startedAt: userPlans.startedAt,
       expiresAt: userPlans.expiresAt,
       polarSubscriptionId: userPlans.polarSubscriptionId,
+      enterpriseAddon: userPlans.enterpriseAddon,
     })
     .from(userPlans)
     .where(eq(userPlans.userId, userId))
@@ -66,11 +69,14 @@ export async function getUserPlan(userId: string): Promise<UserPlanInfo> {
     expiresAt !== null &&
     expiresAt.getTime() <= Date.now();
 
+  const enterpriseAddon = row?.enterpriseAddon ?? false;
+
   return {
     subscribedTier,
     tier,
     limits: TIER_LIMITS[tier],
-    allowedEditions: getAllowedEditionsForTier(tier),
+    allowedEditions: filterAllowedEditionsForPlan(tier, enterpriseAddon),
+    enterpriseAddon,
     startedAt: row?.startedAt ?? null,
     expiresAt,
     planExpired,
@@ -174,6 +180,29 @@ export async function setUserPlanTier(userId: string, tier: PlanTier) {
     await db.insert(userPlans).values({
       userId,
       tier,
+      startedAt: now,
+    });
+  }
+}
+
+export async function setUserEnterpriseAddon(userId: string, enabled: boolean) {
+  const now = new Date();
+  const [existing] = await db
+    .select({ id: userPlans.id })
+    .from(userPlans)
+    .where(eq(userPlans.userId, userId))
+    .limit(1);
+
+  if (existing) {
+    await db
+      .update(userPlans)
+      .set({ enterpriseAddon: enabled, updatedAt: now })
+      .where(eq(userPlans.userId, userId));
+  } else {
+    await db.insert(userPlans).values({
+      userId,
+      tier: "free",
+      enterpriseAddon: enabled,
       startedAt: now,
     });
   }

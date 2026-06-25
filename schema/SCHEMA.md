@@ -27,7 +27,7 @@ Edition, kartın şema zenginliğini belirler. Abonelik planı (tier) hangi edit
 |---------|------------------|-----------|----------|
 | **core** | `1.0` | Free | KOBİ, pilot, tek marka |
 | **business** | `1.1` | Verified+ | Holding, çok iş kolu |
-| **registry_plus** | `1.1` | Pro | Finans, kamu, yüksek güven |
+| **registry_plus** | `1.2` | Pro + enterprise add-on | Finans, kamu, yüksek güven |
 
 - `edition` registry'de kart seviyesinde saklanır (kullanıcı planından bağımsız alan).
 - Plan düşerse edition etiketi kalır; Eksen 1 kuralları (verified revoke, limit) uygulanır.
@@ -98,13 +98,42 @@ Business ve Registry+ kartları `schema_version: "1.1"` kullanır.
 - Core kartlarda `products[]` kullanılır; Business'ta `offerings[]` tercih edilir (ikisi birlikte de olabilir).
 - API, Core edition'da `offerings` ve `content_locale` gönderimini reddeder.
 
+## 1e. Registry+ edition (şema v1.2)
+
+Registry+ kartları `schema_version: "1.2"` kullanır. Business alanlarının üzerine kriptografik attestation eklenir.
+
+| Alan | Zorunlu | Açıklama |
+|------|---------|----------|
+| `signatures.registry` | ❌ | Compact JWS — registry JSON attestation |
+
+```json
+{
+  "signatures": {
+    "registry": {
+      "alg": "RS256",
+      "kid": "key-2026",
+      "jws": "eyJhbGciOiJSUzI1NiIs..."
+    }
+  }
+}
+```
+
+| `alg` | Desteklenen |
+|-------|-------------|
+| `RS256` | ✅ |
+| `ES256` | ✅ |
+| `EdDSA` | ✅ |
+
+- API, Core/Business edition'da `signatures` gönderimini reddeder.
+- JWS **doğrulama** aracı E3-A'da; v1.2 şimdilik saklama + export.
+
 ---
 
 ## 2. Ortak Alanlar
 
 | Alan | Zorunlu | Tip | Açıklama |
 |------|---------|-----|----------|
-| `schema_version` | ✅ | `"1.0"` \| `"1.1"` | Şema sürümü (edition ile eşleşir) |
+| `schema_version` | ✅ | `"1.0"` \| `"1.1"` \| `"1.2"` | Şema sürümü (edition ile eşleşir) |
 | `edition` | ✅ | enum | `core` \| `business` \| `registry_plus` (default: `core`) |
 | `card_id` | ✅ | string | Canonical ID — genelde domain (org) veya benzersiz handle (person) |
 | `type` | ✅ | enum | `organization` \| `person` |
@@ -272,7 +301,7 @@ SDK `toSchemaOrg(card)` bu dönüşümü uygular.
 | `structure.*` (org şeması) | v1.1 — kamu/üniversite |
 | `address` (tam adres) | v1.1 |
 | `modes[]` (person) | v1.1 — MVP sonrası |
-| `signatures` (JWS) | v1.2 — Registry+ edition |
+| `signatures` (JWS) | v1.2 — Registry+ edition (`signatures.registry` compact JWS) |
 | `capabilities` (agent gateway) | v1.2+ — Eksen 3, reserved extension |
 | `offerings[]` | v1.1 — Business edition |
 | `locations[]` (şubeler) | v1.1 — KOBİ |

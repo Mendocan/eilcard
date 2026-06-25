@@ -8,7 +8,8 @@ export type AdminAuditAction =
   | "card.revoke"
   | "card.delete"
   | "card.dns_check"
-  | "user.plan";
+  | "user.plan"
+  | "user.enterprise_addon";
 
 export async function logAdminAction(
   action: AdminAuditAction,

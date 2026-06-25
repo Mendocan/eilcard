@@ -1,7 +1,7 @@
 # YAPILACAKLAR
 
 > EIL Card — öncelikli iş listesi  
-> Son güncelleme: 2026-06-24
+> Son güncelleme: 2026-06-25
 
 ---
 
@@ -110,10 +110,10 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 
 #### E2-D — Registry+ edition (enterprise / ileri)
 
-- [ ] **JWS imza alanı** — kriptografik doğrulama
-- [ ] **MCP sunucusu** — `resolve_domain`, `get_card_by_handle`
-- [ ] **Enterprise add-on** — SLA, çoklu org kartı kotası, öncelikli destek (sözleşme)
-- [ ] **Federated registry** değerlendirmesi
+- [x] **JWS imza alanı** — `signatures.registry` (compact JWS); Registry+ gate + dashboard
+- [x] **MCP sunucusu** — `@digitalcard/mcp`: `resolve_domain`, `get_card_by_handle`
+- [x] **Enterprise add-on** — `user_plans.enterprise_addon` + admin toggle; Registry+ edition gate
+- [x] **Federated registry** değerlendirmesi — `docs/registry-plus.md` (ertelendi, tetikleyiciler)
 
 **Edition ↔ plan özeti (hedef)**
 
@@ -121,7 +121,7 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 |---------|------|-----------|----------|
 | **Core** | v1.0 | Free (verified yok) / Verified+ | KOBİ, pilot, tek marka |
 | **Business** | v1.1 | Verified+ | Holding, çok iş kolu, zengin katalog |
-| **Registry+** | v1.1+ | Pro + add-on | Finans, kamu, yüksek güven |
+| **Registry+** | v1.2 | Pro + enterprise add-on | Finans, kamu, yüksek güven |
 
 ---
 
@@ -335,7 +335,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 ## İlgili belgeler
 
-- `docs/core-edition.md` — Core edition (v1.0), holding anlatımı, canlı referanslar
+- `docs/registry-plus.md` — Registry+ edition, JWS, MCP, enterprise add-on
 - `docs/strateji-agent-cagi.md` — agent çağı stratejisi, üç eksen, E3 yol haritası
 - `kesif-stratejisi.md` — keşif stratejisi ve MVP kararları
 - `packages/sdk/SDK.md` — SDK spesifikasyonu

@@ -1,0 +1,39 @@
+{
+  "name": "@digitalcard/mcp",
+  "version": "0.1.0",
+  "description": "MCP server for EIL Card registry resolve tools",
+  "type": "module",
+  "bin": {
+    "eilcard-mcp": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "eil",
+    "mcp",
+    "digital-card",
+    "resolve",
+    "agent"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.21",
+    "typescript": "^5.8.0"
+  }
+}

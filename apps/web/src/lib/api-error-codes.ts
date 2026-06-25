@@ -13,6 +13,8 @@ export const API_ERROR_CODES = {
   EDITION_NOT_ALLOWED: "edition_not_allowed",
   BUSINESS_FIELDS_NOT_ALLOWED: "business_fields_not_allowed",
   OFFERING_LIMIT: "offering_limit",
+  SIGNATURES_NOT_ALLOWED: "signatures_not_allowed",
+  ENTERPRISE_ADDON_REQUIRED: "enterprise_addon_required",
 } as const;
 
 export type ApiErrorCode =

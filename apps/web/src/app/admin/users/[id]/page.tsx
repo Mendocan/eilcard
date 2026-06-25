@@ -93,6 +93,7 @@ export default async function AdminUserDetailPage({ params }: Props) {
           <AdminUserTierActions
             userId={user.id}
             currentTier={user.plan.subscribedTier}
+            enterpriseAddon={user.plan.enterpriseAddon}
             m={a}
           />
         </div>

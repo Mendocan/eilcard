@@ -8,14 +8,21 @@ import type { PlanTier } from "@/lib/tier-limits";
 type Props = {
   userId: string;
   currentTier: PlanTier;
+  enterpriseAddon: boolean;
   m: Messages["admin"];
 };
 
 const TIERS: PlanTier[] = ["free", "verified", "pro"];
 
-export function AdminUserTierActions({ userId, currentTier, m }: Props) {
+export function AdminUserTierActions({
+  userId,
+  currentTier,
+  enterpriseAddon,
+  m,
+}: Props) {
   const router = useRouter();
   const [tier, setTier] = useState<PlanTier>(currentTier);
+  const [addon, setAddon] = useState(enterpriseAddon);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -25,10 +32,15 @@ export function AdminUserTierActions({ userId, currentTier, m }: Props) {
     setError(null);
     setMessage(null);
     try {
+      const payload: { tier?: PlanTier; enterpriseAddon?: boolean } = {};
+      if (tier !== currentTier) payload.tier = tier;
+      if (addon !== enterpriseAddon) payload.enterpriseAddon = addon;
+      if (Object.keys(payload).length === 0) return;
+
       const res = await fetch(`/api/admin/users/${encodeURIComponent(userId)}/plan`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tier }),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error("failed");
       setMessage(m.planUpdated);
@@ -39,6 +51,8 @@ export function AdminUserTierActions({ userId, currentTier, m }: Props) {
       setBusy(false);
     }
   }
+
+  const unchanged = tier === currentTier && addon === enterpriseAddon;
 
   return (
     <div className="space-y-3">
@@ -59,7 +73,7 @@ export function AdminUserTierActions({ userId, currentTier, m }: Props) {
           </select>
           <button
             type="button"
-            disabled={busy || tier === currentTier}
+            disabled={busy || unchanged}
             onClick={savePlan}
             className="rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm transition hover:border-[var(--color-border-strong)] disabled:opacity-50"
           >
@@ -67,6 +81,18 @@ export function AdminUserTierActions({ userId, currentTier, m }: Props) {
           </button>
         </div>
       </label>
+
+      <label className="flex items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          checked={addon}
+          onChange={(e) => setAddon(e.target.checked)}
+          disabled={busy}
+          className="rounded border-[var(--color-border)]"
+        />
+        <span className="text-[var(--color-text-muted)]">{m.enterpriseAddon}</span>
+      </label>
+
       {message && <p className="text-sm text-[var(--color-success)]">{message}</p>}
       {error && <p className="text-sm text-[var(--color-error)]">{error}</p>}
     </div>

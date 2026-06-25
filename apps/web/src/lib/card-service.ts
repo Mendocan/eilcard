@@ -3,6 +3,7 @@ import { cards, resolveEvents } from "./db/schema";
 import { eq, sql } from "drizzle-orm";
 import type { Card } from "@digitalcard/schema";
 import { isBusinessEdition } from "./offering-validation";
+import { isRegistryPlusEdition } from "./registry-plus-validation";
 
 export async function getCardByHandle(handle: string) {
   const [row] = await db
@@ -35,6 +36,10 @@ export function mergeCardBody(
   for (const [key, value] of Object.entries(patch)) {
     if (key === "domain") continue;
     if (value === undefined) continue;
+    if (value === null) {
+      delete merged[key];
+      continue;
+    }
 
     const existing = merged[key];
     if (
@@ -70,6 +75,9 @@ export function buildCardJson(
   if (!isBusinessEdition(row.edition)) {
     delete publicBody.offerings;
     delete publicBody.content_locale;
+  }
+  if (!isRegistryPlusEdition(row.edition)) {
+    delete publicBody.signatures;
   }
 
   const publicVerified =

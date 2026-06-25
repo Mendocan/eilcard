@@ -27,21 +27,46 @@ export function getSchemaVersionForEdition(edition: CardEdition): string {
 
 export type EditionValidationResult =
   | { allowed: true }
-  | { allowed: false; requiredTier: PlanTier; edition: CardEdition };
+  | {
+      allowed: false;
+      requiredTier: PlanTier;
+      edition: CardEdition;
+      reason?: "tier" | "enterprise_addon";
+    };
 
 export function validateEditionForTier(
   tier: PlanTier,
-  edition: CardEdition
+  edition: CardEdition,
+  options?: { enterpriseAddon?: boolean }
 ): EditionValidationResult {
-  if (canUseEdition(tier, edition)) {
-    return { allowed: true };
+  if (!canUseEdition(tier, edition)) {
+    return {
+      allowed: false,
+      requiredTier: getMinTierForEdition(edition),
+      edition,
+      reason: "tier",
+    };
   }
 
-  return {
-    allowed: false,
-    requiredTier: getMinTierForEdition(edition),
-    edition,
-  };
+  if (edition === "registry_plus" && !options?.enterpriseAddon) {
+    return {
+      allowed: false,
+      requiredTier: "pro",
+      edition,
+      reason: "enterprise_addon",
+    };
+  }
+
+  return { allowed: true };
+}
+
+export function filterAllowedEditionsForPlan(
+  tier: PlanTier,
+  enterpriseAddon: boolean
+): CardEdition[] {
+  return getAllowedEditionsForTier(tier).filter(
+    (edition) => edition !== "registry_plus" || enterpriseAddon
+  );
 }
 
 export function getAllowedEditionsForTier(tier: PlanTier): CardEdition[] {

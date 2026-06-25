@@ -7,6 +7,7 @@ import { eq } from "drizzle-orm";
 import {
   getUserPlan,
   isValidPlanTier,
+  setUserEnterpriseAddon,
   setUserPlanTier,
 } from "@/lib/user-plan";
 
@@ -29,18 +30,41 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const body = (await request.json()) as { tier?: string };
-  if (!body.tier || !isValidPlanTier(body.tier)) {
-    return NextResponse.json({ error: "Invalid tier" }, { status: 400 });
+  const body = (await request.json()) as {
+    tier?: string;
+    enterpriseAddon?: boolean;
+  };
+
+  if (body.tier === undefined && body.enterpriseAddon === undefined) {
+    return NextResponse.json({ error: "No changes requested" }, { status: 400 });
   }
 
   const previous = await getUserPlan(id);
-  await setUserPlanTier(id, body.tier);
 
-  await logAdminAction("user.plan", "user", id, {
-    previous: previous.tier,
-    next: body.tier,
+  if (body.tier !== undefined) {
+    if (!isValidPlanTier(body.tier)) {
+      return NextResponse.json({ error: "Invalid tier" }, { status: 400 });
+    }
+    await setUserPlanTier(id, body.tier);
+    await logAdminAction("user.plan", "user", id, {
+      previous: previous.subscribedTier,
+      next: body.tier,
+    });
+  }
+
+  if (body.enterpriseAddon !== undefined) {
+    await setUserEnterpriseAddon(id, body.enterpriseAddon);
+    await logAdminAction("user.enterprise_addon", "user", id, {
+      previous: previous.enterpriseAddon,
+      next: body.enterpriseAddon,
+    });
+  }
+
+  const next = await getUserPlan(id);
+
+  return NextResponse.json({
+    ok: true,
+    tier: next.subscribedTier,
+    enterpriseAddon: next.enterpriseAddon,
   });
-
-  return NextResponse.json({ ok: true, tier: body.tier });
 }

@@ -55,6 +55,9 @@ type InitialOrg = {
   products: ProductRow[];
   offerings: OfferingRow[];
   contentLocale: "en" | "tr" | "";
+  signatureAlg: "RS256" | "ES256" | "EdDSA" | "";
+  signatureKid: string;
+  signatureJws: string;
   sameAsText: string;
 };
 
@@ -167,6 +170,15 @@ export function EditCardForm({
   const [cardEdition, setCardEdition] = useState<CardEdition>(initialEdition);
   const [contentLocale, setContentLocale] = useState<"en" | "tr" | "">(
     initial.type === "organization" ? initial.contentLocale : ""
+  );
+  const [signatureAlg, setSignatureAlg] = useState<
+    "RS256" | "ES256" | "EdDSA" | ""
+  >(initial.type === "organization" ? initial.signatureAlg : "");
+  const [signatureKid, setSignatureKid] = useState(
+    initial.type === "organization" ? initial.signatureKid : ""
+  );
+  const [signatureJws, setSignatureJws] = useState(
+    initial.type === "organization" ? initial.signatureJws : ""
   );
   const [links, setLinks] = useState<LinkRow[]>(
     initial.type === "person" ? initial.links : []
@@ -337,6 +349,19 @@ export function EditCardForm({
           body.content_locale = contentLocale;
         }
         body.offerings = serializeOfferings(offerings);
+      }
+      if (cardEdition === "registry_plus") {
+        if (signatureJws.trim()) {
+          body.signatures = {
+            registry: {
+              alg: signatureAlg || "RS256",
+              ...(signatureKid.trim() ? { kid: signatureKid.trim() } : {}),
+              jws: signatureJws.trim(),
+            },
+          };
+        } else {
+          body.signatures = null;
+        }
       }
     } else {
       body.name = { full: nameFull };
@@ -670,6 +695,50 @@ export function EditCardForm({
                 {m.addOffering}
               </button>
             )}
+          </div>
+        )}
+
+        {initial.type === "organization" && cardEdition === "registry_plus" && (
+          <div className="space-y-3 rounded-lg border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/5 p-4">
+            <div>
+              <p className="text-sm font-medium">{m.signatures}</p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+                {m.signaturesHint}
+              </p>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium">{m.signatureAlg}</label>
+              <select
+                value={signatureAlg || "RS256"}
+                onChange={(e) =>
+                  setSignatureAlg(e.target.value as "RS256" | "ES256" | "EdDSA")
+                }
+                className={inputClass}
+              >
+                <option value="RS256">RS256</option>
+                <option value="ES256">ES256</option>
+                <option value="EdDSA">EdDSA</option>
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium">{m.signatureKid}</label>
+              <input
+                type="text"
+                value={signatureKid}
+                onChange={(e) => setSignatureKid(e.target.value)}
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium">{m.signatureJws}</label>
+              <textarea
+                rows={4}
+                value={signatureJws}
+                onChange={(e) => setSignatureJws(e.target.value)}
+                className={inputClass}
+                placeholder="eyJhbGciOiJSUzI1NiIs..."
+              />
+            </div>
           </div>
         )}
 

@@ -17,6 +17,7 @@ import {
   validateBusinessFieldsForEdition,
   validateOfferingCount,
 } from "@/lib/offering-validation";
+import { validateRegistryPlusFieldsForEdition } from "@/lib/registry-plus-validation";
 import { isDomainTaken } from "@/lib/domain-check";
 import { checkPlatformResourceAccess } from "@/lib/platform-operator";
 import { getClientIp } from "@/lib/client-ip";
@@ -96,16 +97,40 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const plan = await getUserPlan(session.user.id);
   const edition = data.edition ?? "core";
-  const editionCheck = validateEditionForTier(createCheck.tier, edition);
+  const editionCheck = validateEditionForTier(plan.tier, edition, {
+    enterpriseAddon: plan.enterpriseAddon,
+  });
   if (!editionCheck.allowed) {
     return NextResponse.json(
       {
-        error: "Edition not allowed for current plan",
-        code: API_ERROR_CODES.EDITION_NOT_ALLOWED,
+        error:
+          editionCheck.reason === "enterprise_addon"
+            ? "Registry+ edition requires enterprise add-on"
+            : "Edition not allowed for current plan",
+        code:
+          editionCheck.reason === "enterprise_addon"
+            ? API_ERROR_CODES.ENTERPRISE_ADDON_REQUIRED
+            : API_ERROR_CODES.EDITION_NOT_ALLOWED,
         edition: editionCheck.edition,
         requiredTier: editionCheck.requiredTier,
-        tier: createCheck.tier,
+        tier: plan.tier,
+      },
+      { status: 403 }
+    );
+  }
+
+  const registryPlusCheck = validateRegistryPlusFieldsForEdition(
+    edition,
+    data as Record<string, unknown>
+  );
+  if (!registryPlusCheck.allowed) {
+    return NextResponse.json(
+      {
+        error: "JWS signatures require Registry+ edition",
+        code: API_ERROR_CODES.SIGNATURES_NOT_ALLOWED,
+        edition,
       },
       { status: 403 }
     );

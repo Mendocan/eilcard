@@ -43,6 +43,10 @@ export function mapDashboardApiError(
       return m.apiBusinessFieldsNotAllowed;
     case "offering_limit":
       return m.apiOfferingLimit;
+    case "signatures_not_allowed":
+      return m.apiSignaturesNotAllowed;
+    case "enterprise_addon_required":
+      return m.apiEnterpriseAddonRequired;
     case "reserved_platform":
       return m.reservedDomainError;
     default:

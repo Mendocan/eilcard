@@ -570,6 +570,10 @@ const en = {
     apiBusinessFieldsNotAllowed:
       "Offerings and content language require Business edition. Upgrade the card edition first.",
     apiOfferingLimit: "Your plan offering limit has been reached.",
+    apiSignaturesNotAllowed:
+      "JWS signatures require Registry+ edition. Upgrade the card edition first.",
+    apiEnterpriseAddonRequired:
+      "Registry+ edition requires a Pro plan and enterprise add-on. Contact support.",
     apiRegistryCardIdTaken: "This registry card ID is already in use.",
     apiNoPendingVerification:
       "No pending DNS verification. Generate a TXT record first.",
@@ -598,10 +602,16 @@ const en = {
       "Things this organization offers — agents read these before scraping the website.",
     edition: "Card edition",
     editionHint:
-      "Core uses schema v1.0. Business unlocks offerings hierarchy (v1.1). Requires Verified+ plan.",
+      "Core uses schema v1.0. Business unlocks offerings hierarchy (v1.1). Registry+ adds JWS signatures (v1.2). Requires Verified+ plan; Registry+ also needs enterprise add-on.",
+    signatures: "Registry attestation (JWS)",
+    signaturesHint:
+      "Optional compact JWS over canonical registry JSON. Verification tooling ships with Registry+.",
+    signatureAlg: "Algorithm",
+    signatureKid: "Key ID (optional)",
+    signatureJws: "Compact JWS",
     editionCore: "Core (v1.0)",
     editionBusiness: "Business (v1.1)",
-    editionRegistryPlus: "Registry+ (v1.1)",
+    editionRegistryPlus: "Registry+ (v1.2)",
     contentLocale: "Content language",
     contentLocaleHint:
       "Language of card text — used for public page labels (EN/TR).",
@@ -798,6 +808,7 @@ const en = {
     planEffective: "Effective tier",
     changePlan: "Change plan",
     planUpdated: "Plan updated.",
+    enterpriseAddon: "Enterprise add-on (Registry+ edition)",
     tierFree: "Free",
     tierVerified: "Verified",
     tierPro: "Pro",
@@ -1424,6 +1435,10 @@ const tr: Messages = {
     apiBusinessFieldsNotAllowed:
       "Offerings ve içerik dili Business edition gerektirir. Önce kart edition'ını yükseltin.",
     apiOfferingLimit: "Planınızdaki offering limitine ulaşıldı.",
+    apiSignaturesNotAllowed:
+      "JWS imzaları Registry+ edition gerektirir. Önce kart edition'ını yükseltin.",
+    apiEnterpriseAddonRequired:
+      "Registry+ edition için Pro plan ve enterprise eklenti gerekir. Destek ile iletişime geçin.",
     apiRegistryCardIdTaken: "Bu registry kart kimliği zaten kullanımda.",
     apiNoPendingVerification:
       "Bekleyen DNS doğrulaması yok. Önce TXT kaydı oluşturun.",
@@ -1454,10 +1469,16 @@ const tr: Messages = {
       "Kurumun sunduğu şeyler — agent'lar site taramadan önce bunları okur.",
     edition: "Kart edition'ı",
     editionHint:
-      "Core şema v1.0 kullanır. Business, offerings hiyerarşisini açar (v1.1). Verified+ plan gerekir.",
+      "Core şema v1.0 kullanır. Business offerings hiyerarşisini açar (v1.1). Registry+ JWS imzası ekler (v1.2). Verified+ plan gerekir; Registry+ için enterprise eklenti de şart.",
     editionCore: "Core (v1.0)",
     editionBusiness: "Business (v1.1)",
-    editionRegistryPlus: "Registry+ (v1.1)",
+    editionRegistryPlus: "Registry+ (v1.2)",
+    signatures: "Registry onayı (JWS)",
+    signaturesHint:
+      "Canonical registry JSON üzerinde isteğe bağlı compact JWS. Doğrulama araçları Registry+ ile gelir.",
+    signatureAlg: "Algoritma",
+    signatureKid: "Anahtar ID (opsiyonel)",
+    signatureJws: "Compact JWS",
     contentLocale: "İçerik dili",
     contentLocaleHint:
       "Kart metninin dili — public sayfa etiketleri için (EN/TR).",
@@ -1654,6 +1675,7 @@ const tr: Messages = {
     planEffective: "Efektif plan",
     changePlan: "Planı değiştir",
     planUpdated: "Plan güncellendi.",
+    enterpriseAddon: "Enterprise eklenti (Registry+ edition)",
     tierFree: "Ücretsiz",
     tierVerified: "Verified",
     tierPro: "Pro",

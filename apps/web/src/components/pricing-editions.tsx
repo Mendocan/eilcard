@@ -21,7 +21,6 @@ export function PricingEditions({ copy }: Props) {
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         {EDITION_ORDER.map((id) => {
           const edition = copy.editions[id];
-          const isRoadmap = id === "registry_plus";
 
           return (
             <article
@@ -32,14 +31,7 @@ export function PricingEditions({ copy }: Props) {
                   : "border-[var(--color-border)] bg-[var(--color-surface)]"
               }`}
             >
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="text-base font-semibold">{edition.name}</h3>
-                {isRoadmap ? (
-                  <span className="shrink-0 rounded-full border border-[var(--color-border)] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
-                    {copy.editionRoadmap}
-                  </span>
-                ) : null}
-              </div>
+              <h3 className="text-base font-semibold">{edition.name}</h3>
               <p className="mt-1 text-xs text-[var(--color-text-muted)]">
                 {edition.schema} · {edition.minPlan}
               </p>
