@@ -1,13 +1,29 @@
 # YAPILACAKLAR
 
 > EIL Card — öncelikli iş listesi  
-> Son güncelleme: 2026-06-25
+> Son güncelleme: 2026-06-25 (çift maddeler temizlendi)
 
 ---
 
 ## Kuzey yıldızı (tek cümle)
 
 **Satılan şey JSON dosyası değil; süreli, yenilenebilir güven hizmetidir** — registry barındırma + DNS doğrulama + `verified: true` otoritesi + resolve kotası. Kart verisi kalabilir; güven sinyali ve premium limitler abonelik yenilenmedikçe düşer.
+
+---
+
+## Sıradaki 5 iş
+
+Öncelik sırası — her madde bitmeden sonrakine geçme.
+
+| # | İş | Neden şimdi | Çıktı |
+|---|-----|-------------|--------|
+| **1** | **Sinyalle pilot gateway — production** | E3-B referans kodu var; uçtan uca pilot döngüsü kapanmıyor | Gateway Sinyalle altyapısında deploy; `@sinyalle` Registry+ kartında canlı `capabilities.agent_gateway`; `read:profile` + `read:orders` E2E |
+| **2** | **Resend işlem postası** | Kayıt doğrulama var; şifre sıfırlama ve fatura maili yok | `forgot-password` akışı + şablonlar; Polar/plan bildirimlerinde `billing@` gönderici |
+| **3** | **Rol tabanlı admin** | Tek `ADMIN_PASSWORD` ölçeklenmiyor | DB admin hesapları, editör/moderatör rolleri, davet akışı |
+| **4** | **EIL CLI** | Adoption tablosunda tek büyük boşluk | `eil-card init`, `verify`, `export well-known` (npm paketi veya `packages/cli`) |
+| **5** | **Branch protection** | Repo büyüdü; `main` doğrudan push riski | GitHub `main` için PR + review zorunluluğu |
+
+**Pilot gateway kalan kriterler** (`docs/pilot-gateway.md` §6): `write:`/`act:` consent, idempotent POST replay, token revoke → 401, platform audit log — **#1** tamamlandıktan sonra sırayla.
 
 ---
 
@@ -208,57 +224,35 @@ Entegrasyon rehberi (`/docs/agents`) — **yayında** (kısa vade maddeleri tama
 
 ---
 
-## Kısa vade — Ticari hazırlık (Polar + uyumluluk)
+## Kısa vade — Ticari hazırlık (kalan)
 
-Ödeme, iade ve chargeback riskini düşürmek için site ve operasyon tarafı tamamlanmalı.
+> **Yasal sayfalar, Polar, checkout, webhook, billing panel** → Faz 1–2 tamamlandı (`[x]`). Bu bölüm yalnızca **açık operasyon** maddelerini listeler.
 
-### Yasal ve şeffaflık sayfaları
-
-- [ ] **`/pricing`** — Free / Verified / Pro limit tablosu (`tier-limits.ts` ile senkron)
-- [ ] **`/legal/terms`** — hizmet koşulları, abonelik, hesap kullanımı (EN; checkout için)
-- [ ] **`/legal/privacy`** — toplanan veriler, saklama, üçüncü taraflar
-- [ ] **`/legal/refund`** — iade süresi, iptal, yenileme, destek kanalı
-- [ ] **Footer linkleri** — Pricing, Terms, Privacy, Refunds
-- [ ] **Kayıt onayı** — hesap oluştururken Terms/Privacy kabul metni
-
-### Polar entegrasyonu
-
-- [ ] Polar org + Verified/Pro ürünleri (USD)
-- [ ] Checkout + customer portal linki
-- [ ] Webhook → `user_plans.tier` + `polar_subscription_id`
-- [ ] Dashboard “Upgrade” ve “Manage billing”
-- [ ] Env: `POLAR_ACCESS_TOKEN`, webhook secret, product ID'leri
-- [ ] Polar account review öncesi site + ürün açıklaması hazır
-
-### Resmi iletişim kanalı (e-posta)
-
-İki katman: **gelen kutusu** (insan) + **işlem postası** (uygulama API).
-
-**Karar:** Gelen kutusu **Namecheap Private Email** — domain Namecheap/DigitalOcean DNS.
+### E-posta (Namecheap + Resend)
 
 | Katman | Amaç | Sağlayıcı |
 |--------|------|-----------|
 | **Gelen kutusu** | support@, billing@, hello@ | **Namecheap Private Email** |
-| **İşlem postası** | şifre sıfırlama, fatura bildirimi | **Resend** (~3.000/ay ücretsiz) |
-
-**Önerilen adresler:** `support@eilcard.com` (ana), `billing@` (alias → support@)
+| **İşlem postası** | şifre sıfırlama, fatura bildirimi | **Resend** |
 
 - [x] **Namecheap Private Email** — Starter; `support@` çalışıyor; `billing@` alias
 - [x] **Footer + About** — `support@eilcard.com` görünür
 - [x] **Admin → Ayarlar** — iletişim env durumu, güvenlik notu, ekip yol haritası
-- [ ] **Resend** — şifre sıfırlama / bildirim şablonları
 - [x] **E-posta doğrulama** — kayıt sonrası Resend + `/verify-email` + dashboard banner
+- [ ] **Resend** — şifre sıfırlama + plan/fatura bildirim şablonları
 - [ ] **`hello@` alias** (opsiyonel)
-- [ ] Polar checkout + fatura bildirimlerinde `billing@`
+- [ ] Polar checkout + fatura bildirimlerinde **`billing@`** gönderici
 
-### Admin panel iyileştirmeleri
+### Admin panel (kalan)
 
 - [x] **Doğrulama kuyruğu (kart merkezli)** — doğrulanmamış kartlar; admin verify → kuyruktan düşer
 - [x] **Doğrulama sayacı düzeltmesi** — doğrulanmamış kart sayısı (kuyruk ile uyumlu)
 - [x] **Çift dil/çıkış butonu** — mobil üst / masaüstü sidebar tek konum
 - [x] **Ayarlar sayfası** (`/admin/settings`)
 - [ ] **Rol tabanlı admin** — editör, moderatör, admin; davet + DB hesapları
-- [ ] **Admin şifre değiştirme UI** — `ADMIN_PASSWORD` yerine DB veya güvenli rotasyon
+- [ ] **Admin şifre değiştirme UI** — `ADMIN_PASSWORD` yerine DB veya güvenli rotasyon (rol tabanlı admin ile birlikte)
+
+**Tamamlanan (referans):** `/pricing`, `/legal/terms`, `/legal/privacy`, `/legal/refund`, footer linkleri, kayıt Terms onayı, Polar org + ürünler, webhook, checkout/portal, dashboard billing — bkz. Faz 1–2.
 
 ---
 
@@ -294,14 +288,15 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 ### 5. Adoption araçları (özet yol haritası)
 
-| Araç | Durum | Yapılacak |
-|------|--------|-----------|
-| **LlamaIndex EILReader** | Yayında | `examples/python/eil_reader.py` |
-| **EIL CLI** | Yok | `eil-card init`, `verify`, `export well-known` |
-| **Playground** | Yayında | `/playground` |
+| Araç | Durum | Sıradaki |
+|------|--------|----------|
+| **LlamaIndex EILReader** | Yayında | — |
+| **EIL CLI** | Yok | **Sıradaki 5 iş #4** |
+| **Playground** | Yayında | — |
 | **Kart demo** | Yayında | `/example` (statik; registry değil) |
 | **Entegrasyon rehberi** | Yayında | `/docs/agents` |
 | **Whitepaper** | Yayında | `/insights/eil-whitepaper` EN/TR |
+| **Pilot gateway (production)** | Referans kod | **Sıradaki 5 iş #1** |
 
 ---
 
@@ -309,10 +304,12 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 ### Ekip / Açık Kaynak hazırlığı
 
-- [ ] **Branch protection rules** — `main` için PR + review
+- [ ] **Branch protection rules** — `main` için PR + review (**Sıradaki 5 iş #5**)
+
+### Standart ve ekosistem
 
 - [ ] IANA `/.well-known/digital-card` kaydı
-- [ ] Federated registry / mesh değerlendirmesi
+- [ ] Federated registry / mesh değerlendirmesi (taslak: `docs/registry-plus.md`)
 - [ ] Büyük AI sağlayıcılarına resmi entegrasyon başvurusu
 
 ---
