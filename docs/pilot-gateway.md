@@ -41,7 +41,7 @@ EIL Card bu akışta **kimlik + pointer** sağlar; gateway ayrı deploy edilir.
 |---------|-------|--------|
 | Public identity | EIL Card `@sinyalle` / `sinyalle.com` | Canlı |
 | `capabilities` pointer | Registry+ kart JSON | API ile set edilebilir |
-| Agent gateway | `api.sinyalle.com` (örnek) | Harici — pilot implementasyon |
+| Agent gateway | `api.sinyalle.com` (örnek) | Harici — `packages/pilot-gateway-sinyalle` referans |
 | Consent UI | Sinyalle dashboard | Platform sorumluluğu |
 
 ---
@@ -119,7 +119,11 @@ Pilot gateway SHOULD implement:
 | `/.well-known/agent-gateway` | GET | OAuth metadata |
 | `/oauth/authorize` | GET | User consent redirect |
 | `/oauth/token` | POST | Code / token exchange |
+| `GET /v1/read/profile` | GET | Scoped read (pilot) |
+| `GET /v1/read/orders` | GET | Scoped read (pilot) |
 | `POST /v1/*` | POST | Scoped act (idempotent) |
+
+Referans sunucu: [pilot-gateway-sinyalle](./pilot-gateway-sinyalle.md) (`packages/pilot-gateway-sinyalle`).
 
 EIL Card bu endpoint'leri host etmez. Act pattern: [EIL Act Spec v0.1](./eil-act-spec-v0.1.md).
 
@@ -128,8 +132,8 @@ EIL Card bu endpoint'leri host etmez. Act pattern: [EIL Act Spec v0.1](./eil-act
 ## 6. Başarı kriterleri (pilot)
 
 - [ ] Registry+ kartta `agent_gateway` canlı URL
-- [ ] Agent resolve → capabilities discovery uçtan uca
-- [ ] En az bir `read:*` scope ile consent + token
+- [x] Agent resolve → capabilities discovery uçtan uca (SDK + MCP)
+- [x] En az bir `read:*` scope ile consent + token (referans gateway)
 - [ ] En az bir `write:` veya `act:` scope ile ayrı consent (E3-C)
 - [ ] Idempotent POST with `Idempotency-Key` replay test
 - [ ] Token `eil_card_id` claim ile domain'e bağlı
@@ -151,5 +155,7 @@ EIL Card bu endpoint'leri host etmez. Act pattern: [EIL Act Spec v0.1](./eil-act
 - [EIL Access Spec v0.1](./eil-access-spec-v0.1.md)
 - [Consent UX Guide](./consent-ux-guide.md)
 - [EIL Act Spec v0.1](./eil-act-spec-v0.1.md)
+- [Sinyalle pilot gateway](./pilot-gateway-sinyalle.md)
+- [Well-known trust model](./well-known-trust-model.md)
 - [Registry+ edition](./registry-plus.md)
 - [MCP README](../packages/mcp/README.md)

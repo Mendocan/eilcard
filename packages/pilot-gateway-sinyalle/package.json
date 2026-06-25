@@ -1,0 +1,14 @@
+{
+  "name": "@digitalcard/pilot-gateway-sinyalle",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reference agent gateway for Sinyalle E3-B pilot (OAuth + read:* — external to EIL Card)",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "typecheck": "node -e \"process.exit(0)\""
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -163,6 +163,22 @@ export default async function DocsAgentsPage() {
               copiedLabel={a.copied}
             />
           </div>
+
+          <h3 className="mt-10 text-lg font-semibold">{a.llamaindexTitle}</h3>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.llamaindexBody}
+          </p>
+          <h4 className="mt-6 text-sm font-medium">{a.llamaindexUsageTitle}</h4>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.llamaindexUsageBody}
+          </p>
+          <div className="mt-4">
+            <CodeSnippet
+              code={snippets.llamaindexReader}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
         </section>
 
         <section className="mt-12">

@@ -214,9 +214,16 @@ export function createEILResolveTool() {
   })
 }`,
 
-    sdkAgentTool: `import { buildEILResolveToolDefinition, invokeEILResolve } from '@digitalcard/sdk'
+    sdkAgentTool: `import {
+  buildEILResolveToolDefinitions,
+  invokeEILResolve,
+} from '@digitalcard/sdk'
 
-const tool = buildEILResolveToolDefinition('${base}')
+const { openai, anthropic, gemini, jsonSchema } =
+  buildEILResolveToolDefinitions('${base}')
+
+// Or download: ${base}/tool-definitions/resolve-entity-all.json
+
 const result = await invokeEILResolve({ domain: '${PILOT_DOMAIN}' })
 console.log(result.card.verified, result.meta.source)`,
 
@@ -250,6 +257,19 @@ curl -s "${resolveUrl}"`,
 # EIL resolve (registry API):     ~50-200 ms  -> structured JSON, verified flag
 # Domain well-known:              ~50-150 ms  -> same card when published
 # HTML scrape + parse:            1-5+ sec    -> fragile, layout-dependent`,
+
+    llamaindexReader: `from eil_reader import EILReader
+from llama_index.core import VectorStoreIndex
+
+# pip install llama-index-core requests
+reader = EILReader(registry_base="${base}")
+documents = reader.load_data(domain="${PILOT_DOMAIN}", split_catalog=True)
+
+# Identity + per-product/offering chunks for RAG
+index = VectorStoreIndex.from_documents(documents)
+query_engine = index.as_query_engine()
+response = query_engine.query("What does this organization offer?")
+print(response)`,
   };
 }
 

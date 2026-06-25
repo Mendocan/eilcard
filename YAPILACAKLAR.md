@@ -271,7 +271,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 - [x] **LangChain `EILResolveTool`** — `packages/sdk/examples/langchain-eil-resolve-tool.ts` + `/docs/agents`
 - [x] **Python agent şablonları** — `packages/sdk/examples/python/` + `/docs/agents`
 - [x] **Güvenlik sertleştirme** — rate limit, security headers, resolve kotası, `security.txt`, public JSON uyarısı
-- [ ] **LlamaIndex `EILReader` (Data Connector)**
+- [x] **LlamaIndex `EILReader`** — `packages/sdk/examples/python/eil_reader.py` + `/docs/agents`
 - [x] **MCP sunucusu** — `@digitalcard/mcp` (`resolve_entity`, `resolve_domain`, `get_card_by_handle`)
 
 ### 2. LLM sistem komutları ve Function Calling
@@ -279,13 +279,13 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 - [x] **OpenAPI 3.x spec** — `/openapi.yaml`
 - [x] **Standart system prompt şablonu** — `/docs/agents`
 - [x] **SDK agent tool** — `buildEILResolveToolDefinition`, `invokeEILResolve`
-- [ ] **JSON Schema → tool definition export**
+- [x] **JSON Schema → tool definition export** — `tool-schema-export.ts`, `/tool-definitions/*.json`, `export-tool-definitions.mjs`
 
 ### 3. Güven katmanı (kriptografik doğrulama)
 
 - [x] **JWS imza alanı** — storage + export; `verify-registry-jws.mjs` CLI
-- [ ] **DNSSEC dokümantasyonu**
-- [ ] **Proxy vs native well-known güven modeli**
+- [x] **DNSSEC dokümantasyonu** — `docs/well-known-trust-model.md`
+- [x] **Proxy vs native well-known güven modeli** — `docs/well-known-trust-model.md`
 
 ### 4. Geriye dönük uyumluluk (Bridge)
 
@@ -296,7 +296,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 | Araç | Durum | Yapılacak |
 |------|--------|-----------|
-| **Universal NPM SDK** | Kısmen var (`@digitalcard/sdk`) | Python paketi, publish |
+| **LlamaIndex EILReader** | Yayında | `examples/python/eil_reader.py` |
 | **EIL CLI** | Yok | `eil-card init`, `verify`, `export well-known` |
 | **Playground** | Yayında | `/playground` |
 | **Kart demo** | Yayında | `/example` (statik; registry değil) |

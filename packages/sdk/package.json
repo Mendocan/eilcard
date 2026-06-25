@@ -15,6 +15,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "export:tools": "node scripts/export-tool-definitions.mjs",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

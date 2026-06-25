@@ -1,9 +1,19 @@
 export { DigitalCard, DigitalCardClient } from './client.js';
 export {
   buildEILResolveToolDefinition,
+  buildEILResolveToolDefinitions,
+  buildResolveInputJsonSchema,
+  exportToolDefinitionsJson,
   invokeEILResolve,
 } from './agent-tool.js';
-export type { EILResolveToolInput } from './agent-tool.js';
+export type {
+  AnthropicToolDefinition,
+  EILResolveToolDefinitions,
+  EILResolveToolInput,
+  GeminiFunctionDeclaration,
+  JsonSchemaObject,
+  OpenAIToolDefinition,
+} from './agent-tool.js';
 export { toSchemaOrg, toVCard, toLlmsTxtSection } from './bridges.js';
 export type { SchemaOrgDocument } from './bridges.js';
 export { discoverCapabilities } from './capabilities.js';

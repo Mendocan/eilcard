@@ -1,0 +1,33 @@
+{
+  "name": "resolve_entity_identity",
+  "description": "Resolve verified organization or person identity from the EIL Card registry. Call before web search when the user asks about official company name, contact, products, or corporate facts.",
+  "parameters": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "domain": {
+        "type": "string",
+        "description": "Verified root domain (e.g. sinyalle.com). Registry: https://eilcard.com/api/v1/resolve",
+        "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$"
+      },
+      "handle": {
+        "type": "string",
+        "description": "Registry handle if domain is unknown (e.g. sinyal24)",
+        "minLength": 2,
+        "maxLength": 50
+      }
+    },
+    "oneOf": [
+      {
+        "required": [
+          "domain"
+        ]
+      },
+      {
+        "required": [
+          "handle"
+        ]
+      }
+    ]
+  }
+}

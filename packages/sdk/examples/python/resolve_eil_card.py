@@ -24,6 +24,45 @@ def normalize_domain(domain: str) -> str:
     return value.split("/")[0]
 
 
+def resolve_eil_entity(
+    *,
+    domain: str | None = None,
+    handle: str | None = None,
+    registry_base: str = DEFAULT_REGISTRY,
+    timeout: float = 10,
+) -> dict[str, Any] | None:
+    """
+    Resolve EIL Card by domain or registry handle.
+
+    Provide exactly one of domain or handle.
+    """
+    if bool(domain) == bool(handle):
+        raise ValueError("Provide exactly one of domain or handle")
+
+    base = registry_base.rstrip("/")
+
+    if handle:
+        url = f"{base}/api/v1/cards/{handle.strip()}"
+    else:
+        normalized = normalize_domain(domain or "")
+        url = f"{base}{RESOLVE_PATH}?domain={normalized}"
+
+    try:
+        response = requests.get(
+            url,
+            headers={"Accept": "application/json"},
+            timeout=timeout,
+        )
+        if response.status_code != 200:
+            return None
+        body = response.json()
+        if isinstance(body, dict) and "card" in body:
+            return body
+        return {"card": body, "meta": {"source": "registry", "registry_url": url}}
+    except requests.RequestException:
+        return None
+
+
 def resolve_eil_card(
     domain: str,
     *,
@@ -35,20 +74,11 @@ def resolve_eil_card(
 
     Returns {"card": {...}, "meta": {"source": "registry", ...}} or None on failure.
     """
-    normalized = normalize_domain(domain)
-    url = f"{registry_base.rstrip('/')}{RESOLVE_PATH}?domain={normalized}"
-
-    try:
-        response = requests.get(
-            url,
-            headers={"Accept": "application/json"},
-            timeout=timeout,
-        )
-        if response.status_code != 200:
-            return None
-        return response.json()
-    except requests.RequestException:
-        return None
+    return resolve_eil_entity(
+        domain=domain,
+        registry_base=registry_base,
+        timeout=timeout,
+    )
 
 
 if __name__ == "__main__":

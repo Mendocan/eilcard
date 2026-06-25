@@ -345,7 +345,7 @@ const en = {
       "AI agents need a reliable way to verify the identity and structured data of real-world entities before executing workflows, processing payments, or pulling context. These are the official copy-paste templates to plug EIL Card into Python and TypeScript agent stacks.",
     templatesIntroTitle: "Standard integration surface",
     templatesIntroBody:
-      "All examples use the public registry API (GET /api/v1/resolve?domain=…) or domain well-known. Full runnable files live in the repo under packages/sdk/examples/python/ and packages/sdk/examples/langchain-eil-resolve-tool.ts. Install @digitalcard/sdk for TypeScript.",
+      "All examples use the public registry API (GET /api/v1/resolve?domain=…) or domain well-known. Runnable files: packages/sdk/examples/python/ (resolve, LangChain tool, LlamaIndex EILReader), packages/sdk/examples/langchain-eil-resolve-tool.ts. Install @digitalcard/sdk for TypeScript.",
     discoveryNoteTitle: "Live test tip",
     discoveryNoteBody:
       "Google AI Mode and some crawlers may block {apiBase}/api/... URLs. For live tests, prefer:\n{pilotWellKnown}",
@@ -380,13 +380,19 @@ const en = {
     pythonAgentLoopTitle: "Sample agent loop (OpenAI + LangChain)",
     pythonAgentLoopBody:
       "End-to-end AgentExecutor that calls verify_entity_identity before answering. Requires langchain, langchain-openai, and OPENAI_API_KEY.",
+    llamaindexTitle: "LlamaIndex — EILReader (data connector)",
+    llamaindexBody:
+      "Load verified entity JSON as LlamaIndex Document objects for RAG — identity doc plus optional per-product/offering chunks. Copy packages/sdk/examples/python/eil_reader.py.",
+    llamaindexUsageTitle: "VectorStoreIndex example",
+    llamaindexUsageBody:
+      "Resolve before indexing HTML. split_catalog=True emits separate documents for products and offerings.",
     sdkTitle: "TypeScript - @digitalcard/sdk",
     langchainJsTitle: "LangChain (JavaScript / TypeScript)",
     langchainJsBody:
       "DynamicStructuredTool wrapper around DigitalCard.resolve(). Copy packages/sdk/examples/langchain-eil-resolve-tool.ts into your agent project.",
     sdkAgentToolTitle: "SDK agent tool (framework-agnostic)",
     sdkAgentToolBody:
-      "buildEILResolveToolDefinition() and invokeEILResolve() work with any function-calling runtime without LangChain.",
+      "buildEILResolveToolDefinitions() exports OpenAI, Anthropic, Gemini, and JSON Schema from one source. Static copies: /tool-definitions/*.json",
     curlTitle: "curl (pilot domain)",
     curlBody:
       "Prefer the entity's domain well-known URL - some AI browsers block registry /api/ URLs.",
@@ -1246,7 +1252,7 @@ const tr: Messages = {
       "AI agent'ların iş akışı çalıştırmadan, ödeme işlemeden veya bağlam çekmeden önce gerçek dünya varlıklarının kimliğini ve yapılandırılmış verisini doğrulaması gerekir. EIL Card'ı Python ve TypeScript agent yığınlarına bağlamak için resmi kopyala-yapıştır şablonları.",
     templatesIntroTitle: "Standart entegrasyon yüzeyi",
     templatesIntroBody:
-      "Tüm örnekler public registry API'sini (GET /api/v1/resolve?domain=…) veya domain well-known kullanır. Çalıştırılabilir dosyalar: packages/sdk/examples/python/ ve packages/sdk/examples/langchain-eil-resolve-tool.ts. TypeScript için npm install @digitalcard/sdk.",
+      "Tüm örnekler public registry API'sini (GET /api/v1/resolve?domain=…) veya domain well-known kullanır. Çalıştırılabilir dosyalar: packages/sdk/examples/python/ (resolve, LangChain, LlamaIndex EILReader), packages/sdk/examples/langchain-eil-resolve-tool.ts. TypeScript için npm install @digitalcard/sdk.",
     discoveryNoteTitle: "Canlı test ipucu",
     discoveryNoteBody:
       "Google AI Modu ve bazı crawler'lar {apiBase}/api/... URL'lerini engelleyebilir. Canlı testlerde şunu tercih edin:\n{pilotWellKnown}",
@@ -1281,13 +1287,19 @@ const tr: Messages = {
     pythonAgentLoopTitle: "Örnek agent döngüsü (OpenAI + LangChain)",
     pythonAgentLoopBody:
       "Yanıtlamadan önce verify_entity_identity çağıran uçtan uca AgentExecutor. langchain, langchain-openai ve OPENAI_API_KEY gerekir.",
+    llamaindexTitle: "LlamaIndex — EILReader (data connector)",
+    llamaindexBody:
+      "Doğrulanmış entity JSON'u LlamaIndex Document nesnelerine yükleyin — kimlik dokümanı + isteğe bağlı ürün/offering parçaları. packages/sdk/examples/python/eil_reader.py dosyasını kopyalayın.",
+    llamaindexUsageTitle: "VectorStoreIndex örneği",
+    llamaindexUsageBody:
+      "HTML indekslemeden önce resolve edin. split_catalog=True ürün ve offering'ler için ayrı doküman üretir.",
     sdkTitle: "TypeScript - @digitalcard/sdk",
     langchainJsTitle: "LangChain (JavaScript / TypeScript)",
     langchainJsBody:
       "DigitalCard.resolve() etrafında DynamicStructuredTool sarmalayıcısı. packages/sdk/examples/langchain-eil-resolve-tool.ts dosyasını projenize kopyalayın.",
     sdkAgentToolTitle: "SDK agent tool (framework bağımsız)",
     sdkAgentToolBody:
-      "buildEILResolveToolDefinition() ve invokeEILResolve() LangChain olmadan her function-calling runtime ile çalışır.",
+      "buildEILResolveToolDefinitions() OpenAI, Anthropic, Gemini ve JSON Schema'yı tek kaynaktan üretir. Statik kopyalar: /tool-definitions/*.json",
     curlTitle: "curl (pilot domain)",
     curlBody:
       "Kurumun domain well-known URL'sini tercih edin - bazı AI tarayıcıları registry /api/ URL'lerini engeller.",

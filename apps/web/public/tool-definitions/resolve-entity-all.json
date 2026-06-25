@@ -1,0 +1,138 @@
+{
+  "registry_base": "https://eilcard.com",
+  "generated_at": "2026-06-25T17:10:43.283Z",
+  "jsonSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://eilcard.com/schema/tool/resolve-entity-input.json",
+    "title": "EILResolveInput",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "domain": {
+        "type": "string",
+        "description": "Verified root domain (e.g. sinyalle.com). Registry: https://eilcard.com/api/v1/resolve",
+        "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$"
+      },
+      "handle": {
+        "type": "string",
+        "description": "Registry handle if domain is unknown (e.g. sinyal24)",
+        "minLength": 2,
+        "maxLength": 50
+      }
+    },
+    "oneOf": [
+      {
+        "required": [
+          "domain"
+        ]
+      },
+      {
+        "required": [
+          "handle"
+        ]
+      }
+    ]
+  },
+  "openai": {
+    "type": "function",
+    "function": {
+      "name": "resolve_entity_identity",
+      "description": "Resolve verified organization or person identity from the EIL Card registry. Call before web search when the user asks about official company name, contact, products, or corporate facts.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "domain": {
+            "type": "string",
+            "description": "Verified root domain (e.g. sinyalle.com). Registry: https://eilcard.com/api/v1/resolve",
+            "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$"
+          },
+          "handle": {
+            "type": "string",
+            "description": "Registry handle if domain is unknown (e.g. sinyal24)",
+            "minLength": 2,
+            "maxLength": 50
+          }
+        },
+        "oneOf": [
+          {
+            "required": [
+              "domain"
+            ]
+          },
+          {
+            "required": [
+              "handle"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "anthropic": {
+    "name": "resolve_entity_identity",
+    "description": "Resolve verified organization or person identity from the EIL Card registry. Call before web search when the user asks about official company name, contact, products, or corporate facts.",
+    "input_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "Verified root domain (e.g. sinyalle.com). Registry: https://eilcard.com/api/v1/resolve",
+          "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$"
+        },
+        "handle": {
+          "type": "string",
+          "description": "Registry handle if domain is unknown (e.g. sinyal24)",
+          "minLength": 2,
+          "maxLength": 50
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "domain"
+          ]
+        },
+        {
+          "required": [
+            "handle"
+          ]
+        }
+      ]
+    }
+  },
+  "gemini": {
+    "name": "resolve_entity_identity",
+    "description": "Resolve verified organization or person identity from the EIL Card registry. Call before web search when the user asks about official company name, contact, products, or corporate facts.",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "Verified root domain (e.g. sinyalle.com). Registry: https://eilcard.com/api/v1/resolve",
+          "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$"
+        },
+        "handle": {
+          "type": "string",
+          "description": "Registry handle if domain is unknown (e.g. sinyal24)",
+          "minLength": 2,
+          "maxLength": 50
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "domain"
+          ]
+        },
+        {
+          "required": [
+            "handle"
+          ]
+        }
+      ]
+    }
+  }
+}

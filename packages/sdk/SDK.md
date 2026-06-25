@@ -272,6 +272,9 @@ const jsonLd = toSchemaOrg(card);
 - [x] Hata sınıfları
 - [x] `fetch` inject (test)
 
+- [x] `buildEILResolveToolDefinitions()` — OpenAI / Anthropic / Gemini + JSON Schema
+- [x] Public tool JSON — `/tool-definitions/*.json` (`pnpm --filter @digitalcard/sdk export:tools`)
+
 ### Sonraya (v0.2+)
 
 - [ ] Response şema validasyonu (Zod)
@@ -280,6 +283,23 @@ const jsonLd = toSchemaOrg(card);
 - [ ] `verify(card)` — DNS/TLS doğrulama client-side
 - [ ] MCP tool wrapper
 - [ ] Python SDK parity
+
+### Framework örnekleri (repo)
+
+| Yığın | Dosya |
+|-------|-------|
+| LangChain (TS) | `examples/langchain-eil-resolve-tool.ts` |
+| LangChain (Python) | `examples/python/langchain_tool.py` |
+| **LlamaIndex EILReader** | `examples/python/eil_reader.py` |
+| Native resolve | `examples/python/resolve_eil_card.py` |
+
+```python
+from eil_reader import EILReader
+from llama_index.core import VectorStoreIndex
+
+docs = EILReader().load_data(domain="sinyalle.com", split_catalog=True)
+index = VectorStoreIndex.from_documents(docs)
+```
 
 ---
 
