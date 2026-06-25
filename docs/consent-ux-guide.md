@@ -2,13 +2,13 @@
 
 > **Audience:** SaaS / platform operators integrating EIL Access  
 > **Status:** Draft — June 2026  
-> **Spec:** [EIL Access Spec v0.1](./eil-access-spec-v0.1.md)
+> **Spec:** [EIL Access Spec v0.1](./eil-access-spec-v0.1.md) · [EIL Act Spec v0.1](./eil-act-spec-v0.1.md)
 
 ---
 
 ## 1. Amaç
 
-Agent'lar public EIL JSON ile **kimliği** çözer; özel veri için kullanıcı **onayı** gerekir. Bu rehber, platformunuzdaki consent ekranı ve akışı için minimum UX standartlarını tanımlar.
+Agent'lar public EIL JSON ile **kimliği** çözer; özel veri ve yazma/etkileşim için kullanıcı **onayı** gerekir. Bu rehber, platformunuzdaki consent ekranı ve akışı için minimum UX standartlarını tanımlar.
 
 EIL Card consent UI sağlamaz — sizin gateway'iniz sağlar.
 
@@ -39,9 +39,9 @@ EIL Card consent UI sağlamaz — sizin gateway'iniz sağlar.
 │  ☑ Sipariş geçmişi (read:orders)                        │
 │  ☐ Profil detayları (read:profile)                      │
 │                                                         │
-│  Bu agent Sinyalle tarafından onaylanmış bir            │
-│  entegrasyondur. Verileriniz üçüncü tarafla              │
-│  paylaşılmaz.                                           │
+│  Bu agent şunları yapabilir:                            │
+│  ☐ Blog yazısı yayınla (write:post)                     │
+│  ☐ Yorum yap (act:comment)                              │
 │                                                         │
 │  [ Reddet ]              [ İzin ver ]                   │
 └─────────────────────────────────────────────────────────┘
@@ -69,8 +69,6 @@ EIL Card `verified: true` ise consent ekranında gösterin:
 
 > Kurum doğrulaması aktif değil — dikkatli ilerleyin.
 
-Platform, kendi güven politikasına göre erişimi reddedebilir.
-
 ---
 
 ## 6. Scope açıklamaları (örnek TR/EN)
@@ -81,30 +79,45 @@ Platform, kendi güven politikasına göre erişimi reddedebilir.
 | `read:orders` | Sipariş ve ödeme geçmişi |
 | `read:posts_private` | Yalnızca size özel içerikler |
 | `read:crm` | Destek kayıtları özeti |
+| `write:post` | Blog veya duyuru yayınlama / düzenleme |
+| `act:comment` | Yorum veya yanıt gönderme |
 
-Her scope için tooltip veya "Daha fazla bilgi" linki önerilir.
+Write ve act scope'ları için **ayrı onay** gösterin — salt okunur erişimle birleştirmeyin.
 
 ---
 
-## 7. Erişim sonrası
+## 7. Act scope consent (write / interact)
 
-- **Dashboard:** Kullanıcıya "Acme Assistant — read:orders" satırı
+`write:` ve `act:` scope'ları destructive veya kullanıcı adına görünür etki yaratabilir:
+
+1. **Ayrı bölüm** — "Bu agent şunları yapabilir" (read'den ayrı)
+2. **Her action** — `capabilities.actions[].label` veya scope açıklaması
+3. **Geri alma** — "Yayınlanan içerikleri silebilirsiniz" gibi kısa not
+
+Bkz. [EIL Act Spec v0.1](./eil-act-spec-v0.1.md).
+
+---
+
+## 8. Erişim sonrası
+
+- **Dashboard:** Kullanıcıya "Acme Assistant — read:orders, write:post" satırı
 - **Bildirim:** İlk erişimde e-posta veya in-app (opsiyonel)
 - **Revoke:** Anında token iptali; agent bir sonraki istekte 401 alır
 - **Audit:** Kullanıcı kendi erişim logunu görebilmeli (enterprise)
 
 ---
 
-## 8. Agent geliştiriciler için notlar
+## 9. Agent geliştiriciler için notlar
 
 - Consent URL'ine `state` ve PKCE zorunlu (OAuth 2.1)
 - `eil_card_id` parametresini authorization isteğine ekleyin
 - Token aldıktan sonra `eil_card_id` claim'ini resolve sonucuyla karşılaştırın
 - Scope escalation istemeyin — kullanıcıyı yeniden consent'e yönlendirin
+- Act çağrılarında `Idempotency-Key` kullanın (Act Spec §5)
 
 ---
 
-## 9. Yasal / gizlilik
+## 10. Yasal / gizlilik
 
 - KVKK / GDPR: lawful basis (consent) ve DPA agent sağlayıcı ile
 - Public EIL kartta kişisel veri tutmayın; özel veri yalnızca gateway'de
@@ -112,8 +125,9 @@ Her scope için tooltip veya "Daha fazla bilgi" linki önerilir.
 
 ---
 
-## 10. İlgili belgeler
+## 11. İlgili belgeler
 
 - [EIL Access Spec v0.1](./eil-access-spec-v0.1.md)
+- [EIL Act Spec v0.1](./eil-act-spec-v0.1.md)
 - [Pilot Gateway](./pilot-gateway.md)
 - [EIL Identity Spec v0.1](./eil-identity-spec-v0.1.md)

@@ -117,7 +117,7 @@ v0.1 recommends `read:` prefix for authorized read scopes:
 
 Platforms MAY define additional scopes. Agents MUST request the **minimum** scope needed.
 
-Write/act scopes (`write:`, `act:`) are defined in **EIL Access Spec v0.2 / E3-C**.
+Write/act scopes (`write:`, `act:`) are defined in **[EIL Act Spec v0.1](./eil-act-spec-v0.1.md)** (E3-C).
 
 ---
 
@@ -245,6 +245,7 @@ See [Pilot Gateway](./pilot-gateway.md) — external platform (e.g. Sinyalle) ho
 | Identity Spec | `docs/eil-identity-spec-v0.1.md` |
 | Consent UX | `docs/consent-ux-guide.md` |
 | Pilot gateway | `docs/pilot-gateway.md` |
+| **Act Spec (authorized write)** | `docs/eil-act-spec-v0.1.md` |
 | Card schema | `schema/SCHEMA.md` §1f |
 | Registry+ | `docs/registry-plus.md` |
 | OAuth 2.1 | IETF draft / final (2025–2026) |

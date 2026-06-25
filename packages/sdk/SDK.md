@@ -80,15 +80,36 @@ const { card, meta } = await client.resolve({ domain: 'sinyalle.com' });
 | `toVCard(card)` | `PersonCard` | string | vCard 4.0 metni |
 | `toLlmsTxtSection(card)` | `DigitalCard` | string | llms.txt Markdown bölümü |
 | `discoverCapabilities(card)` | `DigitalCard` | `DiscoveredCapabilities` | Registry+ capability manifest (E3-B) |
+| `discoverActCapabilities(card)` | `DigitalCard` | `DiscoveredActCapabilities` | + write/act scopes and actions (E3-C) |
+| `parseCapabilityScopes(scopes)` | `string[]` | `ParsedCapabilityScopes` | Classify read/write/act |
+| `buildIdempotencyKey(input)` | ids + nonce | string | Idempotent act header value |
 
 ```typescript
-import { DigitalCard, toSchemaOrg, discoverCapabilities } from '@digitalcard/sdk';
+import {
+  DigitalCard,
+  discoverActCapabilities,
+  buildIdempotencyKey,
+  buildAgentActHeaders,
+  agentActHeadersToFetch,
+} from '@digitalcard/sdk';
 
 const { card } = await DigitalCard.resolve({ domain: 'sinyalle.com' });
-const jsonLd = toSchemaOrg(card);
-const caps = discoverCapabilities(card);
-if (caps.available) {
-  console.log(caps.agent_gateway, caps.scopes);
+const act = discoverActCapabilities(card);
+if (act.hasWriteOrAct && act.actions?.length) {
+  const key = buildIdempotencyKey({
+    agentClientId: 'acme-assistant',
+    actionId: act.actions[0].id,
+    entityId: card.card_id,
+    nonce: crypto.randomUUID(),
+  });
+  const headers = agentActHeadersToFetch(
+    buildAgentActHeaders({
+      accessToken: '…',
+      idempotencyKey: key,
+      actionId: act.actions[0].id,
+      cardId: card.card_id,
+    })
+  );
 }
 ```
 

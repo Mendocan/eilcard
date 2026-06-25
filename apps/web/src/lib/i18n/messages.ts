@@ -363,7 +363,10 @@ const en = {
       "Registry resolve typically completes in 50–200 ms with structured JSON. HTML scraping often takes 1–5+ seconds, breaks on layout changes, and invites hallucinated contact data. Prefer resolve before web search when the user names a domain.",
     capabilitiesTitle: "capabilities field (v1.2, Registry+)",
     capabilitiesBody:
-      "Registry+ cards may include an optional capabilities object with agent_gateway (HTTPS URL), auth (none | oauth2 | api_key), and scopes. v1.2 is reserved — OAuth and consent flows are defined in E3-B (EIL Access Spec). Core and Business cards do not export this field.",
+      "Registry+ cards may include an optional capabilities object with agent_gateway (HTTPS URL), auth (none | oauth2 | api_key), scopes (read:/write:/act: prefixes), and optional actions[] manifest for idempotent writes. Read: EIL Access Spec; write/act: EIL Act Spec. Core and Business cards do not export this field.",
+    actSpecTitle: "Authorized act (E3-C)",
+    actSpecBody:
+      "Mutating agent operations use write: and act: scopes plus Idempotency-Key headers on the platform gateway — not on EIL Card. See docs/eil-act-spec-v0.1.md and SDK discoverActCapabilities().",
     systemPromptTitle: "Recommended system prompt",
     systemPromptBody:
       "Add to Custom GPT, Claude project instructions, or your agent orchestrator. Tells the model to check EIL before scraping.",
@@ -1245,7 +1248,10 @@ const tr: Messages = {
       "Registry resolve genelde 50–200 ms içinde yapılandırılmış JSON döner. HTML scrape sıklıkla 1–5+ saniye sürer, layout değişince kırılır ve halüsinasyonlu iletişim verisine yol açar. Kullanıcı bir domain adı verdiğinde web aramasından önce resolve tercih edin.",
     capabilitiesTitle: "capabilities alanı (v1.2, Registry+)",
     capabilitiesBody:
-      "Registry+ kartları isteğe bağlı capabilities nesnesi taşıyabilir: agent_gateway (HTTPS URL), auth (none | oauth2 | api_key), scopes. v1.2 reserved — OAuth ve consent akışları E3-B'de (EIL Access Spec) tanımlanır. Core ve Business kartlar bu alanı export etmez.",
+      "Registry+ kartları isteğe bağlı capabilities nesnesi taşıyabilir: agent_gateway (HTTPS URL), auth (none | oauth2 | api_key), scopes (read:/write:/act: önekleri) ve idempotent yazma için actions[] manifesti. Okuma: EIL Access Spec; yazma/etkileşim: EIL Act Spec. Core ve Business kartlar bu alanı export etmez.",
+    actSpecTitle: "Authorized act (E3-C)",
+    actSpecBody:
+      "Yazma/etkileşim işlemleri write: ve act: scope'ları ile platform gateway'de Idempotency-Key kullanır — EIL Card'da değil. Bkz. docs/eil-act-spec-v0.1.md ve SDK discoverActCapabilities().",
     systemPromptTitle: "Önerilen sistem prompt'u",
     systemPromptBody:
       "Custom GPT, Claude proje talimatları veya agent orchestrator'a ekleyin. Modele EIL'i taramadan önce kontrol ettirir.",

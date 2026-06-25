@@ -136,7 +136,8 @@ Registry+ kartları isteğe bağlı agent gateway pointer taşıyabilir. **E3-B*
 | `capabilities` | ❌ | Agent etkileşim manifesti (reserved) |
 | `capabilities.agent_gateway` | ❌ | HTTPS agent gateway URL |
 | `capabilities.auth` | ❌ | `none` \| `oauth2` \| `api_key` |
-| `capabilities.scopes` | ❌ | string[] (max 20, her biri max 64 karakter) |
+| `capabilities.scopes` | ❌ | string[] — `read:`, `write:`, `act:` prefixes |
+| `capabilities.actions` | ❌ | Declared mutating operations (E3-C) |
 
 ```json
 {
@@ -145,14 +146,24 @@ Registry+ kartları isteğe bağlı agent gateway pointer taşıyabilir. **E3-B*
   "capabilities": {
     "agent_gateway": "https://api.example.com/agents/eil",
     "auth": "oauth2",
-    "scopes": ["read:profile"]
+    "scopes": ["read:profile", "write:post", "act:comment"],
+    "actions": [
+      {
+        "id": "create_post",
+        "method": "POST",
+        "path": "/v1/posts",
+        "scopes": ["write:post"],
+        "idempotent": true
+      }
+    ]
   }
 }
 ```
 
 - API, Core/Business edition'da `capabilities` gönderimini reddeder.
 - Public JSON'da `capabilities` yalnızca Registry+ edition'da export edilir.
-- Semantik: `docs/eil-access-spec-v0.1.md` — Dashboard UI henüz yok, API kabul eder.
+- Read semantik: `docs/eil-access-spec-v0.1.md` — Act semantik: `docs/eil-act-spec-v0.1.md`
+- Dashboard UI henüz yok, API kabul eder.
 
 ---
 

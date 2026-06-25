@@ -32,6 +32,8 @@ export {
   cardSignaturesSchema,
   capabilitiesAuthEnum,
   capabilitiesSchema,
+  capabilityActionMethodEnum,
+  capabilityActionSchema,
 } from "./card";
 
 export type {
@@ -61,4 +63,6 @@ export type {
   CardSignatures,
   CapabilitiesAuth,
   Capabilities,
+  CapabilityActionMethod,
+  CapabilityAction,
 } from "./card";

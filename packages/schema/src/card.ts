@@ -33,12 +33,40 @@ export type CardSignatures = z.infer<typeof cardSignaturesSchema>;
 export const capabilitiesAuthEnum = z.enum(["none", "oauth2", "api_key"]);
 export type CapabilitiesAuth = z.infer<typeof capabilitiesAuthEnum>;
 
-/** Reserved v1.2 field — agent gateway pointer (E3-B fills semantics). */
+export const capabilityActionMethodEnum = z.enum([
+  "POST",
+  "PUT",
+  "PATCH",
+  "DELETE",
+]);
+export type CapabilityActionMethod = z.infer<typeof capabilityActionMethodEnum>;
+
+/** Declared mutating operation on platform agent gateway (E3-C). */
+export const capabilityActionSchema = z.object({
+  id: z
+    .string()
+    .min(1)
+    .max(50)
+    .regex(/^[a-z0-9_-]+$/),
+  label: z.string().max(100).optional(),
+  method: capabilityActionMethodEnum,
+  path: z
+    .string()
+    .min(1)
+    .max(200)
+    .regex(/^\//),
+  scopes: z.array(z.string().max(64)).min(1).max(5),
+  idempotent: z.boolean().optional(),
+});
+export type CapabilityAction = z.infer<typeof capabilityActionSchema>;
+
+/** Reserved v1.2 field — agent gateway pointer (E3-B/C). */
 export const capabilitiesSchema = z
   .object({
     agent_gateway: z.string().url().optional(),
     auth: capabilitiesAuthEnum.optional(),
     scopes: z.array(z.string().max(64)).max(20).optional(),
+    actions: z.array(capabilityActionSchema).max(10).optional(),
   })
   .optional();
 export type Capabilities = z.infer<typeof capabilitiesSchema>;

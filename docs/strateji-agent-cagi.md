@@ -162,10 +162,10 @@ Eksen 2 ve 3'e geçerken kırılmayı önleyen kararlar:
 
 ### E3-C — Authorized act (24+ ay)
 
-- [ ] Write scope modeli (`write:post`, `act:comment`)
-- [ ] Idempotent agent action API pattern
-- [ ] Audit log + rate limit + abuse standartları
-- [ ] "Universal Agent Protocol" yalnızca konsensüs sonrası isimlendirme
+- [x] Write scope modeli (`write:post`, `act:comment`) — `docs/eil-act-spec-v0.1.md`
+- [x] Idempotent agent action API pattern — spec + SDK helpers
+- [x] Audit log + rate limit + abuse standartları — Act Spec §6–7
+- [x] "Universal Agent Protocol" yalnızca konsensüs sonrası isimlendirme — Act Spec §9
 
 ---
 
@@ -187,6 +187,7 @@ Eksen 2 ve 3'e geçerken kırılmayı önleyen kararlar:
 - `docs/eil-access-spec-v0.1.md` — authorized read + OAuth referans
 - `docs/consent-ux-guide.md` — platform consent UX
 - `docs/pilot-gateway.md` — harici gateway pointer
+- `docs/eil-act-spec-v0.1.md` — authorized write/act
 - `kesif-stratejisi.md` — hibrit keşif kararları
 - `schema/SCHEMA.md` — kart JSON şeması
 - `packages/sdk/SDK.md` — SDK sözleşmesi

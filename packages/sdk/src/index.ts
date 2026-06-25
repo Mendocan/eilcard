@@ -9,6 +9,21 @@ export type { SchemaOrgDocument } from './bridges.js';
 export { discoverCapabilities } from './capabilities.js';
 export type { DiscoveredCapabilities } from './capabilities.js';
 export {
+  parseCapabilityScopes,
+  discoverActCapabilities,
+  buildIdempotencyKey,
+  buildAgentActHeaders,
+  agentActHeadersToFetch,
+} from './act.js';
+export type {
+  ScopeKind,
+  ParsedCapabilityScopes,
+  CapabilityActionManifest,
+  DiscoveredActCapabilities,
+  IdempotencyKeyInput,
+  AgentActHeaders,
+} from './act.js';
+export {
   CardNotFoundError,
   DigitalCardError,
   InvalidResolveInputError,

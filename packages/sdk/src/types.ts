@@ -120,6 +120,14 @@ export interface CardBase {
     agent_gateway?: string;
     auth?: 'none' | 'oauth2' | 'api_key';
     scopes?: string[];
+    actions?: Array<{
+      id: string;
+      label?: string;
+      method: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+      path: string;
+      scopes: string[];
+      idempotent?: boolean;
+    }>;
   };
   updated_at: string;
   created_at?: string;

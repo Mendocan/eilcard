@@ -149,9 +149,10 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 
 #### E3-C — Authorized act (yazma / etkileşim)
 
-- [ ] Write scope modeli (`write:post`, `act:comment`)
-- [ ] Idempotent agent action API pattern
-- [ ] Audit + rate limit + abuse standartları
+- [x] Write scope modeli (`write:post`, `act:comment`) — `docs/eil-act-spec-v0.1.md`
+- [x] Idempotent agent action API pattern — spec + SDK `buildIdempotencyKey` / `buildAgentActHeaders`
+- [x] Audit + rate limit + abuse standartları — Act Spec §6–7
+- [x] `capabilities.actions[]` manifest — şema v1.2 + `discoverActCapabilities()`
 
 **Yapma:** Tüm OAuth/agent auth'u EIL Card core monolitine gömme.
 

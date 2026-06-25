@@ -58,7 +58,17 @@ EIL Card bu akışta **kimlik + pointer** sağlar; gateway ayrı deploy edilir.
   "capabilities": {
     "agent_gateway": "https://api.sinyalle.com/v1/agent-gateway",
     "auth": "oauth2",
-    "scopes": ["read:profile", "read:orders"]
+    "scopes": ["read:profile", "read:orders", "write:post", "act:comment"],
+    "actions": [
+      {
+        "id": "create_post",
+        "label": "Create blog post",
+        "method": "POST",
+        "path": "/v1/posts",
+        "scopes": ["write:post"],
+        "idempotent": true
+      }
+    ]
   }
 }
 ```
@@ -84,10 +94,18 @@ if (!caps.available) throw new Error('No agent gateway configured');
 // redirect user to caps.agent_gateway + /.well-known/agent-gateway
 // → authorization_endpoint, exchange code for token
 
-// 4. Private read
-// fetch('https://api.sinyalle.com/v1/orders', {
-//   headers: { Authorization: `Bearer ${accessToken}` },
-// });
+// 4. Private read — platform API
+// fetch(..., { headers: { Authorization: `Bearer ${accessToken}` } });
+
+// 5. Authorized act (E3-C) — idempotent write
+// import { discoverActCapabilities, buildIdempotencyKey, agentActHeadersToFetch, buildAgentActHeaders } from '@digitalcard/sdk';
+// const act = discoverActCapabilities(card);
+// const action = act.actions?.find((a) => a.id === 'create_post');
+// if (action) {
+//   const key = buildIdempotencyKey({ agentClientId: 'acme', actionId: action.id, entityId: card.card_id, nonce: crypto.randomUUID() });
+//   const headers = agentActHeadersToFetch(buildAgentActHeaders({ accessToken, idempotencyKey: key, actionId: action.id, cardId: card.card_id }));
+//   // fetch(`${caps.agent_gateway}${action.path}`, { method: action.method, headers, body: JSON.stringify({...}) });
+// }
 ```
 
 ---
@@ -101,9 +119,9 @@ Pilot gateway SHOULD implement:
 | `/.well-known/agent-gateway` | GET | OAuth metadata |
 | `/oauth/authorize` | GET | User consent redirect |
 | `/oauth/token` | POST | Code / token exchange |
-| `/v1/*` | GET | Scoped private resources |
+| `POST /v1/*` | POST | Scoped act (idempotent) |
 
-EIL Card bu endpoint'leri host etmez.
+EIL Card bu endpoint'leri host etmez. Act pattern: [EIL Act Spec v0.1](./eil-act-spec-v0.1.md).
 
 ---
 
@@ -112,6 +130,8 @@ EIL Card bu endpoint'leri host etmez.
 - [ ] Registry+ kartta `agent_gateway` canlı URL
 - [ ] Agent resolve → capabilities discovery uçtan uca
 - [ ] En az bir `read:*` scope ile consent + token
+- [ ] En az bir `write:` veya `act:` scope ile ayrı consent (E3-C)
+- [ ] Idempotent POST with `Idempotency-Key` replay test
 - [ ] Token `eil_card_id` claim ile domain'e bağlı
 - [ ] Revoke sonrası 401
 - [ ] Audit log (platform tarafı)
@@ -130,5 +150,6 @@ EIL Card bu endpoint'leri host etmez.
 
 - [EIL Access Spec v0.1](./eil-access-spec-v0.1.md)
 - [Consent UX Guide](./consent-ux-guide.md)
+- [EIL Act Spec v0.1](./eil-act-spec-v0.1.md)
 - [Registry+ edition](./registry-plus.md)
 - [MCP README](../packages/mcp/README.md)

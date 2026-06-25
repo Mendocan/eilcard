@@ -124,9 +124,10 @@ Registry+ cards MAY include:
 |-------|-------------|
 | `agent_gateway` | HTTPS URL for authorized agent interaction (E3-B) |
 | `auth` | `none` \| `oauth2` \| `api_key` |
-| `scopes` | Declared scope strings (max 20) |
+| `scopes` | Declared scope strings (max 20) — `read:`, `write:`, `act:` prefixes |
+| `actions` | Optional mutating operation manifest (E3-C) |
 
-**v0.1:** Field is accepted by API and exported on Registry+ public JSON. Semantics, consent, and OAuth flows are defined in **EIL Access Spec** (E3-B). Dashboard UI is not required in v0.1.
+**v0.1:** Field is accepted by API and exported on Registry+ public JSON. Read semantics: **EIL Access Spec** (E3-B). Write/act: **EIL Act Spec** (E3-C).
 
 Core and Business editions MUST NOT send `capabilities`; public export strips the field.
 

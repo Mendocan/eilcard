@@ -104,6 +104,13 @@ export default async function DocsAgentsPage() {
           </p>
         </section>
 
+        <section className="mt-12 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+          <h2 className="text-lg font-semibold">{a.actSpecTitle}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.actSpecBody}
+          </p>
+        </section>
+
         <section className="mt-12">
           <h2 className="text-lg font-semibold">{a.systemPromptTitle}</h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
