@@ -21,7 +21,7 @@
 | **2** | **Resend işlem postası** | Kayıt doğrulama vardı | ~~forgot/reset + billing@~~ **tamamlandı** (deploy sonrası doğrula) |
 | **3** | **Rol tabanlı admin** | Tek `ADMIN_PASSWORD` ölçeklenmiyor | ~~DB admin hesapları, editör/moderatör rolleri, davet akışı~~ **tamamlandı** (bootstrap + deploy sonrası doğrula) |
 | **4** | **EIL CLI** | Adoption tablosunda tek büyük boşluk | ~~`eil-card init`, `verify`, `export well-known`~~ **tamamlandı** (`packages/cli`) |
-| **5** | **Branch protection** | Repo büyüdü; `main` doğrudan push riski | GitHub `main` için PR + review zorunluluğu |
+| **5** | **Branch protection** | Repo büyüdü; `main` doğrudan push riski | ~~GitHub `main` için PR + review zorunluluğu~~ **tamamlandı** (CI + rules) |
 
 **Pilot gateway kalan kriterler** (`docs/pilot-gateway.md` §6): `write:`/`act:` consent, idempotent POST replay, token revoke → 401, platform audit log — **#1** tamamlandıktan sonra sırayla.
 
@@ -304,7 +304,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 ### Ekip / Açık Kaynak hazırlığı
 
-- [ ] **Branch protection rules** — `main` için PR + review (**Sıradaki 5 iş #5**)
+- [x] **Branch protection rules** — `main` için PR + review + CI `typecheck` (`docs/branch-protection.md`)
 
 ### Standart ve ekosistem
 
