@@ -127,6 +127,33 @@ Registry+ kartları `schema_version: "1.2"` kullanır. Business alanlarının ü
 - API, Core/Business edition'da `signatures` gönderimini reddeder.
 - JWS **doğrulama** aracı E3-A'da; v1.2 şimdilik saklama + export.
 
+## 1f. Capabilities (şema v1.2, reserved)
+
+Registry+ kartları isteğe bağlı agent gateway pointer taşıyabilir. **E3-B** OAuth ve consent semantiğini doldurur; v1.2'de alan saklanır ve export edilir.
+
+| Alan | Zorunlu | Açıklama |
+|------|---------|----------|
+| `capabilities` | ❌ | Agent etkileşim manifesti (reserved) |
+| `capabilities.agent_gateway` | ❌ | HTTPS agent gateway URL |
+| `capabilities.auth` | ❌ | `none` \| `oauth2` \| `api_key` |
+| `capabilities.scopes` | ❌ | string[] (max 20, her biri max 64 karakter) |
+
+```json
+{
+  "edition": "registry_plus",
+  "schema_version": "1.2",
+  "capabilities": {
+    "agent_gateway": "https://api.example.com/agents/eil",
+    "auth": "oauth2",
+    "scopes": ["read:profile"]
+  }
+}
+```
+
+- API, Core/Business edition'da `capabilities` gönderimini reddeder.
+- Public JSON'da `capabilities` yalnızca Registry+ edition'da export edilir.
+- Dashboard UI henüz yok — API kabul eder.
+
 ---
 
 ## 2. Ortak Alanlar

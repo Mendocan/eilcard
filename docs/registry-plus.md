@@ -48,8 +48,8 @@ Registry+ kartları isteğe bağlı compact JWS taşıyabilir:
 }
 ```
 
-- **Şimdilik:** saklama + public export; doğrulama aracı E3-A ile gelir.
-- **Core / Business:** `signatures` API tarafından reddedilir.
+- **Şimdilik:** saklama + public export; JWS doğrulama CLI sonraki adım.
+- **Core / Business:** `signatures` ve `capabilities` API tarafından reddedilir.
 
 ---
 
@@ -69,6 +69,7 @@ Paket: `packages/mcp` (`@digitalcard/mcp`)
 
 | Tool | API |
 |------|-----|
+| `resolve_entity` | domain **or** handle (unified) |
 | `resolve_domain` | `/api/v1/resolve?domain=` |
 | `get_card_by_handle` | `/api/v1/cards/{handle}` |
 
@@ -92,6 +93,7 @@ Bkz. `packages/mcp/README.md` — Claude Desktop / Cursor MCP yapılandırması.
 
 ## İlgili belgeler
 
-- `schema/SCHEMA.md` — `signatures` alanı
+- `schema/SCHEMA.md` — `signatures`, `capabilities`
+- `docs/eil-identity-spec-v0.1.md` — identity + discovery spec
 - `docs/strateji-agent-cagi.md` — E3-A MCP + Identity spec
 - `docs/core-edition.md` — Core / Business referans

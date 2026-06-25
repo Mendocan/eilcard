@@ -29,6 +29,16 @@ export async function getCardByHandle(handle: string) {
   return fetchJson(url);
 }
 
+export async function resolveEntity(options: {
+  domain?: string;
+  handle?: string;
+}) {
+  const { domain, handle } = options;
+  if (domain) return resolveDomain(domain);
+  if (handle) return getCardByHandle(handle);
+  throw new Error("Provide domain or handle");
+}
+
 function textResult(payload: unknown) {
   return {
     content: [{ type: "text" as const, text: JSON.stringify(payload, null, 2) }],
@@ -53,6 +63,29 @@ export function createEilCardMcpServer() {
     "Fetch canonical registry JSON for a card handle (e.g. sinyal24).",
     { handle: z.string().min(1).describe("Registry handle without @") },
     async ({ handle }) => textResult(await getCardByHandle(handle))
+  );
+
+  server.tool(
+    "resolve_entity",
+    "Resolve entity by domain or handle (unified). Prefer domain when both are given.",
+    {
+      domain: z
+        .string()
+        .min(1)
+        .optional()
+        .describe("Root domain, e.g. sinyalle.com"),
+      handle: z
+        .string()
+        .min(1)
+        .optional()
+        .describe("Registry handle without @, e.g. sinyal24"),
+    },
+    async ({ domain, handle }) => {
+      if (!domain && !handle) {
+        throw new Error("Provide domain or handle");
+      }
+      return textResult(await resolveEntity({ domain, handle }));
+    }
   );
 
   return server;

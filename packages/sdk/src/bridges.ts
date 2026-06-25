@@ -4,6 +4,42 @@ import { SchemaValidationError } from './errors.js';
 /** schema.org JSON-LD object (Organization or Person) */
 export type SchemaOrgDocument = Record<string, unknown>;
 
+function addEilMeta(doc: SchemaOrgDocument, card: Card): void {
+  doc.additionalProperty = [
+    {
+      '@type': 'PropertyValue',
+      propertyID: 'eil:schema_version',
+      value: card.schema_version,
+    },
+    {
+      '@type': 'PropertyValue',
+      propertyID: 'eil:edition',
+      value: card.edition,
+    },
+  ];
+}
+
+function addCapabilitiesAction(doc: SchemaOrgDocument, card: Card): void {
+  const gateway = card.capabilities?.agent_gateway;
+  if (!gateway) return;
+
+  doc.potentialAction = {
+    '@type': 'InteractAction',
+    name: 'Agent gateway',
+    description:
+      'Authorized agent interaction endpoint referenced by EIL Card capabilities.',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: gateway,
+      ...(card.content_locale && { inLanguage: card.content_locale }),
+      actionPlatform: [
+        'http://schema.org/DesktopWebPlatform',
+        'http://schema.org/MobileWebPlatform',
+      ],
+    },
+  };
+}
+
 function isOrganization(card: Card): card is OrganizationCard {
   return card.type === 'organization';
 }
@@ -52,6 +88,9 @@ export function toSchemaOrg(card: Card): SchemaOrgDocument {
       };
     }
 
+    addCapabilitiesAction(doc, card);
+    addEilMeta(doc, card);
+
     return doc;
   }
 
@@ -79,6 +118,9 @@ export function toSchemaOrg(card: Card): SchemaOrgDocument {
           : `https://${card.organization_ref}/#organization`,
       };
     }
+
+    addCapabilitiesAction(doc, card);
+    addEilMeta(doc, card);
 
     return doc;
   }

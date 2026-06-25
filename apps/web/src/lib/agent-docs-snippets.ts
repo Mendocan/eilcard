@@ -219,6 +219,37 @@ export function createEILResolveTool() {
 const tool = buildEILResolveToolDefinition('${base}')
 const result = await invokeEILResolve({ domain: '${PILOT_DOMAIN}' })
 console.log(result.card.verified, result.meta.source)`,
+
+    mcpConfig: JSON.stringify(
+      {
+        mcpServers: {
+          eilcard: {
+            command: "node",
+            args: ["<absolute-path>/digital_card/packages/mcp/dist/index.js"],
+            env: {
+              EIL_REGISTRY_URL: base,
+            },
+          },
+        },
+      },
+      null,
+      2
+    ),
+
+    mcpResolveEntity: `# After MCP is connected, the host exposes resolve_entity.
+# Example tool call (conceptual):
+{
+  "name": "resolve_entity",
+  "arguments": { "domain": "${PILOT_DOMAIN}" }
+}
+
+# Returns the same JSON as:
+curl -s "${resolveUrl}"`,
+
+    latencyComparison: `# Typical latency (same region, warm connection)
+# EIL resolve (registry API):     ~50-200 ms  -> structured JSON, verified flag
+# Domain well-known:              ~50-150 ms  -> same card when published
+# HTML scrape + parse:            1-5+ sec    -> fragile, layout-dependent`,
   };
 }
 

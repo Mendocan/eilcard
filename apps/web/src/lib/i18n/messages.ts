@@ -349,6 +349,21 @@ const en = {
     discoveryNoteTitle: "Live test tip",
     discoveryNoteBody:
       "Google AI Mode and some crawlers may block {apiBase}/api/... URLs. For live tests, prefer:\n{pilotWellKnown}",
+    mcpTitle: "MCP server (@digitalcard/mcp)",
+    mcpBody:
+      "For Claude Desktop, Cursor, and other MCP hosts, install the stdio MCP server. It exposes resolve_entity — one tool for domain or handle.",
+    mcpSetupTitle: "Cursor / Claude Desktop config",
+    mcpSetupBody:
+      "Build packages/mcp, then add the server to your MCP config. Override EIL_REGISTRY_URL for staging.",
+    mcpResolveTitle: "resolve_entity example",
+    mcpResolveBody:
+      "The model calls resolve_entity with domain or handle. Response is canonical registry JSON — same as GET /api/v1/resolve.",
+    latencyTitle: "Resolve vs scrape",
+    latencyBody:
+      "Registry resolve typically completes in 50–200 ms with structured JSON. HTML scraping often takes 1–5+ seconds, breaks on layout changes, and invites hallucinated contact data. Prefer resolve before web search when the user names a domain.",
+    capabilitiesTitle: "capabilities field (v1.2, Registry+)",
+    capabilitiesBody:
+      "Registry+ cards may include an optional capabilities object with agent_gateway (HTTPS URL), auth (none | oauth2 | api_key), and scopes. v1.2 is reserved — OAuth and consent flows are defined in E3-B (EIL Access Spec). Core and Business cards do not export this field.",
     systemPromptTitle: "Recommended system prompt",
     systemPromptBody:
       "Add to Custom GPT, Claude project instructions, or your agent orchestrator. Tells the model to check EIL before scraping.",
@@ -572,6 +587,8 @@ const en = {
     apiOfferingLimit: "Your plan offering limit has been reached.",
     apiSignaturesNotAllowed:
       "JWS signatures require Registry+ edition. Upgrade the card edition first.",
+    apiCapabilitiesNotAllowed:
+      "Capabilities require Registry+ edition. Upgrade the card edition first.",
     apiEnterpriseAddonRequired:
       "Registry+ edition requires a Pro plan and enterprise add-on. Contact support.",
     apiRegistryCardIdTaken: "This registry card ID is already in use.",
@@ -1214,6 +1231,21 @@ const tr: Messages = {
     discoveryNoteTitle: "Canlı test ipucu",
     discoveryNoteBody:
       "Google AI Modu ve bazı crawler'lar {apiBase}/api/... URL'lerini engelleyebilir. Canlı testlerde şunu tercih edin:\n{pilotWellKnown}",
+    mcpTitle: "MCP sunucusu (@digitalcard/mcp)",
+    mcpBody:
+      "Claude Desktop, Cursor ve diğer MCP host'ları için stdio MCP sunucusunu kurun. resolve_entity aracı domain veya handle ile tek çağrıda çözümler.",
+    mcpSetupTitle: "Cursor / Claude Desktop yapılandırması",
+    mcpSetupBody:
+      "packages/mcp derleyin, ardından MCP yapılandırmanıza ekleyin. Staging için EIL_REGISTRY_URL ile override edin.",
+    mcpResolveTitle: "resolve_entity örneği",
+    mcpResolveBody:
+      "Model resolve_entity'yi domain veya handle ile çağırır. Yanıt canonical registry JSON'dur — GET /api/v1/resolve ile aynı.",
+    latencyTitle: "Resolve vs scrape",
+    latencyBody:
+      "Registry resolve genelde 50–200 ms içinde yapılandırılmış JSON döner. HTML scrape sıklıkla 1–5+ saniye sürer, layout değişince kırılır ve halüsinasyonlu iletişim verisine yol açar. Kullanıcı bir domain adı verdiğinde web aramasından önce resolve tercih edin.",
+    capabilitiesTitle: "capabilities alanı (v1.2, Registry+)",
+    capabilitiesBody:
+      "Registry+ kartları isteğe bağlı capabilities nesnesi taşıyabilir: agent_gateway (HTTPS URL), auth (none | oauth2 | api_key), scopes. v1.2 reserved — OAuth ve consent akışları E3-B'de (EIL Access Spec) tanımlanır. Core ve Business kartlar bu alanı export etmez.",
     systemPromptTitle: "Önerilen sistem prompt'u",
     systemPromptBody:
       "Custom GPT, Claude proje talimatları veya agent orchestrator'a ekleyin. Modele EIL'i taramadan önce kontrol ettirir.",
@@ -1437,6 +1469,8 @@ const tr: Messages = {
     apiOfferingLimit: "Planınızdaki offering limitine ulaşıldı.",
     apiSignaturesNotAllowed:
       "JWS imzaları Registry+ edition gerektirir. Önce kart edition'ını yükseltin.",
+    apiCapabilitiesNotAllowed:
+      "Capabilities alanı Registry+ edition gerektirir. Önce kart edition'ını yükseltin.",
     apiEnterpriseAddonRequired:
       "Registry+ edition için Pro plan ve enterprise eklenti gerekir. Destek ile iletişime geçin.",
     apiRegistryCardIdTaken: "Bu registry kart kimliği zaten kullanımda.",

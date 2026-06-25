@@ -133,11 +133,11 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 
 #### E3-A — Agent discovery (keşif yüzeyi)
 
-- [ ] **MCP sunucusu** — `resolve_entity`, `get_card_by_handle`
-- [ ] **`capabilities` extension** — SCHEMA.md taslağı; v1.0'da boş/default
-- [ ] **EIL Identity Spec v0.1** — public draft (kimlik katmanı only)
-- [ ] **Schema.org bridge** — çift yazım, geriye uyum
-- [ ] Agent docs — scrape yerine resolve; latency / güven örneği
+- [x] **MCP sunucusu** — `resolve_entity`, `get_card_by_handle`
+- [x] **`capabilities` extension** — SCHEMA.md taslağı; v1.0'da boş/default
+- [x] **EIL Identity Spec v0.1** — public draft (kimlik katmanı only)
+- [x] **Schema.org bridge** — çift yazım, geriye uyum
+- [x] Agent docs — scrape yerine resolve; latency / güven örneği
 
 #### E3-B — Authorized read (özel veri, kullanıcı onayı)
 
@@ -271,7 +271,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 - [x] **Python agent şablonları** — `packages/sdk/examples/python/` + `/docs/agents`
 - [x] **Güvenlik sertleştirme** — rate limit, security headers, resolve kotası, `security.txt`, public JSON uyarısı
 - [ ] **LlamaIndex `EILReader` (Data Connector)**
-- [ ] **MCP sunucusu** — → Faz 5 E3-A
+- [x] **MCP sunucusu** — `@digitalcard/mcp` (`resolve_entity`, `resolve_domain`, `get_card_by_handle`)
 
 ### 2. LLM sistem komutları ve Function Calling
 
@@ -288,8 +288,8 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 ### 4. Geriye dönük uyumluluk (Bridge)
 
-- [ ] **Schema.org bridge**
-- [ ] **Bridge response meta**
+- [x] **Schema.org bridge**
+- [x] **Bridge response meta**
 
 ### 5. Adoption araçları (özet yol haritası)
 

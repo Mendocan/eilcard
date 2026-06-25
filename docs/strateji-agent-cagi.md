@@ -146,11 +146,11 @@ Eksen 2 ve 3'e geçerken kırılmayı önleyen kararlar:
 
 ### E3-A — Agent discovery (6–12 ay, Eksen 2 ile paralel mümkün)
 
-- [ ] MCP sunucusu: `resolve_entity`, `get_card_by_handle`
-- [ ] `capabilities` extension taslağı (SCHEMA.md, boş default)
-- [ ] **EIL Identity Spec v0.1** — public draft (GitHub)
-- [ ] Agent docs: scrape yok, resolve var (ölçülebilir latency örneği)
-- [ ] Schema.org bridge (çift yazım, kırılma yok)
+- [x] MCP sunucusu: `resolve_entity`, `get_card_by_handle`
+- [x] `capabilities` extension taslağı (SCHEMA.md, boş default)
+- [x] **EIL Identity Spec v0.1** — public draft (`docs/eil-identity-spec-v0.1.md`)
+- [x] Agent docs: scrape yok, resolve var (ölçülebilir latency örneği)
+- [x] Schema.org bridge (çift yazım, kırılma yok)
 
 ### E3-B — Authorized read (12–24 ay)
 

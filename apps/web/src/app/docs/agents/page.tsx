@@ -53,6 +53,58 @@ export default async function DocsAgentsPage() {
         </div>
 
         <section className="mt-12">
+          <h2 className="text-xl font-semibold">{a.mcpTitle}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.mcpBody}
+          </p>
+
+          <h3 className="mt-8 text-lg font-semibold">{a.mcpSetupTitle}</h3>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.mcpSetupBody}
+          </p>
+          <div className="mt-4">
+            <CodeSnippet
+              code={snippets.mcpConfig}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+
+          <h3 className="mt-10 text-lg font-semibold">{a.mcpResolveTitle}</h3>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.mcpResolveBody}
+          </p>
+          <div className="mt-4">
+            <CodeSnippet
+              code={snippets.mcpResolveEntity}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="text-lg font-semibold">{a.latencyTitle}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.latencyBody}
+          </p>
+          <div className="mt-4">
+            <CodeSnippet
+              code={snippets.latencyComparison}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+        </section>
+
+        <section className="mt-12 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+          <h2 className="text-lg font-semibold">{a.capabilitiesTitle}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.capabilitiesBody}
+          </p>
+        </section>
+
+        <section className="mt-12">
           <h2 className="text-lg font-semibold">{a.systemPromptTitle}</h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
             {a.systemPromptBody}

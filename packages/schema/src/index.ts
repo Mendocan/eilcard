@@ -30,6 +30,8 @@ export {
   jwsSignatureAlgEnum,
   jwsSignatureSchema,
   cardSignaturesSchema,
+  capabilitiesAuthEnum,
+  capabilitiesSchema,
 } from "./card";
 
 export type {
@@ -57,4 +59,6 @@ export type {
   JwsSignatureAlg,
   JwsSignature,
   CardSignatures,
+  CapabilitiesAuth,
+  Capabilities,
 } from "./card";

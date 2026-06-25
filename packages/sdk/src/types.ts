@@ -116,6 +116,11 @@ export interface CardBase {
       jws: string;
     };
   };
+  capabilities?: {
+    agent_gateway?: string;
+    auth?: 'none' | 'oauth2' | 'api_key';
+    scopes?: string[];
+  };
   updated_at: string;
   created_at?: string;
   human_url?: string;

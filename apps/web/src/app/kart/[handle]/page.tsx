@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getCardByHandle, buildPublicCardJson } from "@/lib/card-service";
+import { toSchemaOrg } from "@/lib/card-exports";
 import { getCardContentLocale } from "@/lib/card-content-locale";
 import { CardView } from "@/components/card-view";
 import { getLocale } from "@/lib/i18n/get-locale";
@@ -98,15 +99,7 @@ export default async function CardPage({ params }: Props) {
     .filter((a) => a.type === "link" && a.url)
     .map((a) => ({ label: a.label, url: a.url! }));
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": card.type === "organization" ? "Organization" : "Person",
-    name,
-    ...(contact.email && { email: `mailto:${contact.email}` }),
-    ...(contact.phone && { telephone: contact.phone }),
-    ...(contact.website && { url: contact.website }),
-    ...(summary ?? tagline ? { description: summary ?? tagline } : {}),
-  };
+  const jsonLd = toSchemaOrg(card);
 
   return (
     <>

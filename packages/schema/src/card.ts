@@ -30,6 +30,19 @@ export const cardSignaturesSchema = z.object({
 });
 export type CardSignatures = z.infer<typeof cardSignaturesSchema>;
 
+export const capabilitiesAuthEnum = z.enum(["none", "oauth2", "api_key"]);
+export type CapabilitiesAuth = z.infer<typeof capabilitiesAuthEnum>;
+
+/** Reserved v1.2 field — agent gateway pointer (E3-B fills semantics). */
+export const capabilitiesSchema = z
+  .object({
+    agent_gateway: z.string().url().optional(),
+    auth: capabilitiesAuthEnum.optional(),
+    scopes: z.array(z.string().max(64)).max(20).optional(),
+  })
+  .optional();
+export type Capabilities = z.infer<typeof capabilitiesSchema>;
+
 export const cardTypeEnum = z.enum(["organization", "person"]);
 export type CardType = z.infer<typeof cardTypeEnum>;
 
@@ -179,6 +192,7 @@ const cardBaseFields = {
   human_url: z.string().url().optional(),
   registry_url: z.string().url().optional(),
   signatures: cardSignaturesSchema.optional(),
+  capabilities: capabilitiesSchema,
 };
 
 export const organizationCardSchema = z.object({
@@ -231,6 +245,7 @@ export const createOrganizationCardSchema = z.object({
   actions: z.array(cardActionSchema).max(20).optional(),
   same_as: z.array(z.string().url()).optional(),
   signatures: cardSignaturesSchema.optional(),
+  capabilities: capabilitiesSchema,
   domain: z.string().max(253).optional(),
 });
 
@@ -251,6 +266,7 @@ export const createPersonCardSchema = z.object({
   actions: z.array(cardActionSchema).max(20).optional(),
   same_as: z.array(z.string().url()).optional(),
   signatures: cardSignaturesSchema.optional(),
+  capabilities: capabilitiesSchema,
   domain: z.string().max(253).optional(),
 });
 
@@ -276,6 +292,7 @@ export const patchOrganizationCardSchema = z.object({
   actions: z.array(cardActionSchema).max(20).optional(),
   same_as: z.array(z.string().url()).max(20).optional(),
   signatures: cardSignaturesSchema.nullable().optional(),
+  capabilities: capabilitiesSchema.nullable().optional(),
 });
 
 export const patchPersonCardSchema = z.object({
@@ -290,4 +307,5 @@ export const patchPersonCardSchema = z.object({
   actions: z.array(cardActionSchema).max(20).optional(),
   same_as: z.array(z.string().url()).max(20).optional(),
   signatures: cardSignaturesSchema.nullable().optional(),
+  capabilities: capabilitiesSchema.nullable().optional(),
 });

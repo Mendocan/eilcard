@@ -126,10 +126,16 @@ export async function POST(request: NextRequest) {
     data as Record<string, unknown>
   );
   if (!registryPlusCheck.allowed) {
+    const isCapabilities =
+      registryPlusCheck.reason === "capabilities_not_allowed";
     return NextResponse.json(
       {
-        error: "JWS signatures require Registry+ edition",
-        code: API_ERROR_CODES.SIGNATURES_NOT_ALLOWED,
+        error: isCapabilities
+          ? "Capabilities require Registry+ edition"
+          : "JWS signatures require Registry+ edition",
+        code: isCapabilities
+          ? API_ERROR_CODES.CAPABILITIES_NOT_ALLOWED
+          : API_ERROR_CODES.SIGNATURES_NOT_ALLOWED,
         edition,
       },
       { status: 403 }
