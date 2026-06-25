@@ -67,6 +67,11 @@ services:
       target: migrator
     environment:
       DATABASE_URL: postgresql://digitalcard:${POSTGRES_PASSWORD}@postgres:5432/digitalcard
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ADMIN_BOOTSTRAP_EMAIL: ${ADMIN_BOOTSTRAP_EMAIL:-}
+      APP_URL: ${APP_URL}
+      NEXT_PUBLIC_APP_URL: ${APP_URL}
     depends_on:
       postgres:
         condition: service_healthy
