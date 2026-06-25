@@ -95,5 +95,8 @@ Bkz. `packages/mcp/README.md` — Claude Desktop / Cursor MCP yapılandırması.
 
 - `schema/SCHEMA.md` — `signatures`, `capabilities`
 - `docs/eil-identity-spec-v0.1.md` — identity + discovery spec
+- `docs/eil-access-spec-v0.1.md` — authorized read + OAuth reference
+- `docs/consent-ux-guide.md` — platform consent UX
+- `docs/pilot-gateway.md` — external gateway pointer pattern
 - `docs/strateji-agent-cagi.md` — E3-A MCP + Identity spec
 - `docs/core-edition.md` — Core / Business referans

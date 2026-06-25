@@ -6,6 +6,8 @@ export {
 export type { EILResolveToolInput } from './agent-tool.js';
 export { toSchemaOrg, toVCard, toLlmsTxtSection } from './bridges.js';
 export type { SchemaOrgDocument } from './bridges.js';
+export { discoverCapabilities } from './capabilities.js';
+export type { DiscoveredCapabilities } from './capabilities.js';
 export {
   CardNotFoundError,
   DigitalCardError,

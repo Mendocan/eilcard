@@ -79,13 +79,17 @@ const { card, meta } = await client.resolve({ domain: 'sinyalle.com' });
 | `toSchemaOrg(card)` | `DigitalCard` | JSON-LD object | schema.org Organization/Person |
 | `toVCard(card)` | `PersonCard` | string | vCard 4.0 metni |
 | `toLlmsTxtSection(card)` | `DigitalCard` | string | llms.txt Markdown bölümü |
+| `discoverCapabilities(card)` | `DigitalCard` | `DiscoveredCapabilities` | Registry+ capability manifest (E3-B) |
 
 ```typescript
-import { DigitalCard, toSchemaOrg, toLlmsTxtSection } from '@digitalcard/sdk';
+import { DigitalCard, toSchemaOrg, discoverCapabilities } from '@digitalcard/sdk';
 
 const { card } = await DigitalCard.resolve({ domain: 'sinyalle.com' });
 const jsonLd = toSchemaOrg(card);
-const llmsSection = toLlmsTxtSection(card);
+const caps = discoverCapabilities(card);
+if (caps.available) {
+  console.log(caps.agent_gateway, caps.scopes);
+}
 ```
 
 ---

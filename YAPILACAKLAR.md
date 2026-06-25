@@ -141,11 +141,11 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 
 #### E3-B — Authorized read (özel veri, kullanıcı onayı)
 
-- [ ] **EIL Access Spec** taslağı — Identity belgesinden ayrı
-- [ ] Capability manifest — `agent_gateway`, scopes, auth type
-- [ ] OAuth 2.1 / agent delegation referans akışı (platform implement eder)
-- [ ] Consent UX rehberi — platform sahipleri için
-- [ ] Pilot gateway — harici platform; EIL kart yalnızca pointer
+- [x] **EIL Access Spec** taslağı — Identity belgesinden ayrı (`docs/eil-access-spec-v0.1.md`)
+- [x] Capability manifest — `agent_gateway`, scopes, auth type (şema + `discoverCapabilities()`)
+- [x] OAuth 2.1 / agent delegation referans akışı (platform implement eder)
+- [x] Consent UX rehberi — platform sahipleri için (`docs/consent-ux-guide.md`)
+- [x] Pilot gateway — harici platform pointer (`docs/pilot-gateway.md`); gateway kodu EIL dışı
 
 #### E3-C — Authorized act (yazma / etkileşim)
 

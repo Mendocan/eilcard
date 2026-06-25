@@ -154,11 +154,11 @@ Eksen 2 ve 3'e geçerken kırılmayı önleyen kararlar:
 
 ### E3-B — Authorized read (12–24 ay)
 
-- [ ] **EIL Access Spec** taslağı (Identity'den ayrı belge)
-- [ ] Capability manifest şeması (`agent_gateway`, scopes, auth type)
-- [ ] OAuth 2.1 / agent delegation referans akışı (platform implement eder)
-- [ ] Consent UX rehberi (platform sahipleri için)
-- [ ] Pilot: bir platform gateway (ör. harici proje, EIL pointer only)
+- [x] **EIL Access Spec** taslağı (Identity'den ayrı belge) — `docs/eil-access-spec-v0.1.md`
+- [x] Capability manifest şeması (`agent_gateway`, scopes, auth type) + SDK `discoverCapabilities()`
+- [x] OAuth 2.1 / agent delegation referans akışı (platform implement eder)
+- [x] Consent UX rehberi (platform sahipleri için) — `docs/consent-ux-guide.md`
+- [x] Pilot: gateway pointer pattern — `docs/pilot-gateway.md` (harici implementasyon)
 
 ### E3-C — Authorized act (24+ ay)
 
@@ -183,6 +183,10 @@ Eksen 2 ve 3'e geçerken kırılmayı önleyen kararlar:
 ## İlgili belgeler
 
 - `YAPILACAKLAR.md` — uygulama sırası ve checkbox'lar
+- `docs/eil-identity-spec-v0.1.md` — kimlik + keşif
+- `docs/eil-access-spec-v0.1.md` — authorized read + OAuth referans
+- `docs/consent-ux-guide.md` — platform consent UX
+- `docs/pilot-gateway.md` — harici gateway pointer
 - `kesif-stratejisi.md` — hibrit keşif kararları
 - `schema/SCHEMA.md` — kart JSON şeması
 - `packages/sdk/SDK.md` — SDK sözleşmesi

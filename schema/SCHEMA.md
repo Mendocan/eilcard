@@ -152,7 +152,7 @@ Registry+ kartları isteğe bağlı agent gateway pointer taşıyabilir. **E3-B*
 
 - API, Core/Business edition'da `capabilities` gönderimini reddeder.
 - Public JSON'da `capabilities` yalnızca Registry+ edition'da export edilir.
-- Dashboard UI henüz yok — API kabul eder.
+- Semantik: `docs/eil-access-spec-v0.1.md` — Dashboard UI henüz yok, API kabul eder.
 
 ---
 

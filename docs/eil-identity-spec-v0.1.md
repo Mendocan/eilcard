@@ -157,6 +157,7 @@ Human card pages embed the same JSON-LD for crawlers and agents.
 |----------|------|
 | Card JSON schema | `schema/SCHEMA.md` |
 | Registry+ edition | `docs/registry-plus.md` |
+| **Access Spec (authorized read)** | `docs/eil-access-spec-v0.1.md` |
 | Agent strategy | `docs/strateji-agent-cagi.md` |
 | MCP package | `packages/mcp/README.md` |
 | SDK | `packages/sdk/SDK.md` |
