@@ -6,6 +6,21 @@ export function getPublicSupportEmail(): string {
   return process.env.SUPPORT_EMAIL?.trim() || DEFAULT_SUPPORT_EMAIL;
 }
 
+const DEFAULT_BILLING_EMAIL = "billing@eilcard.com";
+
+/** Transactional billing mail (Polar, plan notices). Falls back to support@. */
+export function getBillingFromEmail(): string {
+  return (
+    process.env.BILLING_EMAIL?.trim() ||
+    getRecommendedContactAddresses(
+      new URL(
+        process.env.NEXT_PUBLIC_APP_URL ?? "https://eilcard.com"
+      ).hostname
+    ).billing ||
+    DEFAULT_BILLING_EMAIL
+  );
+}
+
 export type PlatformConfig = {
   appUrl: string;
   supportEmail: string | null;

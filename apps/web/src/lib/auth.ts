@@ -4,6 +4,7 @@ import { db } from "./db";
 import * as schema from "./db/schema";
 import { sendEmailVerificationMail } from "./email-verification-mail";
 import { localeFromRequest } from "./i18n/locale-from-request";
+import { sendPasswordResetMail } from "./password-reset-mail";
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
@@ -32,6 +33,16 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: async ({ user, url }, request) => {
+      const locale = localeFromRequest(request);
+      await sendPasswordResetMail({
+        to: user.email,
+        userName: user.name,
+        url,
+        locale,
+      });
+    },
   },
   session: {
     cookieCache: {

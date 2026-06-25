@@ -1,10 +1,24 @@
-import { getPublicSupportEmail } from "@/lib/platform-config";
+import {
+  getBillingFromEmail,
+  getPublicSupportEmail,
+} from "@/lib/platform-config";
+
+export type EmailFromKind = "support" | "billing";
 
 export type SendTransactionalEmailInput = {
   to: string;
   subject: string;
   text: string;
+  from?: EmailFromKind;
 };
+
+function resolveFromAddress(kind: EmailFromKind): string {
+  return kind === "billing" ? getBillingFromEmail() : getPublicSupportEmail();
+}
+
+function fromDisplayName(kind: EmailFromKind): string {
+  return kind === "billing" ? "EIL Card Billing" : "EIL Card";
+}
 
 export async function sendTransactionalEmail(
   input: SendTransactionalEmailInput
@@ -15,7 +29,9 @@ export async function sendTransactionalEmail(
     return { sent: false, reason: "no_resend" };
   }
 
-  const from = getPublicSupportEmail();
+  const kind = input.from ?? "support";
+  const address = resolveFromAddress(kind);
+
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -23,7 +39,7 @@ export async function sendTransactionalEmail(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: `EIL Card <${from}>`,
+      from: `${fromDisplayName(kind)} <${address}>`,
       to: input.to,
       subject: input.subject,
       text: input.text,

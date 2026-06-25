@@ -1,54 +1,46 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Messages } from "@/lib/i18n/messages";
-import { signIn } from "@/lib/auth-client";
+import { requestPasswordReset } from "@/lib/auth-client";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]";
 
-function safeNextPath(next: string | undefined): string {
-  if (!next || !next.startsWith("/") || next.startsWith("//")) {
-    return "/dashboard";
-  }
-  return next;
-}
-
 type Props = {
   m: Messages["auth"];
-  nextPath?: string;
 };
 
-export function LoginForm({ m, nextPath }: Props) {
-  const router = useRouter();
+export function ForgotPasswordForm({ m }: Props) {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setMessage("");
     setLoading(true);
 
-    const result = await signIn.email({ email, password });
+    const redirectTo = `${window.location.origin}/reset-password`;
+    const result = await requestPasswordReset({ email, redirectTo });
     setLoading(false);
 
     if (result.error) {
-      setError(result.error.message ?? m.loginFailed);
+      setError(m.forgotPasswordFailed);
       return;
     }
 
-    router.push(safeNextPath(nextPath));
+    setMessage(m.forgotPasswordSent);
   }
 
   return (
     <>
-      <h1 className="text-2xl font-semibold tracking-tight">{m.loginTitle}</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">{m.forgotPasswordTitle}</h1>
       <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
-        {m.loginSubtitle}
+        {m.forgotPasswordSubtitle}
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
@@ -70,51 +62,26 @@ export function LoginForm({ m, nextPath }: Props) {
           />
         </div>
 
-        <div>
-          <div className="mb-1 flex items-center justify-between gap-2">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-[var(--color-text-muted)]"
-            >
-              {m.password}
-            </label>
-            <Link
-              href="/forgot-password"
-              className="text-xs font-medium text-[var(--color-accent)] hover:opacity-80"
-            >
-              {m.forgotPasswordLink}
-            </Link>
-          </div>
-          <input
-            id="password"
-            type="password"
-            required
-            minLength={8}
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={inputClass}
-          />
-        </div>
-
         {error && <p className="text-sm text-[var(--color-error)]">{error}</p>}
+        {message && (
+          <p className="text-sm text-[var(--color-text-muted)]">{message}</p>
+        )}
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || Boolean(message)}
           className="w-full rounded-lg bg-[var(--color-text)] px-4 py-2.5 text-sm font-medium text-[var(--color-bg)] transition hover:opacity-90 disabled:opacity-50"
         >
-          {loading ? m.loginLoading : m.loginSubmit}
+          {loading ? m.forgotPasswordLoading : m.forgotPasswordSubmit}
         </button>
       </form>
 
       <p className="mt-6 text-center text-sm text-[var(--color-text-muted)]">
-        {m.noAccount}{" "}
         <Link
-          href="/register"
+          href="/login"
           className="font-medium text-[var(--color-accent)] hover:opacity-80"
         >
-          {m.registerLink}
+          {m.backToSignIn}
         </Link>
       </p>
     </>

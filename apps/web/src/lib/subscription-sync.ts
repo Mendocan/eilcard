@@ -8,6 +8,10 @@ import {
 } from "@/lib/polar-config";
 import type { PlanTier } from "@/lib/tier-limits";
 import { getEffectiveTier } from "@/lib/user-plan";
+import {
+  sendSubscriptionActivatedMail,
+  sendSubscriptionCanceledMail,
+} from "@/lib/billing-email";
 
 export type SubscriptionSyncInput = {
   userId: string;
@@ -162,6 +166,21 @@ function subscriptionProductId(sub: PolarSubscriptionLike): string | null {
   return sub.productId ?? sub.product?.id ?? null;
 }
 
+async function getUserMailProfile(userId: string) {
+  const [row] = await db
+    .select({ name: users.name, email: users.email })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+  return row ?? null;
+}
+
+function tierLabel(tier: PlanTier): string {
+  if (tier === "pro") return "Pro";
+  if (tier === "verified") return "Verified";
+  return "Free";
+}
+
 export async function syncPolarSubscription(sub: PolarSubscriptionLike) {
   const userId = await resolveUserIdFromCustomer({
     externalId: sub.customer?.externalId,
@@ -196,6 +215,16 @@ export async function syncPolarSubscription(sub: PolarSubscriptionLike) {
       expiresAt: periodEnd,
       polarSubscriptionId: sub.id,
     });
+
+    const profile = await getUserMailProfile(userId);
+    if (profile?.email) {
+      void sendSubscriptionActivatedMail({
+        to: profile.email,
+        userName: profile.name,
+        locale: "en",
+        tierLabel: tierLabel(tier),
+      });
+    }
     return;
   }
 
@@ -214,6 +243,16 @@ export async function syncPolarSubscription(sub: PolarSubscriptionLike) {
       polarSubscriptionId: sub.id,
     });
     await maybeDowngradeIfExpired(userId);
+
+    const profile = await getUserMailProfile(userId);
+    if (profile?.email) {
+      void sendSubscriptionCanceledMail({
+        to: profile.email,
+        userName: profile.name,
+        locale: "en",
+        graceEndsAt: expiresAt,
+      });
+    }
     return;
   }
 

@@ -17,8 +17,8 @@
 
 | # | İş | Neden şimdi | Çıktı |
 |---|-----|-------------|--------|
-| **1** | **Sinyalle pilot gateway — production** | read:* + revoke E2E hazır; Sinyalle DNS ve act kriterleri kaldı | Interim: `agent-gateway.eilcard.com`; hedef: `agent-gateway.sinyalle.com`; seed + E2E script |
-| **2** | **Resend işlem postası** | Kayıt doğrulama var; şifre sıfırlama ve fatura maili yok | `forgot-password` akışı + şablonlar; Polar/plan bildirimlerinde `billing@` gönderici |
+| **1** | **Sinyalle pilot gateway — production** | read:* + revoke E2E canlı (`agent-gateway.eilcard.com`) | Sinyalle DNS taşıması + `write:`/`act:` (E3-C) |
+| **2** | **Resend işlem postası** | Kayıt doğrulama vardı | ~~forgot/reset + billing@~~ **tamamlandı** (deploy sonrası doğrula) |
 | **3** | **Rol tabanlı admin** | Tek `ADMIN_PASSWORD` ölçeklenmiyor | DB admin hesapları, editör/moderatör rolleri, davet akışı |
 | **4** | **EIL CLI** | Adoption tablosunda tek büyük boşluk | `eil-card init`, `verify`, `export well-known` (npm paketi veya `packages/cli`) |
 | **5** | **Branch protection** | Repo büyüdü; `main` doğrudan push riski | GitHub `main` için PR + review zorunluluğu |
@@ -239,9 +239,9 @@ Entegrasyon rehberi (`/docs/agents`) — **yayında** (kısa vade maddeleri tama
 - [x] **Footer + About** — `support@eilcard.com` görünür
 - [x] **Admin → Ayarlar** — iletişim env durumu, güvenlik notu, ekip yol haritası
 - [x] **E-posta doğrulama** — kayıt sonrası Resend + `/verify-email` + dashboard banner
-- [ ] **Resend** — şifre sıfırlama + plan/fatura bildirim şablonları
+- [x] **Resend** — şifre sıfırlama + plan/fatura bildirim şablonları (`billing@` gönderici)
 - [ ] **`hello@` alias** (opsiyonel)
-- [ ] Polar checkout + fatura bildirimlerinde **`billing@`** gönderici
+- [x] Polar checkout + fatura bildirimlerinde **`billing@`** gönderici
 
 ### Admin panel (kalan)
 
