@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PricingEditions } from "@/components/pricing-editions";
 import { PricingTable } from "@/components/pricing-table";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-header";
@@ -33,7 +34,7 @@ export default async function PricingPage() {
         user={session?.user ?? null}
       />
 
-      <main className="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-20">
+      <main className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-accent)]">
           {p.eyebrow}
         </p>
@@ -45,8 +46,18 @@ export default async function PricingPage() {
         </p>
 
         <div className="mt-10">
-          <PricingTable copy={p} checkoutEnabled={polarCheckout} />
+          <PricingEditions copy={p} />
         </div>
+
+        <section className="mt-14">
+          <h2 className="text-lg font-semibold tracking-tight">{p.plansTitle}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {p.plansIntro}
+          </p>
+          <div className="mt-6">
+            <PricingTable copy={p} checkoutEnabled={polarCheckout} />
+          </div>
+        </section>
 
         <section className="mt-12 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
           <h2 className="text-lg font-semibold">{p.churnTitle}</h2>

@@ -36,6 +36,18 @@ export function PricingTable({ copy, checkoutEnabled = false }: Props) {
       values: TIERS.map((t) => String(TIER_LIMITS[t].maxProducts)),
     },
     {
+      label: copy.rowOfferings,
+      values: TIERS.map((t) =>
+        TIER_LIMITS[t].maxOfferings === 0
+          ? "—"
+          : String(TIER_LIMITS[t].maxOfferings)
+      ),
+    },
+    {
+      label: copy.rowEditions,
+      values: [copy.editionCoreOnly, copy.editionCoreBusiness, copy.editionAll],
+    },
+    {
       label: copy.rowResolve,
       values: TIERS.map((t) => formatNum(TIER_LIMITS[t].resolveLimit)),
     },

@@ -1,7 +1,7 @@
 # YAPILACAKLAR
 
 > EIL Card — öncelikli iş listesi  
-> Son güncelleme: 2026-06-22
+> Son güncelleme: 2026-06-24
 
 ---
 
@@ -63,7 +63,8 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 ### Faz 3 — Pilot müşteri + operatör kartı
 
 - [x] Production operatör: `@eilcard` + `eilcard.com` DNS doğrulama (verified)
-- [ ] Sinyalle pilot: abonelik senaryosu test — `simulate-subscription-lapse.mjs` + cron reconcile
+- [x] **Sinyalle pilot — abonelik satın alma (E2E)** — `@sinyal24` hesabı, kart oluşturma, Polar Verified checkout ($9 test ödemesi) → webhook → plan
+- [ ] **Sinyalle pilot — churn simülasyonu (opsiyonel)** — `simulate-subscription-lapse.mjs` + cron reconcile (grace → downgrade → `--restore`; Polar iptal etmeden DB testi)
 - [x] Admin: son müşteri değişikliği — `/admin/changes` (`card_change_logs`)
 - [x] Admin: kuyruk durumu — `/admin/verification`
 - [x] Operatör script'leri — `seed-platform-operator-card.mjs`, deploy hook
@@ -89,7 +90,7 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 - [x] **Edition enum** — `core` | `business` | `registry_plus` (DB veya kart metadata)
 - [x] **Plan ↔ edition eşlemesi** — hangi tier hangi edition alanlarını açar (ör. Business → Verified+)
 - [x] **Feature gate** — API + dashboard: edition dışı alan reddedilir veya gizlenir
-- [ ] **Pricing / satış dili** — vitrin: edition; arka plan: mevcut Polar planları (ayrı ürün şart değil)
+- [x] **Pricing / satış dili** — vitrin: edition (Core → Business → Registry+); arka plan: Verified/Pro Polar planları
 - [x] **`SCHEMA.md` + SDK** — edition ve `schema_version` ilişkisi belgelenir
 
 #### E2-B — Core edition (mevcut durumun adlandırılması)
@@ -324,7 +325,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 - Dashboard keşif paneli: proxy snippet, well-known check, agent-card, llms.txt
 - Güvenlik: rate limit, headers, resolve kotası, `security.txt`
 - Whitepaper v1.0: `/insights/eil-whitepaper` (EN/TR)
-- Sinyalle pilot: nginx proxy, domain well-known **ok**
+- Sinyalle pilot: nginx proxy, domain well-known **ok**; Polar Verified checkout E2E ($9 test) **ok**
 - Operatör kartı: `@eilcard` + `eilcard.com` DNS verified
 - **Eksen 1** ticari omurga: Polar, tier limits, grace/cron (Faz 0–2)
 - Kart UI v1.0: agent discovery alanları (şema değişmeden)

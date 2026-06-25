@@ -1,5 +1,16 @@
 import type { Locale } from "./types";
 
+export type PricingEditionId = "core" | "business" | "registry_plus";
+
+export type PricingEditionCopy = {
+  name: string;
+  schema: string;
+  minPlan: string;
+  summary: string;
+  features: string[];
+  audience: string;
+};
+
 export type PricingCopy = {
   metaTitle: string;
   metaDescription: string;
@@ -7,6 +18,12 @@ export type PricingCopy = {
   title: string;
   subtitle: string;
   subtitleLive: string;
+  editionsTitle: string;
+  editionsIntro: string;
+  editionRoadmap: string;
+  editions: Record<PricingEditionId, PricingEditionCopy>;
+  plansTitle: string;
+  plansIntro: string;
   tierFree: string;
   tierVerified: string;
   tierPro: string;
@@ -14,9 +31,14 @@ export type PricingCopy = {
   rowCards: string;
   rowOrgCards: string;
   rowProducts: string;
+  rowOfferings: string;
+  rowEditions: string;
   rowResolve: string;
   rowDns: string;
   rowVerifiedBadge: string;
+  editionCoreOnly: string;
+  editionCoreBusiness: string;
+  editionAll: string;
   perMonth: string;
   included: string;
   comingSoon: string;
@@ -38,13 +60,64 @@ export const pricingMessages: Record<Locale, PricingCopy> = {
   en: {
     metaTitle: "Pricing — EIL Card",
     metaDescription:
-      "Free, Verified, and Pro plans for domain-verified entity identity in the EIL Card registry.",
+      "Core, Business, and Registry+ card editions. Verified and Pro subscriptions unlock trust, limits, and richer schemas.",
     eyebrow: "Pricing",
-    title: "Plans for verified entity identity",
+    title: "Card editions and subscription plans",
     subtitle:
-      "Limits sync with tier-limits.ts. Paid checkout launches with Polar; until then, contact support for upgrades.",
+      "Choose a card edition for agent-ready content, then a subscription for trust signals and registry capacity. Limits sync with tier-limits.ts.",
     subtitleLive:
-      "Limits sync with tier-limits.ts. Subscribe to Verified or Pro via Polar checkout — manage billing from your dashboard.",
+      "Choose a card edition in the dashboard, then subscribe via Polar for verified: true and higher limits. Manage billing from your dashboard.",
+    editionsTitle: "Card editions (what agents read)",
+    editionsIntro:
+      "Editions define schema richness — products, offerings, and future enterprise fields. Your subscription unlocks which editions you can publish.",
+    editionRoadmap: "Roadmap",
+    editions: {
+      core: {
+        name: "Core",
+        schema: "Schema v1.0",
+        minPlan: "Free · verified badge needs Verified+",
+        summary:
+          "Single brand or pilot: identity, summary, products[], links, and same_as profiles.",
+        features: [
+          "name, contact, description",
+          "products[] catalog",
+          "actions[] and same_as[]",
+          "DNS verification (with paid plan)",
+        ],
+        audience: "SMBs, pilots, one primary brand",
+      },
+      business: {
+        name: "Business",
+        schema: "Schema v1.1",
+        minPlan: "Verified or Pro",
+        summary:
+          "Holdings and multi-line orgs: nested offerings hierarchy plus content language.",
+        features: [
+          "Everything in Core",
+          "offerings[] business lines",
+          "content_locale for card language",
+          "Higher product/offering quotas",
+        ],
+        audience: "Holdings, agencies, rich catalogs",
+      },
+      registry_plus: {
+        name: "Registry+",
+        schema: "Schema v1.1+",
+        minPlan: "Pro + enterprise add-on",
+        summary:
+          "High-trust registry: cryptographic attestation and agent tooling for regulated use cases.",
+        features: [
+          "Everything in Business",
+          "JWS signature field (planned)",
+          "MCP resolve tools (planned)",
+          "SLA and priority support (contract)",
+        ],
+        audience: "Finance, public sector, high assurance",
+      },
+    },
+    plansTitle: "Subscriptions (trust and limits)",
+    plansIntro:
+      "Subscriptions renew registry authority — verified badge, resolve quota, card count, and which editions you can use. Checkout uses existing Verified and Pro products; no separate SKU per edition.",
     tierFree: "Free",
     tierVerified: "Verified",
     tierPro: "Pro",
@@ -52,9 +125,14 @@ export const pricingMessages: Record<Locale, PricingCopy> = {
     rowCards: "Cards per account",
     rowOrgCards: "Organization cards",
     rowProducts: "Products per org card",
+    rowOfferings: "Offerings per org card (Business)",
+    rowEditions: "Card editions",
     rowResolve: "Resolve requests / month",
     rowDns: "DNS domain verification",
     rowVerifiedBadge: "verified: true (active subscription)",
+    editionCoreOnly: "Core",
+    editionCoreBusiness: "Core, Business",
+    editionAll: "Core, Business, Registry+",
     perMonth: "/ month",
     included: "Included",
     comingSoon: "Checkout soon",
@@ -82,13 +160,64 @@ export const pricingMessages: Record<Locale, PricingCopy> = {
   tr: {
     metaTitle: "Fiyatlandırma — EIL Card",
     metaDescription:
-      "EIL Card registry için Ücretsiz, Verified ve Pro planları — domain doğrulamalı varlık kimliği.",
+      "Core, Business ve Registry+ kart edition'ları. Verified ve Pro abonelikleri güven, limit ve zengin şemayı açar.",
     eyebrow: "Fiyatlandırma",
-    title: "Doğrulanmış varlık kimliği planları",
+    title: "Kart edition'ları ve abonelik planları",
     subtitle:
-      "Limitler tier-limits.ts ile senkron. Ücretli ödeme Polar ile açılacak; şimdilik yükseltme için destek ile iletişime geçin.",
+      "Agent'lar için kart zenginliğini edition ile seçin; güven sinyali ve registry kapasitesi için abonelik. Limitler tier-limits.ts ile senkron.",
     subtitleLive:
-      "Limitler tier-limits.ts ile senkron. Verified veya Pro için Polar checkout ile abone olun — faturalandırmayı panelden yönetin.",
+      "Panelden kart edition'ını seçin, verified: true ve yüksek limitler için Polar ile abone olun — faturalandırmayı panelden yönetin.",
+    editionsTitle: "Kart edition'ları (agent'ların okuduğu katman)",
+    editionsIntro:
+      "Edition'lar şema zenginliğini belirler — ürünler, offerings ve ileride enterprise alanlar. Aboneliğiniz hangi edition'ları yayınlayabileceğinizi açar.",
+    editionRoadmap: "Yol haritası",
+    editions: {
+      core: {
+        name: "Core",
+        schema: "Şema v1.0",
+        minPlan: "Ücretsiz · rozet için Verified+",
+        summary:
+          "Tek marka veya pilot: kimlik, özet, products[], linkler ve same_as profilleri.",
+        features: [
+          "name, contact, description",
+          "products[] katalog",
+          "actions[] ve same_as[]",
+          "DNS doğrulama (ücretli planda)",
+        ],
+        audience: "KOBİ, pilot, tek ana marka",
+      },
+      business: {
+        name: "Business",
+        schema: "Şema v1.1",
+        minPlan: "Verified veya Pro",
+        summary:
+          "Holding ve çok iş kolu: iç içe offerings hiyerarşisi ve kart içeriği dili.",
+        features: [
+          "Core'daki her şey",
+          "offerings[] iş kolu ağacı",
+          "content_locale kart dili",
+          "Daha yüksek ürün/offering kotası",
+        ],
+        audience: "Holding, ajans, zengin katalog",
+      },
+      registry_plus: {
+        name: "Registry+",
+        schema: "Şema v1.1+",
+        minPlan: "Pro + enterprise eklenti",
+        summary:
+          "Yüksek güven registry: kriptografik doğrulama ve agent araçları (regülasyonlu senaryolar).",
+        features: [
+          "Business'taki her şey",
+          "JWS imza alanı (planlanıyor)",
+          "MCP resolve araçları (planlanıyor)",
+          "SLA ve öncelikli destek (sözleşme)",
+        ],
+        audience: "Finans, kamu, yüksek güvence",
+      },
+    },
+    plansTitle: "Abonelikler (güven ve limitler)",
+    plansIntro:
+      "Abonelikler registry otoritesini yeniler — verified rozeti, resolve kotası, kart sayısı ve kullanılabilir edition'lar. Ödeme mevcut Verified ve Pro ürünleriyle; edition başına ayrı SKU yok.",
     tierFree: "Ücretsiz",
     tierVerified: "Verified",
     tierPro: "Pro",
@@ -96,9 +225,14 @@ export const pricingMessages: Record<Locale, PricingCopy> = {
     rowCards: "Hesap başına kart",
     rowOrgCards: "Kurum kartı",
     rowProducts: "Kurum kartı başına ürün",
+    rowOfferings: "Kurum kartı başına offering (Business)",
+    rowEditions: "Kart edition'ları",
     rowResolve: "Resolve isteği / ay",
     rowDns: "DNS domain doğrulama",
     rowVerifiedBadge: "verified: true (aktif abonelik)",
+    editionCoreOnly: "Core",
+    editionCoreBusiness: "Core, Business",
+    editionAll: "Core, Business, Registry+",
     perMonth: "/ ay",
     included: "Dahil",
     comingSoon: "Ödeme yakında",
