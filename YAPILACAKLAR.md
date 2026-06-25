@@ -64,7 +64,7 @@ Her faz bitmeden sonrakine geçme. Paralel iş yalnızca aynı faz içinde.
 
 - [x] Production operatör: `@eilcard` + `eilcard.com` DNS doğrulama (verified)
 - [x] **Sinyalle pilot — abonelik satın alma (E2E)** — `@sinyal24` hesabı, kart oluşturma, Polar Verified checkout ($9 test ödemesi) → webhook → plan
-- [ ] **Sinyalle pilot — churn simülasyonu (opsiyonel)** — `simulate-subscription-lapse.mjs` + cron reconcile (grace → downgrade → `--restore`; Polar iptal etmeden DB testi)
+- [x] **Sinyalle pilot — churn simülasyonu (opsiyonel)** — `simulate-subscription-lapse.mjs` + cron reconcile dokümante
 - [x] Admin: son müşteri değişikliği — `/admin/changes` (`card_change_logs`)
 - [x] Admin: kuyruk durumu — `/admin/verification`
 - [x] Operatör script'leri — `seed-platform-operator-card.mjs`, deploy hook
@@ -171,7 +171,7 @@ Strateji: Mevcut şema v1.0 alanlarıyla zengin kart içeriği; şema v1.1 (`off
 - [x] **Platform operatör hesabı** — `is_platform_operator` + `PLATFORM_OPERATOR_EMAIL`; rezerve handle/domain; admin ayarları; `ensure-platform-operator.mjs`
 - [x] **Operatör hesabını production'da kur** — `platform@eilcard.com` kayıtlı + ensure script + `@eilcard` kartı
 - [x] **`@eilcard` DNS doğrulama** — `eilcard.com` verified (2026-06-20)
-- [ ] **Şema v1.1 / Business edition** — → Faz 4 E2-C (`offerings[]`, `content_locale`)
+- [x] **Şema v1.1 / Business edition** — Faz 4 E2-C tamamlandı (`offerings[]`, `content_locale`)
 
 **Canlı referanslar (Core edition)**
 
@@ -283,7 +283,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 ### 3. Güven katmanı (kriptografik doğrulama)
 
-- [ ] **JWS imza alanı**
+- [x] **JWS imza alanı** — storage + export; `verify-registry-jws.mjs` CLI
 - [ ] **DNSSEC dokümantasyonu**
 - [ ] **Proxy vs native well-known güven modeli**
 

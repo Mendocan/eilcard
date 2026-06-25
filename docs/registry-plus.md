@@ -14,7 +14,7 @@
 | Min. plan | **Pro** (efektif tier) |
 | Enterprise add-on | Admin tarafından açılır (sözleşme) |
 | `schema_version` | `1.2` |
-| Durum | Iskelet canlı — JWS doğrulama CLI sonraki adım |
+| Durum | Iskelet canlı — JWS doğrulama CLI (`verify-registry-jws.mjs`) |
 
 ---
 
@@ -48,8 +48,28 @@ Registry+ kartları isteğe bağlı compact JWS taşıyabilir:
 }
 ```
 
-- **Şimdilik:** saklama + public export; JWS doğrulama CLI sonraki adım.
+- **CLI:** `apps/web/scripts/verify-registry-jws.mjs` — decode + optional `--public-key-pem` verify
 - **Core / Business:** `signatures` ve `capabilities` API tarafından reddedilir.
+
+### JWS doğrulama CLI
+
+```bash
+# Yapısal decode (imza doğrulama olmadan)
+node apps/web/scripts/verify-registry-jws.mjs --handle eilcard
+
+# Domain ile resolve
+node apps/web/scripts/verify-registry-jws.mjs --domain sinyalle.com
+
+# Registry public key ile kriptografik doğrulama (RS256)
+node apps/web/scripts/verify-registry-jws.mjs --handle eilcard --public-key-pem ./registry-public.pem
+```
+
+Production:
+
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm migrate \
+  node apps/web/scripts/verify-registry-jws.mjs --handle eilcard
+```
 
 ---
 
@@ -59,7 +79,7 @@ Polar'da ayrı SKU yok. Akış:
 
 1. Müşteri **Pro** aboneliği (Verified yetmez — Registry+ edition seçimi Pro + add-on).
 2. Sözleşme sonrası admin → kullanıcı detayı → **Enterprise add-on** işaretle.
-3. Dashboard'da kart edition → **Registry+** seçilebilir.
+- Dashboard'da kart edition → **Registry+** seçilebilir; **capabilities** ve JWS alanları düzenlenebilir.
 
 ---
 

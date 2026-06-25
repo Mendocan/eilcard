@@ -42,6 +42,15 @@ type OfferingRow = {
   items: OfferingItemRow[];
 };
 
+type CapabilityActionRow = {
+  id: string;
+  label: string;
+  method: "POST" | "PUT" | "PATCH" | "DELETE";
+  path: string;
+  scopesText: string;
+  idempotent: boolean;
+};
+
 type InitialOrg = {
   type: "organization";
   nameOfficial: string;
@@ -58,6 +67,10 @@ type InitialOrg = {
   signatureAlg: "RS256" | "ES256" | "EdDSA" | "";
   signatureKid: string;
   signatureJws: string;
+  capAgentGateway: string;
+  capAuth: "none" | "oauth2" | "api_key" | "";
+  capScopesText: string;
+  capActions: CapabilityActionRow[];
   sameAsText: string;
 };
 
@@ -131,6 +144,50 @@ function slugId(name: string, index: number) {
   return base || `product-${index + 1}`;
 }
 
+function parseScopesText(text: string): string[] {
+  return text
+    .split(/[\n,]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function serializeCapabilities(input: {
+  agentGateway: string;
+  auth: "none" | "oauth2" | "api_key" | "";
+  scopesText: string;
+  actions: CapabilityActionRow[];
+}) {
+  const scopes = parseScopesText(input.scopesText);
+  const actions = input.actions
+    .filter((row) => row.id.trim() && row.path.trim())
+    .map((row) => ({
+      id: row.id.trim(),
+      method: row.method,
+      path: row.path.trim(),
+      scopes: parseScopesText(row.scopesText),
+      ...(row.label.trim() ? { label: row.label.trim() } : {}),
+      ...(row.idempotent ? { idempotent: true } : {}),
+    }))
+    .filter((row) => row.scopes.length > 0);
+
+  const hasData =
+    input.agentGateway.trim() ||
+    scopes.length > 0 ||
+    actions.length > 0 ||
+    Boolean(input.auth);
+
+  if (!hasData) return null;
+
+  return {
+    ...(input.agentGateway.trim()
+      ? { agent_gateway: input.agentGateway.trim() }
+      : {}),
+    ...(input.auth ? { auth: input.auth } : {}),
+    ...(scopes.length ? { scopes } : {}),
+    ...(actions.length ? { actions } : {}),
+  };
+}
+
 export function EditCardForm({
   handle,
   initial,
@@ -180,6 +237,18 @@ export function EditCardForm({
   const [signatureJws, setSignatureJws] = useState(
     initial.type === "organization" ? initial.signatureJws : ""
   );
+  const [capAgentGateway, setCapAgentGateway] = useState(
+    initial.type === "organization" ? initial.capAgentGateway : ""
+  );
+  const [capAuth, setCapAuth] = useState<"none" | "oauth2" | "api_key" | "">(
+    initial.type === "organization" ? initial.capAuth : ""
+  );
+  const [capScopesText, setCapScopesText] = useState(
+    initial.type === "organization" ? initial.capScopesText : ""
+  );
+  const [capActions, setCapActions] = useState<CapabilityActionRow[]>(
+    initial.type === "organization" ? initial.capActions : []
+  );
   const [links, setLinks] = useState<LinkRow[]>(
     initial.type === "person" ? initial.links : []
   );
@@ -197,6 +266,35 @@ export function EditCardForm({
 
   function removeLink(index: number) {
     setLinks((rows) => rows.filter((_, i) => i !== index));
+  }
+
+  function updateCapAction(
+    index: number,
+    field: keyof CapabilityActionRow,
+    value: string | boolean
+  ) {
+    setCapActions((rows) =>
+      rows.map((row, i) => (i === index ? { ...row, [field]: value } : row))
+    );
+  }
+
+  function addCapAction() {
+    if (capActions.length >= 10) return;
+    setCapActions((rows) => [
+      ...rows,
+      {
+        id: "",
+        label: "",
+        method: "POST",
+        path: "/",
+        scopesText: "",
+        idempotent: true,
+      },
+    ]);
+  }
+
+  function removeCapAction(index: number) {
+    setCapActions((rows) => rows.filter((_, i) => i !== index));
   }
 
   function updateProduct(index: number, field: keyof ProductRow, value: string) {
@@ -362,6 +460,12 @@ export function EditCardForm({
         } else {
           body.signatures = null;
         }
+        body.capabilities = serializeCapabilities({
+          agentGateway: capAgentGateway,
+          auth: capAuth,
+          scopesText: capScopesText,
+          actions: capActions,
+        });
       }
     } else {
       body.name = { full: nameFull };
@@ -738,6 +842,143 @@ export function EditCardForm({
                 className={inputClass}
                 placeholder="eyJhbGciOiJSUzI1NiIs..."
               />
+            </div>
+          </div>
+        )}
+
+        {initial.type === "organization" && cardEdition === "registry_plus" && (
+          <div className="space-y-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]/80 p-4">
+            <div>
+              <p className="text-sm font-medium">{m.capabilities}</p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+                {m.capabilitiesHint}
+              </p>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium">
+                {m.capAgentGateway}
+              </label>
+              <input
+                type="url"
+                value={capAgentGateway}
+                onChange={(e) => setCapAgentGateway(e.target.value)}
+                placeholder="https://api.example.com/v1/agent-gateway"
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium">{m.capAuth}</label>
+              <select
+                value={capAuth || ""}
+                onChange={(e) =>
+                  setCapAuth(
+                    (e.target.value || "") as "none" | "oauth2" | "api_key" | ""
+                  )
+                }
+                className={inputClass}
+              >
+                <option value="">{m.capAuthUnset}</option>
+                <option value="none">none</option>
+                <option value="oauth2">oauth2</option>
+                <option value="api_key">api_key</option>
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium">{m.capScopes}</label>
+              <textarea
+                rows={3}
+                value={capScopesText}
+                onChange={(e) => setCapScopesText(e.target.value)}
+                placeholder={"read:profile\nwrite:post\nact:comment"}
+                className={inputClass}
+              />
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+                {m.capScopesHint}
+              </p>
+            </div>
+            <div className="space-y-3">
+              <p className="text-sm font-medium">{m.capActions}</p>
+              {capActions.map((action, index) => (
+                <div
+                  key={index}
+                  className="space-y-2 rounded-lg border border-[var(--color-border)]/60 p-3"
+                >
+                  <input
+                    type="text"
+                    placeholder={m.capActionId}
+                    value={action.id}
+                    onChange={(e) => updateCapAction(index, "id", e.target.value)}
+                    className={inputClass}
+                  />
+                  <input
+                    type="text"
+                    placeholder={m.capActionLabel}
+                    value={action.label}
+                    onChange={(e) => updateCapAction(index, "label", e.target.value)}
+                    className={inputClass}
+                  />
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    <select
+                      value={action.method}
+                      onChange={(e) =>
+                        updateCapAction(
+                          index,
+                          "method",
+                          e.target.value as CapabilityActionRow["method"]
+                        )
+                      }
+                      className={inputClass}
+                    >
+                      <option value="POST">POST</option>
+                      <option value="PUT">PUT</option>
+                      <option value="PATCH">PATCH</option>
+                      <option value="DELETE">DELETE</option>
+                    </select>
+                    <input
+                      type="text"
+                      placeholder={m.capActionPath}
+                      value={action.path}
+                      onChange={(e) => updateCapAction(index, "path", e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder={m.capActionScopes}
+                    value={action.scopesText}
+                    onChange={(e) =>
+                      updateCapAction(index, "scopesText", e.target.value)
+                    }
+                    className={inputClass}
+                  />
+                  <label className="flex items-center gap-2 text-xs text-[var(--color-text-muted)]">
+                    <input
+                      type="checkbox"
+                      checked={action.idempotent}
+                      onChange={(e) =>
+                        updateCapAction(index, "idempotent", e.target.checked)
+                      }
+                    />
+                    {m.capActionIdempotent}
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => removeCapAction(index)}
+                    className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-error)]"
+                  >
+                    {m.removeCapAction}
+                  </button>
+                </div>
+              ))}
+              {capActions.length < 10 && (
+                <button
+                  type="button"
+                  onClick={addCapAction}
+                  className="text-sm font-medium text-[var(--color-accent)] hover:opacity-80"
+                >
+                  {m.addCapAction}
+                </button>
+              )}
             </div>
           </div>
         )}

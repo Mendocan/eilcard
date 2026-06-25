@@ -101,6 +101,38 @@ export default async function EditCardPage({ params }: Props) {
   const signatureKid = registrySignature?.kid ?? "";
   const signatureJws = registrySignature?.jws ?? "";
 
+  const rawCapabilities = body.capabilities as
+    | {
+        agent_gateway?: string;
+        auth?: "none" | "oauth2" | "api_key";
+        scopes?: string[];
+        actions?: Array<{
+          id: string;
+          label?: string;
+          method: "POST" | "PUT" | "PATCH" | "DELETE";
+          path: string;
+          scopes: string[];
+          idempotent?: boolean;
+        }>;
+      }
+    | undefined;
+  const capAgentGateway = rawCapabilities?.agent_gateway ?? "";
+  const capAuth: "none" | "oauth2" | "api_key" | "" =
+    rawCapabilities?.auth === "none" ||
+    rawCapabilities?.auth === "oauth2" ||
+    rawCapabilities?.auth === "api_key"
+      ? rawCapabilities.auth
+      : "";
+  const capScopesText = (rawCapabilities?.scopes ?? []).join("\n");
+  const capActions = (rawCapabilities?.actions ?? []).map((action) => ({
+    id: action.id,
+    label: action.label ?? "",
+    method: action.method,
+    path: action.path,
+    scopesText: action.scopes.join(", "),
+    idempotent: action.idempotent ?? false,
+  }));
+
   const initial =
     card.type === "organization"
       ? {
@@ -119,6 +151,10 @@ export default async function EditCardPage({ params }: Props) {
           signatureAlg,
           signatureKid,
           signatureJws,
+          capAgentGateway,
+          capAuth,
+          capScopesText,
+          capActions,
           sameAsText: sameAs.join("\n"),
         }
       : {
