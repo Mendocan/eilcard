@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { logAdminAction } from "@/lib/admin-audit";
 import { getCardByHandle } from "@/lib/card-service";
 import { db } from "@/lib/db";
@@ -14,9 +14,8 @@ import {
 type Params = { params: Promise<{ handle: string }> };
 
 export async function POST(request: Request, { params }: Params) {
-  if (!(await isAdminRequest(request))) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireAdminApi(request, "verification.write");
+  if (session instanceof NextResponse) return session;
 
   const { handle } = await params;
   const card = await getCardByHandle(handle);
@@ -57,12 +56,18 @@ export async function POST(request: Request, { params }: Params) {
       })
       .where(eq(cards.id, card.id));
 
-    await logAdminAction("card.dns_check", "card", handle, { status: "verified" });
+    await logAdminAction("card.dns_check", "card", handle, {
+      operatorId: session.operatorId,
+      details: { status: "verified" },
+    });
 
     return NextResponse.json({ status: "verified" });
   }
 
-  await logAdminAction("card.dns_check", "card", handle, { status: "pending" });
+  await logAdminAction("card.dns_check", "card", handle, {
+    operatorId: session.operatorId,
+    details: { status: "pending" },
+  });
 
   return NextResponse.json({
     status: "pending",

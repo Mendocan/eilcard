@@ -13,6 +13,7 @@ import {
 import { db } from "@/lib/db";
 import {
   adminAuditLogs,
+  adminOperators,
   cardChangeLogs,
   cards,
   domainVerifications,
@@ -365,8 +366,19 @@ export async function listAdminAuditLogs(page: number) {
   const offset = (page - 1) * PAGE_SIZE;
 
   const rows = await db
-    .select()
+    .select({
+      id: adminAuditLogs.id,
+      action: adminAuditLogs.action,
+      targetType: adminAuditLogs.targetType,
+      targetId: adminAuditLogs.targetId,
+      details: adminAuditLogs.details,
+      createdAt: adminAuditLogs.createdAt,
+      operatorId: adminAuditLogs.operatorId,
+      operatorName: adminOperators.name,
+      operatorEmail: adminOperators.email,
+    })
     .from(adminAuditLogs)
+    .leftJoin(adminOperators, eq(adminAuditLogs.operatorId, adminOperators.id))
     .orderBy(desc(adminAuditLogs.createdAt))
     .limit(PAGE_SIZE)
     .offset(offset);

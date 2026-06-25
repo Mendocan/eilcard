@@ -34,6 +34,13 @@ cd /opt/digital_card
 docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm migrate node apps/web/scripts/delete-eilcard-card.mjs
 REMOTE
 
+echo "==> bootstrap admin operator (first run only)"
+ssh -i "$KEY" "$HOST" bash <<'REMOTE'
+set -euo pipefail
+cd /opt/digital_card
+docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm migrate node apps/web/scripts/bootstrap-admin-operator.mjs || true
+REMOTE
+
 echo "==> ensure platform operator (if user registered)"
 ssh -i "$KEY" "$HOST" bash <<'REMOTE'
 set -euo pipefail

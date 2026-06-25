@@ -9,18 +9,24 @@ export type AdminAuditAction =
   | "card.delete"
   | "card.dns_check"
   | "user.plan"
-  | "user.enterprise_addon";
+  | "user.enterprise_addon"
+  | "team.invite"
+  | "team.password_change";
 
 export async function logAdminAction(
   action: AdminAuditAction,
   targetType: string,
   targetId: string,
-  details?: Record<string, unknown>
+  options?: {
+    details?: Record<string, unknown>;
+    operatorId?: string;
+  }
 ) {
   await db.insert(adminAuditLogs).values({
     action,
     targetType,
     targetId,
-    details: details ?? null,
+    details: options?.details ?? null,
+    operatorId: options?.operatorId ?? null,
   });
 }

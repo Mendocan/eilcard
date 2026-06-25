@@ -35,6 +35,9 @@ export function auditActionLabel(action: string, m: Messages["admin"]): string {
     "card.delete": m.auditActionCardDelete,
     "card.dns_check": m.auditActionCardDnsCheck,
     "user.plan": m.auditActionUserPlan,
+    "user.enterprise_addon": m.auditActionUserPlan,
+    "team.invite": m.auditActionTeamInvite,
+    "team.password_change": m.auditActionPasswordChange,
   };
   return labels[action] ?? action;
 }

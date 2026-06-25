@@ -1,4 +1,4 @@
-import { requireAdminSession } from "@/lib/admin-auth";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { listAdminAuditLogs } from "@/lib/admin-queries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default async function AdminAuditPage({ searchParams }: Props) {
-  await requireAdminSession();
+  await requireAdminPage("/admin/audit");
   const locale = await getLocale();
   const a = t(locale).admin;
   const sp = await searchParams;
@@ -42,6 +42,7 @@ export default async function AdminAuditPage({ searchParams }: Props) {
             <thead className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
               <tr>
                 <th className="px-4 py-3 font-medium">{a.created}</th>
+                <th className="px-4 py-3 font-medium">{a.auditOperator}</th>
                 <th className="px-4 py-3 font-medium">{a.auditAction}</th>
                 <th className="px-4 py-3 font-medium">{a.auditTarget}</th>
                 <th className="px-4 py-3 font-medium">{a.auditDetails}</th>
@@ -55,6 +56,9 @@ export default async function AdminAuditPage({ searchParams }: Props) {
                 >
                   <td className="px-4 py-3 text-[var(--color-text-muted)]">
                     {row.createdAt.toISOString().slice(0, 16).replace("T", " ")}
+                  </td>
+                  <td className="px-4 py-3 text-sm">
+                    {row.operatorName ?? row.operatorEmail ?? "—"}
                   </td>
                   <td className="px-4 py-3">{auditActionLabel(row.action, a)}</td>
                   <td className="px-4 py-3">

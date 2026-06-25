@@ -35,6 +35,12 @@ export const cardEditionEnum = pgEnum("card_edition", [
   "registry_plus",
 ]);
 
+export const adminRoleEnum = pgEnum("admin_role", [
+  "admin",
+  "moderator",
+  "editor",
+]);
+
 // --- Better Auth tables ---
 
 export const users = pgTable("users", {
@@ -153,10 +159,46 @@ export const resolveEvents = pgTable(
   ]
 );
 
+export const adminOperators = pgTable(
+  "admin_operators",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: varchar("email", { length: 255 }).notNull(),
+    name: varchar("name", { length: 255 }).notNull(),
+    passwordHash: text("password_hash").notNull(),
+    role: adminRoleEnum("role").notNull().default("editor"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+    lastLoginAt: timestamp("last_login_at"),
+  },
+  (table) => [uniqueIndex("admin_operators_email_idx").on(table.email)]
+);
+
+export const adminInvites = pgTable(
+  "admin_invites",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: varchar("email", { length: 255 }).notNull(),
+    role: adminRoleEnum("role").notNull(),
+    tokenHash: varchar("token_hash", { length: 128 }).notNull(),
+    invitedByOperatorId: uuid("invited_by_operator_id").references(
+      () => adminOperators.id,
+      { onDelete: "set null" }
+    ),
+    expiresAt: timestamp("expires_at").notNull(),
+    acceptedAt: timestamp("accepted_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [index("admin_invites_email_idx").on(table.email)]
+);
+
 export const adminAuditLogs = pgTable(
   "admin_audit_logs",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    operatorId: uuid("operator_id").references(() => adminOperators.id, {
+      onDelete: "set null",
+    }),
     action: varchar("action", { length: 64 }).notNull(),
     targetType: varchar("target_type", { length: 32 }).notNull(),
     targetId: varchar("target_id", { length: 255 }).notNull(),

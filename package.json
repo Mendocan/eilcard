@@ -5,6 +5,7 @@
     "dev": "pnpm --filter @digitalcard/web dev",
     "build": "pnpm --filter @digitalcard/web build",
     "build:sdk": "pnpm --filter @digitalcard/sdk build",
+    "build:cli": "pnpm --filter @digitalcard/cli build",
     "db:push": "pnpm --filter @digitalcard/web db:push",
     "db:studio": "pnpm --filter @digitalcard/web db:studio",
     "typecheck": "pnpm -r typecheck",

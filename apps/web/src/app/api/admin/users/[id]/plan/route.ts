@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { eq } from "drizzle-orm";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { logAdminAction } from "@/lib/admin-audit";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 import {
   getUserPlan,
   isValidPlanTier,
@@ -14,9 +14,8 @@ import {
 type Params = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, { params }: Params) {
-  if (!(await isAdminRequest(request))) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireAdminApi(request, "users.write");
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
 
@@ -47,16 +46,22 @@ export async function PATCH(request: Request, { params }: Params) {
     }
     await setUserPlanTier(id, body.tier);
     await logAdminAction("user.plan", "user", id, {
-      previous: previous.subscribedTier,
-      next: body.tier,
+      operatorId: session.operatorId,
+      details: {
+        previous: previous.subscribedTier,
+        next: body.tier,
+      },
     });
   }
 
   if (body.enterpriseAddon !== undefined) {
     await setUserEnterpriseAddon(id, body.enterpriseAddon);
     await logAdminAction("user.enterprise_addon", "user", id, {
-      previous: previous.enterpriseAddon,
-      next: body.enterpriseAddon,
+      operatorId: session.operatorId,
+      details: {
+        previous: previous.enterpriseAddon,
+        next: body.enterpriseAddon,
+      },
     });
   }
 

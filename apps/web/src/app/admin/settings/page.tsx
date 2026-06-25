@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { requireAdminSession } from "@/lib/admin-auth";
+import { requireAdminPage } from "@/lib/admin-auth";
+import { countAdminOperators } from "@/lib/admin-operators";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 import {
@@ -51,13 +52,14 @@ function ConfigRow({ label, value }: { label: string; value: string }) {
 }
 
 export default async function AdminSettingsPage() {
-  await requireAdminSession();
+  await requireAdminPage("/admin/settings");
   const locale = await getLocale();
   const a = t(locale).admin;
   const config = getPlatformConfig();
   const domain = new URL(config.appUrl).hostname;
   const recommended = getRecommendedContactAddresses(domain);
   const operator = await getPlatformOperatorStatus();
+  const operatorCount = await countAdminOperators();
 
   const operatorReady = operator.userFound && operator.isDesignated;
   const operatorStatusLabel = !operator.userFound
@@ -146,29 +148,32 @@ export default async function AdminSettingsPage() {
         <SettingsCard title={a.settingsSecurityTitle}>
           <p>{a.settingsSecurityBody}</p>
           <div className="flex items-center justify-between gap-4">
-            <span>{a.settingsAdminPassword}</span>
+            <span>{a.settingsAdminOperators}</span>
             <StatusBadge
-              ok={config.adminConfigured}
+              ok={operatorCount > 0}
               label={
-                config.adminConfigured
-                  ? a.settingsConfigured
+                operatorCount > 0
+                  ? a.settingsOperatorCount.replace("{n}", String(operatorCount))
                   : a.settingsNotConfigured
               }
             />
           </div>
-          <p className="text-xs">{a.settingsSecurityEnvHint}</p>
+          <p className="text-xs">{a.settingsSecurityOperatorsHint}</p>
         </SettingsCard>
 
         <SettingsCard title={a.settingsTeamTitle}>
           <p>{a.settingsTeamBody}</p>
           <ul className="list-inside list-disc space-y-2">
-            {a.settingsTeamPlanned.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
+            <li>{a.settingsTeamRoleEditor}</li>
+            <li>{a.settingsTeamRoleModerator}</li>
+            <li>{a.settingsTeamRoleAdmin}</li>
           </ul>
-          <p className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)]/40 px-4 py-3 text-xs">
-            {a.settingsTeamNote}
-          </p>
+          <Link
+            href="/admin/team"
+            className="inline-flex text-sm font-medium text-[var(--color-accent)] hover:opacity-80"
+          >
+            {a.team} →
+          </Link>
         </SettingsCard>
 
         <SettingsCard title={a.settingsPlatformTitle}>

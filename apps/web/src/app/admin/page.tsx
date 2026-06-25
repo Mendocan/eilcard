@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { requireAdminSession } from "@/lib/admin-auth";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { getAdminOverview } from "@/lib/admin-queries";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
+import { AdminPasswordForm } from "./admin-password-form";
 
 export default async function AdminOverviewPage() {
-  await requireAdminSession();
+  await requireAdminPage("/admin");
   const locale = await getLocale();
   const a = t(locale).admin;
   const stats = await getAdminOverview();
@@ -173,6 +174,13 @@ export default async function AdminOverviewPage() {
           </div>
         </section>
       </div>
+
+      <section className="mt-10 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 p-6">
+        <h3 className="text-base font-semibold">{a.teamPasswordTitle}</h3>
+        <div className="mt-4">
+          <AdminPasswordForm m={a} />
+        </div>
+      </section>
     </main>
   );
 }

@@ -75,6 +75,19 @@ importers:
         specifier: ^5.8.0
         version: 5.9.3
 
+  packages/cli:
+    dependencies:
+      '@digitalcard/sdk':
+        specifier: workspace:*
+        version: link:../sdk
+    devDependencies:
+      '@types/node':
+        specifier: ^22.19.21
+        version: 22.19.21
+      typescript:
+        specifier: ^5.8.0
+        version: 5.9.3
+
   packages/mcp:
     dependencies:
       '@modelcontextprotocol/sdk':

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { logAdminAction } from "@/lib/admin-audit";
 import { getCardByHandle } from "@/lib/card-service";
 import { closePendingVerifications } from "@/lib/domain-verification-queue";
@@ -10,9 +10,8 @@ import { eq } from "drizzle-orm";
 type Params = { params: Promise<{ handle: string }> };
 
 export async function PATCH(request: Request, { params }: Params) {
-  if (!(await isAdminRequest(request))) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireAdminApi(request, "cards.write");
+  if (session instanceof NextResponse) return session;
 
   const { handle } = await params;
   const card = await getCardByHandle(handle);
@@ -38,16 +37,18 @@ export async function PATCH(request: Request, { params }: Params) {
     body.verified ? "card.verify" : "card.revoke",
     "card",
     handle,
-    { previous: card.verified }
+    {
+      operatorId: session.operatorId,
+      details: { previous: card.verified },
+    }
   );
 
   return NextResponse.json({ ok: true, verified: body.verified });
 }
 
 export async function DELETE(request: Request, { params }: Params) {
-  if (!(await isAdminRequest(request))) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const session = await requireAdminApi(request, "cards.write");
+  if (session instanceof NextResponse) return session;
 
   const { handle } = await params;
   const card = await getCardByHandle(handle);
@@ -58,8 +59,11 @@ export async function DELETE(request: Request, { params }: Params) {
   await db.delete(cards).where(eq(cards.handle, handle));
 
   await logAdminAction("card.delete", "card", handle, {
-    domain: card.domain,
-    type: card.type,
+    operatorId: session.operatorId,
+    details: {
+      domain: card.domain,
+      type: card.type,
+    },
   });
 
   return NextResponse.json({ ok: true });

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { requireAdminSession } from "@/lib/admin-auth";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { listVerificationQueue } from "@/lib/admin-queries";
 import { verificationQueueStateLabel } from "@/lib/admin-labels";
 import { getLocale } from "@/lib/i18n/get-locale";
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default async function AdminVerificationPage({ searchParams }: Props) {
-  await requireAdminSession();
+  await requireAdminPage("/admin/verification");
   const locale = await getLocale();
   const a = t(locale).admin;
   const sp = await searchParams;

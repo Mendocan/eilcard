@@ -4,6 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Messages } from "@/lib/i18n/messages";
 import type { Locale } from "@/lib/i18n/types";
+import {
+  ADMIN_NAV_PERMISSIONS,
+  adminHasPermission,
+  type AdminRole,
+} from "@/lib/admin-rbac";
 import { BrandLogo } from "@/components/brand-logo";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { AdminSignOutButton } from "./admin-sign-out";
@@ -17,16 +22,24 @@ const NAV = [
   { href: "/admin/users", labelKey: "users" as const, exact: false },
   { href: "/admin/audit", labelKey: "auditLog" as const, exact: false },
   { href: "/admin/settings", labelKey: "settings" as const, exact: false },
+  { href: "/admin/team", labelKey: "team" as const, exact: false },
 ];
 
 type Props = {
   locale: Locale;
   m: Messages["admin"];
+  role: AdminRole | null;
   children: React.ReactNode;
 };
 
-export function AdminShell({ locale, m, children }: Props) {
+export function AdminShell({ locale, m, role, children }: Props) {
   const currentPath = usePathname();
+
+  const visibleNav = NAV.filter((item) => {
+    if (!role) return true;
+    const permission = ADMIN_NAV_PERMISSIONS[item.href];
+    return permission ? adminHasPermission(role, permission) : true;
+  });
 
   return (
     <div className="min-h-screen lg:flex">
@@ -48,7 +61,7 @@ export function AdminShell({ locale, m, children }: Props) {
         </div>
 
         <nav className="flex gap-1 overflow-x-auto px-4 pb-4 lg:flex-col lg:px-6 lg:pb-6">
-          {NAV.map((item) => {
+          {visibleNav.map((item) => {
             const active = item.exact
               ? currentPath === item.href
               : currentPath.startsWith(item.href);

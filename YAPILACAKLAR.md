@@ -19,8 +19,8 @@
 |---|-----|-------------|--------|
 | **1** | **Sinyalle pilot gateway — production** | read:* + revoke E2E canlı (`agent-gateway.eilcard.com`) | Sinyalle DNS taşıması + `write:`/`act:` (E3-C) |
 | **2** | **Resend işlem postası** | Kayıt doğrulama vardı | ~~forgot/reset + billing@~~ **tamamlandı** (deploy sonrası doğrula) |
-| **3** | **Rol tabanlı admin** | Tek `ADMIN_PASSWORD` ölçeklenmiyor | DB admin hesapları, editör/moderatör rolleri, davet akışı |
-| **4** | **EIL CLI** | Adoption tablosunda tek büyük boşluk | `eil-card init`, `verify`, `export well-known` (npm paketi veya `packages/cli`) |
+| **3** | **Rol tabanlı admin** | Tek `ADMIN_PASSWORD` ölçeklenmiyor | ~~DB admin hesapları, editör/moderatör rolleri, davet akışı~~ **tamamlandı** (bootstrap + deploy sonrası doğrula) |
+| **4** | **EIL CLI** | Adoption tablosunda tek büyük boşluk | ~~`eil-card init`, `verify`, `export well-known`~~ **tamamlandı** (`packages/cli`) |
 | **5** | **Branch protection** | Repo büyüdü; `main` doğrudan push riski | GitHub `main` için PR + review zorunluluğu |
 
 **Pilot gateway kalan kriterler** (`docs/pilot-gateway.md` §6): `write:`/`act:` consent, idempotent POST replay, token revoke → 401, platform audit log — **#1** tamamlandıktan sonra sırayla.
@@ -249,7 +249,7 @@ Entegrasyon rehberi (`/docs/agents`) — **yayında** (kısa vade maddeleri tama
 - [x] **Doğrulama sayacı düzeltmesi** — doğrulanmamış kart sayısı (kuyruk ile uyumlu)
 - [x] **Çift dil/çıkış butonu** — mobil üst / masaüstü sidebar tek konum
 - [x] **Ayarlar sayfası** (`/admin/settings`)
-- [ ] **Rol tabanlı admin** — editör, moderatör, admin; davet + DB hesapları
+- [x] **Rol tabanlı admin** — editör, moderatör, admin; davet + DB hesapları
 - [ ] **Admin şifre değiştirme UI** — `ADMIN_PASSWORD` yerine DB veya güvenli rotasyon (rol tabanlı admin ile birlikte)
 
 **Tamamlanan (referans):** `/pricing`, `/legal/terms`, `/legal/privacy`, `/legal/refund`, footer linkleri, kayıt Terms onayı, Polar org + ürünler, webhook, checkout/portal, dashboard billing — bkz. Faz 1–2.
@@ -291,7 +291,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 | Araç | Durum | Sıradaki |
 |------|--------|----------|
 | **LlamaIndex EILReader** | Yayında | — |
-| **EIL CLI** | Yok | **Sıradaki 5 iş #4** |
+| **EIL CLI** | `@digitalcard/cli` (`eil-card init`, `verify`, `export well-known`) | **#4 tamamlandı** |
 | **Playground** | Yayında | — |
 | **Kart demo** | Yayında | `/example` (statik; registry değil) |
 | **Entegrasyon rehberi** | Yayında | `/docs/agents` |

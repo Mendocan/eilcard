@@ -1,0 +1,35 @@
+{
+  "name": "@digitalcard/cli",
+  "version": "0.1.0",
+  "description": "EIL Card CLI — init local project, verify registry/DNS/well-known, export static well-known JSON",
+  "type": "module",
+  "bin": {
+    "eil-card": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["eil", "digital-card", "cli", "well-known", "registry"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mendocan/eilcard.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://eilcard.com",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@digitalcard/sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.21",
+    "typescript": "^5.8.0"
+  }
+}

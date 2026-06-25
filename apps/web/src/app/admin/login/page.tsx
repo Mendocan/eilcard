@@ -1,5 +1,10 @@
 import { redirect } from "next/navigation";
-import { getAdminSession, isAdminConfigured } from "@/lib/admin-auth";
+import {
+  getAdminSession,
+  isAdminBootstrapReady,
+  isAdminConfigured,
+} from "@/lib/admin-auth";
+import { countAdminOperators } from "@/lib/admin-operators";
 import { BrandLogo } from "@/components/brand-logo";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { getLocale } from "@/lib/i18n/get-locale";
@@ -13,6 +18,8 @@ export default async function AdminLoginPage() {
 
   const locale = await getLocale();
   const m = t(locale);
+  const operatorCount = await countAdminOperators();
+  const needsBootstrap = operatorCount === 0 && isAdminBootstrapReady();
 
   return (
     <main className="relative flex min-h-screen items-center justify-center px-4">
@@ -27,7 +34,11 @@ export default async function AdminLoginPage() {
             {m.admin.loginSubtitle}
           </p>
         </div>
-        <AdminLoginForm m={m.admin} configured={isAdminConfigured()} />
+        <AdminLoginForm
+          m={m.admin}
+          configured={await isAdminConfigured()}
+          needsBootstrap={needsBootstrap}
+        />
       </div>
     </main>
   );

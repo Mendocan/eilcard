@@ -27,17 +27,21 @@ export type PlatformConfig = {
   billingEmail: string | null;
   platformOperatorEmail: string;
   resendConfigured: boolean;
-  adminConfigured: boolean;
+  adminBootstrapReady: boolean;
 };
 
 export function getPlatformConfig(): PlatformConfig {
+  const adminPassword = process.env.ADMIN_PASSWORD?.trim();
+  const authSecret = process.env.BETTER_AUTH_SECRET?.trim();
   return {
     appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://eilcard.com",
     supportEmail: process.env.SUPPORT_EMAIL?.trim() || DEFAULT_SUPPORT_EMAIL,
     billingEmail: process.env.BILLING_EMAIL?.trim() || null,
     platformOperatorEmail: getPlatformOperatorEmail(),
     resendConfigured: Boolean(process.env.RESEND_API_KEY?.trim()),
-    adminConfigured: Boolean(process.env.ADMIN_PASSWORD?.trim()),
+    adminBootstrapReady: Boolean(
+      adminPassword && adminPassword.length >= 8 && authSecret
+    ),
   };
 }
 

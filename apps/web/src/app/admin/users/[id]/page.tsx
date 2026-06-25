@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { requireAdminSession } from "@/lib/admin-auth";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { cardTypeLabel, tierLabel } from "@/lib/admin-labels";
 import { getAdminUserDetail } from "@/lib/admin-queries";
 import { getLocale } from "@/lib/i18n/get-locale";
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default async function AdminUserDetailPage({ params }: Props) {
-  await requireAdminSession();
+  await requireAdminPage("/admin/users");
   const { id } = await params;
   const locale = await getLocale();
   const a = t(locale).admin;
