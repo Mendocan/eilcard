@@ -1,0 +1,27 @@
+---
+description: Git commit ve push birlikte yapılır; commit sonrası push atlanmaz
+alwaysApply: true
+---
+
+# Git — Commit + Push
+
+Kullanıcı **commit** istediğinde veya değişiklikleri kaydetmek için commit yapıldığında:
+
+## Zorunlu akış
+
+1. `git status`, `git diff`, `git log` ile durumu kontrol et
+2. İlgili dosyaları stage et ve commit oluştur
+3. **Hemen ardından** `git push` (takip edilen branch'e, genelde `origin main`)
+4. `git status` ile working tree temiz ve branch'in remote ile senkron olduğunu doğrula
+
+Commit ve push **tek iş akışı**dır; commit bitip push yapılmadan görev tamamlanmış sayılmaz.
+
+## İstisnalar
+
+- Kullanıcı açıkça **yalnızca commit, push yok** derse push atlanır
+- `push --force` / `main` force push — kullanıcı açıkça istemedikçe yapılmaz
+- Push başarısız olursa (auth, network, rejected): hatayı bildir; kullanıcıya retry veya düzeltme adımı öner; sessizce commit-only bırakma
+
+## Deploy
+
+Deploy ayrı adımdır. Kullanıcı **commit + deploy** veya **commit + push + deploy** dediğinde sıra: commit → push → deploy script.

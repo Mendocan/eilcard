@@ -17,5 +17,7 @@ is-plani.md
 faz.md
 pilot-sektor.md
 teknik-stack.md
-.cursor/
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
 schema/examples/organization.sinyalle.json
