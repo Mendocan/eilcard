@@ -1,30 +1,50 @@
 # EIL Card — Python agent examples
 
-Runnable templates for LangChain, LlamaIndex, and zero-dependency resolve.
+> **Prefer the installable SDK:** `pip install eil-card` — see [`packages/python/README.md`](../../python/README.md).
 
-| File | Purpose | Install |
-|------|---------|---------|
-| `resolve_eil_card.py` | Native resolve by domain or handle | `requests` |
-| `langchain_tool.py` | `@tool` for LangChain agents | `langchain-core`, `requests` |
+These files are legacy copy-paste templates; the packaged equivalents live in `eil_card.integrations`.
+
+| File | Packaged equivalent | Install |
+|------|---------------------|---------|
+| `resolve_eil_card.py` | `from eil_card import DigitalCard` | `pip install eil-card` |
+| `langchain_tool.py` | `eil_card.integrations.langchain.create_eil_resolve_tool` | `pip install eil-card[langchain]` |
 | `langchain_agent_loop.py` | Sample AgentExecutor loop | `langchain`, `langchain-openai`, … |
-| `eil_reader.py` | **LlamaIndex `EILReader`** data connector | `llama-index-core`, `requests` |
+| `eil_reader.py` | `eil_card.integrations.llamaindex.EILReader` | `pip install eil-card[llamaindex]` |
 | `eil_reader_demo.py` | Load documents + optional index | same as above |
 
-## LlamaIndex EILReader
+## Quick start (SDK)
 
 ```python
-from eil_reader import EILReader
-from llama_index.core import VectorStoreIndex
+from eil_card import DigitalCard, discover_capabilities
 
-reader = EILReader()
-docs = reader.load_data(domain="sinyalle.com", split_catalog=True)
-index = VectorStoreIndex.from_documents(docs)
+result = DigitalCard.resolve(domain="sinyalle.com")
+caps = discover_capabilities(result["card"])
 ```
 
-By handle:
+## LangChain
 
 ```python
-docs = reader.load_data(handle="sinyal24")
+from eil_card.integrations.langchain import create_eil_resolve_tool
+
+tool = create_eil_resolve_tool()
+```
+
+## CrewAI
+
+```python
+from eil_card.integrations.crewai import create_eil_resolve_crewai_tool
+
+tool = create_eil_resolve_crewai_tool()
+```
+
+## LlamaIndex
+
+```python
+from eil_card.integrations.llamaindex import EILReader
+from llama_index.core import VectorStoreIndex
+
+docs = EILReader().load_data(domain="sinyalle.com", split_catalog=True)
+index = VectorStoreIndex.from_documents(docs)
 ```
 
 See https://eilcard.com/docs/agents
