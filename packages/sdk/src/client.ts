@@ -1,11 +1,14 @@
 import {
   CardNotFoundError,
   InvalidResolveInputError,
+  JwsVerificationError,
   RegistryError,
 } from './errors.js';
+import { verifyRegistryJws } from './jws.js';
 import type {
   Card,
   DigitalCardClientOptions,
+  JwsVerifyClientOption,
   ResolveInput,
   ResolveMeta,
   ResolveResult,
@@ -21,6 +24,7 @@ export class DigitalCardClient {
   private readonly apiKey?: string;
   private readonly timeout: number;
   private readonly skipWellKnownFallback: boolean;
+  private readonly verifyJws?: JwsVerifyClientOption;
   private readonly fetchFn: typeof fetch;
 
   constructor(options: DigitalCardClientOptions = {}) {
@@ -28,6 +32,7 @@ export class DigitalCardClient {
     this.apiKey = options.apiKey;
     this.timeout = options.timeout ?? DEFAULT_TIMEOUT;
     this.skipWellKnownFallback = options.skipWellKnownFallback ?? false;
+    this.verifyJws = options.verifyJws;
     this.fetchFn = options.fetch ?? globalThis.fetch.bind(globalThis);
   }
 
@@ -36,11 +41,29 @@ export class DigitalCardClient {
       throw new InvalidResolveInputError();
     }
 
-    if (input.handle) {
-      return this.resolveByHandle(input.handle);
+    const result = input.handle
+      ? await this.resolveByHandle(input.handle)
+      : await this.resolveByDomain(input.domain!);
+
+    return this.attachTrust(result);
+  }
+
+  private async attachTrust(result: ResolveResult): Promise<ResolveResult> {
+    if (!this.verifyJws) return result;
+
+    const opts = typeof this.verifyJws === 'object' ? this.verifyJws : {};
+    const jws = await verifyRegistryJws(result.card, {
+      publicKeyPem: opts.publicKeyPem,
+    });
+
+    if (opts.requireValid && !jws.ok) {
+      throw new JwsVerificationError(jws.message);
     }
 
-    return this.resolveByDomain(input.domain!);
+    return {
+      ...result,
+      trust: { jws },
+    };
   }
 
   private async resolveByHandle(handle: string): Promise<ResolveResult> {

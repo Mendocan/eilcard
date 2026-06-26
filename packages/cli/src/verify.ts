@@ -143,7 +143,7 @@ export async function runVerify(options: VerifyOptions = {}): Promise<VerifyRepo
       }
     }
     if (card) {
-      const jws = verifyRegistryJws(card, options.publicKeyPem);
+      const jws = await verifyRegistryJws(card, options.publicKeyPem);
       checks.push({
         name: "jws",
         ok: jws.ok,

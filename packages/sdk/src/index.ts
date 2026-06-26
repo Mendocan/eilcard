@@ -37,9 +37,15 @@ export {
   CardNotFoundError,
   DigitalCardError,
   InvalidResolveInputError,
+  JwsVerificationError,
   RegistryError,
   SchemaValidationError,
 } from './errors.js';
+export {
+  canonicalCardWithoutSignatures,
+  verifyRegistryJws,
+} from './jws.js';
+export type { JwsVerifyOptions, JwsVerifyResult } from './jws.js';
 export type {
   ActionType,
   Apps,
@@ -52,6 +58,7 @@ export type {
   Contact,
   Description,
   DigitalCardClientOptions,
+  JwsVerifyClientOption,
   Legal,
   LegalType,
   OrganizationCard,

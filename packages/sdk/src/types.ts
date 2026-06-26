@@ -178,6 +178,10 @@ export interface ResolveMeta {
 export interface ResolveResult {
   card: Card;
   meta: ResolveMeta;
+  /** Present when verifyJws is enabled on the client */
+  trust?: {
+    jws: import('./jws.js').JwsVerifyResult;
+  };
 }
 
 export interface ResolveInput {
@@ -186,6 +190,15 @@ export interface ResolveInput {
   /** Registry handle — e.g. sinyalle */
   handle?: string;
 }
+
+export type JwsVerifyClientOption =
+  | boolean
+  | {
+      /** PEM-encoded registry public key */
+      publicKeyPem?: string;
+      /** Throw when JWS verify fails */
+      requireValid?: boolean;
+    };
 
 export interface DigitalCardClientOptions {
   /** Registry API base — default https://api.digitalcard.tr */
@@ -198,4 +211,6 @@ export interface DigitalCardClientOptions {
   skipWellKnownFallback?: boolean;
   /** Custom fetch implementation (Node, edge, test mocks) */
   fetch?: typeof fetch;
+  /** After resolve, verify signatures.registry.jws (payload or crypto with publicKeyPem) */
+  verifyJws?: JwsVerifyClientOption;
 }

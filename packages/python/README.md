@@ -63,6 +63,21 @@ from eil_card.integrations.llamaindex import EILReader
 docs = EILReader().load_data(domain="sinyalle.com")
 ```
 
+## JWS trust (Registry+)
+
+```python
+from eil_card import DigitalCard
+
+result = DigitalCard.resolve(domain="sinyalle.com", verify_jws=True)
+print(result.get("trust", {}).get("jws"))
+
+# Crypto verify: pip install eil-card[crypto]
+result = DigitalCard.resolve(
+    domain="sinyalle.com",
+    verify_jws={"public_key_pem": open("registry-public.pem").read(), "require_valid": True},
+)
+```
+
 ## Agent act headers (pilot gateway)
 
 ```python
