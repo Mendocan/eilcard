@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Literal, TypedDict
+from typing import Any, Literal, NotRequired, TypedDict
 
 SCHEMA_VERSION = "1.2"
 
@@ -18,6 +18,7 @@ class ResolveMeta(TypedDict, total=False):
 class ResolveResult(TypedDict):
     card: dict[str, Any]
     meta: ResolveMeta
+    trust: NotRequired[dict[str, Any]]
 
 
 class DiscoveredCapabilities(TypedDict, total=False):

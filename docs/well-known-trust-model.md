@@ -82,9 +82,34 @@ DNSSEC, resolver'ların DNS yanıtlarının değiştirilmediğini kriptografik o
 1. `DigitalCard.resolve({ domain })` ile registry authoritative yanıtı al.
 2. `verified === true` ve `card_id === domain` kontrol et.
 3. İsteğe bağlı: `https://{domain}/.well-known/digital-card` fetch et; `checkDomainWellKnown` mantığıyla uyum doğrula.
-4. DNSSEC doğrulaması platforma özgüdür (Node `dns.resolve` DNSSEC bitini taşımaz); yüksek güven gereken kurulumlarda harici DNSSEC validator veya enterprise resolver kullanın.
+4. İsteğe bağlı: Registry+ kartlarda `signatures.registry.jws` doğrula — SDK/CLI ile otomatik:
 
-EIL Card şu an DNSSEC'i zorunlu kılmaz; Registry+ **JWS imza** katmanı registry export'u için ek kanıt sağlar (`verify-registry-jws.mjs`).
+```typescript
+import { DigitalCard } from '@digitalcard/sdk';
+
+const { card, trust } = await DigitalCard.resolve(
+  { domain: 'sinyalle.com' },
+  { verifyJws: { publicKeyPem: REGISTRY_PUBLIC_PEM, requireValid: true } }
+);
+console.log(trust?.jws.ok, trust?.jws.message);
+```
+
+```python
+from eil_card import DigitalCard
+
+result = DigitalCard.resolve(domain="sinyalle.com", verify_jws={"public_key_pem": pem, "require_valid": True})
+print(result["trust"]["jws"]["ok"])
+```
+
+```bash
+eil-card verify --domain sinyalle.com --jws --public-key-pem ./registry-public.pem
+```
+
+Payload-only check (PEM olmadan): `verifyJws: true` — imzalı payload ile public kart JSON'unun eşleşmesini kontrol eder; kriptografik doğrulama için registry public key gerekir.
+
+5. DNSSEC doğrulaması platforma özgüdür (Node `dns.resolve` DNSSEC bitini taşımaz); yüksek güven gereken kurulumlarda harici DNSSEC validator veya enterprise resolver kullanın.
+
+EIL Card şu an DNSSEC'i zorunlu kılmaz; Registry+ **JWS imza** katmanı registry export'u için ek kanıt sağlar (`verifyRegistryJws` — TS/Python SDK ve `eil-card verify --jws`).
 
 ---
 

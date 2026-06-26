@@ -31,7 +31,7 @@ Gemini yeniden değerlendirmesi (2026-06-25) + mevcut boşluklar. Öncelik sıra
 |---|-----|--------|--------|
 | **A** | **Pilot gateway `write:`/`act:`** | E3-C spec hazır; canlı consent + idempotent act yok | ✅ **Tamamlandı** (2026-06-26) — production E2E ALL PASSED |
 | **B** | **Python SDK (`pip install`)** | Agent ekosistemi Python ağırlıklı; örnekler var, paket yok | ✅ `packages/python` (`eil-card` 0.1.0) — **PyPI publish** kaldı |
-| **C** | **Resolve + trust zinciri** | JWS alanı var; agent otomatik doğrulamıyor | SDK/CLI: `resolve()` sonrası opsiyonel JWS verify; `docs/well-known-trust-model.md` güncelle |
+| **C** | **Resolve + trust zinciri** | JWS alanı var; agent otomatik doğrulamıyor | ✅ SDK/CLI/Python `verifyJws` — PyPI 0.1.1 publish kaldı |
 | **D** | **Identity state (well-known policy)** | “Robots.txt for agents” — anlık izin/engel durumu | Spec taslağı: `permissions` veya `access_policy` + dashboard → well-known sync |
 | **E** | **40–50 kart adoption** | Bottom-up: bağımsız agent dev’leri önce | Outreach, `/docs/agents`, CLI, pilot hikâyesi; metrik: kayıtlı + verified kart |
 

@@ -28,3 +28,12 @@ class RegistryError(DigitalCardError):
 
 class SchemaValidationError(DigitalCardError):
     pass
+
+
+class SchemaValidationError(DigitalCardError):
+    pass
+
+
+class JwsVerificationError(DigitalCardError):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)

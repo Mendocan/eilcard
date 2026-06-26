@@ -6,7 +6,13 @@ from typing import Any
 
 import requests
 
-from eil_card.errors import CardNotFoundError, InvalidResolveInputError, RegistryError
+from eil_card.errors import (
+    CardNotFoundError,
+    InvalidResolveInputError,
+    JwsVerificationError,
+    RegistryError,
+)
+from eil_card.jws import verify_registry_jws
 from eil_card.types import ResolveResult
 
 DEFAULT_REGISTRY = "https://eilcard.com"
@@ -31,12 +37,14 @@ class DigitalCardClient:
         api_key: str | None = None,
         timeout: float = DEFAULT_TIMEOUT,
         skip_well_known_fallback: bool = False,
+        verify_jws: bool | dict[str, Any] = False,
         session: requests.Session | None = None,
     ) -> None:
         self.registry_base_url = registry_base_url.rstrip("/")
         self.api_key = api_key
         self.timeout = timeout
         self.skip_well_known_fallback = skip_well_known_fallback
+        self.verify_jws = verify_jws
         self.session = session or requests.Session()
 
     def resolve(
@@ -48,9 +56,26 @@ class DigitalCardClient:
         if bool(domain) == bool(handle):
             raise InvalidResolveInputError()
 
-        if handle:
-            return self._resolve_by_handle(handle.strip())
-        return self._resolve_by_domain(domain or "")
+        result = (
+            self._resolve_by_handle(handle.strip())
+            if handle
+            else self._resolve_by_domain(domain or "")
+        )
+        return self._attach_trust(result)
+
+    def _attach_trust(self, result: ResolveResult) -> ResolveResult:
+        if not self.verify_jws:
+            return result
+
+        opts = self.verify_jws if isinstance(self.verify_jws, dict) else {}
+        jws = verify_registry_jws(
+            result["card"],
+            public_key_pem=opts.get("public_key_pem"),
+        )
+        if opts.get("require_valid") and not jws.get("ok"):
+            raise JwsVerificationError(jws.get("message", "JWS verification failed"))
+
+        return {**result, "trust": {"jws": jws}}
 
     def _resolve_by_handle(self, handle: str) -> ResolveResult:
         url = f"{self.registry_base_url}{API_PREFIX}/cards/{handle}"
@@ -152,12 +177,14 @@ class DigitalCard:
         api_key: str | None = None,
         timeout: float = DEFAULT_TIMEOUT,
         skip_well_known_fallback: bool = False,
+        verify_jws: bool | dict[str, Any] = False,
     ) -> ResolveResult:
         client = DigitalCardClient(
             registry_base_url=registry_base_url,
             api_key=api_key,
             timeout=timeout,
             skip_well_known_fallback=skip_well_known_fallback,
+            verify_jws=verify_jws,
         )
         return client.resolve(domain=domain, handle=handle)
 

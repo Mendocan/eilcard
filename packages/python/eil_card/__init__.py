@@ -19,9 +19,11 @@ from eil_card.errors import (
     CardNotFoundError,
     DigitalCardError,
     InvalidResolveInputError,
+    JwsVerificationError,
     RegistryError,
     SchemaValidationError,
 )
+from eil_card.jws import canonical_card_without_signatures, verify_registry_jws
 from eil_card.tool_schema import (
     EIL_RESOLVE_TOOL_DESCRIPTION,
     EIL_RESOLVE_TOOL_NAME,
@@ -52,8 +54,11 @@ __all__ = [
     "DigitalCardError",
     "CardNotFoundError",
     "InvalidResolveInputError",
+    "JwsVerificationError",
     "RegistryError",
     "SchemaValidationError",
+    "canonical_card_without_signatures",
+    "verify_registry_jws",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"

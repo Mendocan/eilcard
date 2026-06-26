@@ -41,3 +41,10 @@ export class SchemaValidationError extends DigitalCardError {
     this.name = 'SchemaValidationError';
   }
 }
+
+export class JwsVerificationError extends DigitalCardError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'JwsVerificationError';
+  }
+}
