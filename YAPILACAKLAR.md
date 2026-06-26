@@ -29,22 +29,22 @@ Gemini yeniden değerlendirmesi (2026-06-25) + mevcut boşluklar. Öncelik sıra
 
 | # | İş | Neden | Çıktı |
 |---|-----|--------|--------|
-| **A** | **Pilot gateway `write:`/`act:`** | E3-C spec hazır; canlı consent + idempotent act yok | ~~Sinyalle production E2E~~ **kod tamam** — merge + deploy + seed |
-| **B** | **Python SDK (`pip install`)** | Agent ekosistemi Python ağırlıklı; örnekler var, paket yok | PyPI `eil-card` veya `@digitalcard` eşdeğeri; LangChain/CrewAI entrypoint |
+| **A** | **Pilot gateway `write:`/`act:`** | E3-C spec hazır; canlı consent + idempotent act yok | ✅ **Tamamlandı** (2026-06-26) — production E2E ALL PASSED |
+| **B** | **Python SDK (`pip install`)** | Agent ekosistemi Python ağırlıklı; örnekler var, paket yok | ✅ `packages/python` (`eil-card` 0.1.0) — **PyPI publish** kaldı |
 | **C** | **Resolve + trust zinciri** | JWS alanı var; agent otomatik doğrulamıyor | SDK/CLI: `resolve()` sonrası opsiyonel JWS verify; `docs/well-known-trust-model.md` güncelle |
 | **D** | **Identity state (well-known policy)** | “Robots.txt for agents” — anlık izin/engel durumu | Spec taslağı: `permissions` veya `access_policy` + dashboard → well-known sync |
 | **E** | **40–50 kart adoption** | Bottom-up: bağımsız agent dev’leri önce | Outreach, `/docs/agents`, CLI, pilot hikâyesi; metrik: kayıtlı + verified kart |
 
-**Pilot gateway kalan kriterler** (`docs/pilot-gateway.md` §6): `write:`/`act:` consent, idempotent POST replay, token revoke → 401, platform audit log.
+**Pilot gateway kriterleri** (`docs/pilot-gateway.md` §6): ✅ tamamlandı (2026-06-26).
 
 ### Gemini değerlendirmesi — eşleme
 
 | Gemini önerisi | Bizde durum | Sıradaki adım |
 |----------------|-------------|----------------|
 | DevX: `DigitalCard.resolve()` cognitive load düşük | ✅ TS SDK + MCP + CLI + `/docs/agents` | **B** Python paket |
-| Python `pip install` — LangChain/CrewAI | Örnekler var (`packages/sdk/examples/python/`), PyPI yok | **B** |
+| Python `pip install` — LangChain/CrewAI | ✅ `packages/python` + integrations | PyPI publish |
 | Discovery stack (Registry → well-known → DNS) | ✅ Canlı + trust model dokümanı | **C** otomatik JWS verify |
-| `capabilities` / yetkilendirme | ✅ Şema v1.2 + E3 Access/Act spec + pilot gateway | **A** production act |
+| `capabilities` / yetkilendirme | ✅ Şema v1.2 + E3 Access/Act spec + pilot gateway | ✅ **A** production act |
 | `verified` arkasında dijital imza | ✅ `signatures.registry` (JWS) Registry+ | **C** agent tarafı doğrulama |
 | Well-known = “State of Identity” (agent policy) | Kısmen: static kart JSON; dinamik policy yok | **D** spec + tasarım |
 | 1000 indie dev → sonra büyük platformlar | Strateji ile uyumlu (`strateji-agent-cagi.md`) | **E** adoption metrikleri |
@@ -320,8 +320,8 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 | **Kart demo** | Yayında | `/example` (statik; registry değil) |
 | **Entegrasyon rehberi** | Yayında | `/docs/agents` |
 | **Whitepaper** | Yayında | `/insights/eil-whitepaper` EN/TR |
-| **Pilot gateway (production)** | read:* + revoke canlı | **A** — `write:`/`act:` |
-| **Python SDK (PyPI)** | Örnek kod var | **B** — `pip install` |
+| **Pilot gateway (production)** | read:* + write/act + revoke canlı | ✅ **A** tamam |
+| **Python SDK (PyPI)** | Paket hazır (`packages/python`) | PyPI `pip install eil-card` |
 
 ---
 
@@ -333,7 +333,8 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 ### Standart ve ekosistem
 
-- [ ] **Python SDK PyPI** — `pip install eil-card`; LangChain/CrewAI birinci sınıf (**Sıradaki dönem B**)
+- [x] **Python SDK paketi** — `packages/python`, LangChain/CrewAI/LlamaIndex (`eil-card` 0.1.0)
+- [ ] **Python SDK PyPI publish** — `twine upload` + `pip install eil-card` (**B** kalan)
 - [ ] **Identity state / agent access policy** — dinamik well-known policy spec (**Sıradaki dönem D**)
 - [ ] IANA `/.well-known/digital-card` kaydı
 - [ ] Federated registry / mesh değerlendirmesi (taslak: `docs/registry-plus.md`)

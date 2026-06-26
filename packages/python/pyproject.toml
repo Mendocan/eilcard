@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eil-card"
+version = "0.1.0"
+description = "EIL Card Python SDK — resolve verified entity identity for AI agents"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "EIL Card" }]
+keywords = ["eil", "digital-card", "entity-identity", "agents", "langchain", "crewai"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+  "requests>=2.31",
+]
+
+[project.optional-dependencies]
+langchain = ["langchain-core>=0.3"]
+llamaindex = ["llama-index-core>=0.11"]
+crewai = ["crewai>=0.80"]
+dev = ["pytest>=8", "responses>=0.25"]
+all = ["eil-card[langchain,llamaindex,crewai]"]
+
+[project.urls]
+Homepage = "https://eilcard.com"
+Documentation = "https://eilcard.com/docs/agents"
+Repository = "https://github.com/Mendocan/eilcard"
+Issues = "https://github.com/Mendocan/eilcard/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["eil_card"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
