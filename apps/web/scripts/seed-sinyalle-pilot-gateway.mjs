@@ -1,5 +1,5 @@
 /**
- * Configure @sinyal24 for E3-B pilot: Registry+ edition + capabilities.agent_gateway.
+ * Configure @sinyal24 for E3-B/C pilot: Registry+ edition + capabilities.agent_gateway.
  *
  * Prerequisites:
  *   - Card handle sinyal24 exists (Sinyalle pilot account)
@@ -21,7 +21,25 @@ const GATEWAY_URL = (
 const CAPABILITIES = {
   agent_gateway: GATEWAY_URL,
   auth: "oauth2",
-  scopes: ["read:profile", "read:orders"],
+  scopes: ["read:profile", "read:orders", "write:post", "act:comment"],
+  actions: [
+    {
+      id: "create_post",
+      label: "Create blog post",
+      method: "POST",
+      path: "/v1/posts",
+      scopes: ["write:post"],
+      idempotent: true,
+    },
+    {
+      id: "add_comment",
+      label: "Add comment",
+      method: "POST",
+      path: "/v1/act/comment",
+      scopes: ["act:comment"],
+      idempotent: true,
+    },
+  ],
 };
 
 const connectionString = process.env.DATABASE_URL;
@@ -81,6 +99,7 @@ try {
 
   console.log(`[seed-sinyalle-pilot-gateway] @${HANDLE} → registry_plus / schema 1.2`);
   console.log(`[seed-sinyalle-pilot-gateway] capabilities.agent_gateway = ${GATEWAY_URL}`);
+  console.log(`[seed-sinyalle-pilot-gateway] scopes: ${CAPABILITIES.scopes.join(", ")}`);
   console.log(`[seed-sinyalle-pilot-gateway] User plan → pro + enterprise_addon`);
   console.log(
     "[seed-sinyalle-pilot-gateway] Verify: curl -s " +
