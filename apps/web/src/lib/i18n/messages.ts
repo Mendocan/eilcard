@@ -79,6 +79,7 @@ const en = {
       "EIL (Entity Identity Layer) standardizes who an organization or person is - domain-bound, machine-readable, and authoritative. Agents call resolve() to read canonical JSON in milliseconds, without scraping HTML or guessing from search snippets. It is not a payment card or user login. It is infrastructure for the agent web.",
     ctaPrimary: "Create your card",
     ctaSecondary: "View on GitHub",
+    ctaAgents: "Agent integration guide",
   },
   pillars: {
     title: "Infrastructure, not another card product",
@@ -433,7 +434,20 @@ const en = {
       "Use in Gemini API tools or paste the prompt below in AI Mode for a grounded test.",
     geminiPromptTitle: "Gemini AI Mode prompt (copy-paste)",
     adoptionOutro:
-      "These templates include the @tool decorators and structured dependency patterns the global AI developer community expects - fork the repo, npm install @digitalcard/sdk, and wire verify_entity_identity into your agent in minutes.",
+      "Fork the repo, wire verify_entity_identity into your stack, then publish a verified card so agents trust your domain — not a search snippet.",
+    adoptionFunnelTitle: "Start building (3 steps)",
+    adoptionStep1Title: "Install the SDK",
+    adoptionStep1Body:
+      "npm install @digitalcard/sdk or pip install eil-card (v0.2+). LangChain, CrewAI, LlamaIndex, MCP, and CLI supported.",
+    adoptionStep2Title: "Resolve the live pilot",
+    adoptionStep2Body:
+      "Open the playground with sinyalle.com — a Registry+ card with capabilities, access_policy, and a production agent gateway.",
+    adoptionStep3Title: "Publish your entity",
+    adoptionStep3Body:
+      "Create a free card, add DNS TXT verification, and expose verified: true to every agent that resolves your domain.",
+    adoptionCtaPlayground: "Try playground",
+    adoptionCtaRegister: "Create your card",
+    adoptionCtaPilotResolve: "View pilot JSON",
     copy: "Copy code",
     copied: "Copied",
     backDocs: "← API documentation",
@@ -1058,6 +1072,7 @@ const tr: Messages = {
       "EIL (Varlık Kimlik Katmanı), bir kurumun veya kişinin kim olduğunu standartlaştırır; alan adına bağlı, makine tarafından okunabilir ve güvenilirdir. Agent'lar, HTML sayfalarını taramak veya arama sonuçlarından tahmin yürütmek zorunda kalmadan, resolve() fonksiyonunu kullanarak milisaniyeler içinde kanonik JSON verisini okuyabilirler. Bu bir ödeme kartı veya kullanıcı girişi değildir; Agent web'i için bir altyapıdır.",
     ctaPrimary: "Kartınızı oluşturun",
     ctaSecondary: "GitHub'da görün",
+    ctaAgents: "Agent entegrasyon rehberi",
   },
   pillars: {
     title: "Altyapı katmanı - bir kart ürünü değil",
@@ -1412,7 +1427,20 @@ const tr: Messages = {
       "Gemini API tools içinde kullanın veya AI Modu'nda test için alttaki prompt'u yapıştırın.",
     geminiPromptTitle: "Gemini AI Modu prompt'u (kopyala-yapıştır)",
     adoptionOutro:
-      "Bu şablonlar küresel AI geliştirici topluluğunun aradığı @tool dekoratörleri ve yapılandırılmış bağımlılık şemalarını içerir - repoyu fork edin, npm install @digitalcard/sdk yapın ve verify_entity_identity aracını dakikalar içinde agent'ınıza bağlayın.",
+      "Repoyu fork edin, verify_entity_identity aracını yığınınıza bağlayın, ardından agent'ların arama snippet'i değil domain'inize güvenmesi için verified kart yayınlayın.",
+    adoptionFunnelTitle: "Başlangıç (3 adım)",
+    adoptionStep1Title: "SDK kurulumu",
+    adoptionStep1Body:
+      "npm install @digitalcard/sdk veya pip install eil-card (v0.2+). LangChain, CrewAI, LlamaIndex, MCP ve CLI desteklenir.",
+    adoptionStep2Title: "Canlı pilot resolve",
+    adoptionStep2Body:
+      "Playground'da sinyalle.com deneyin — capabilities, access_policy ve production agent gateway içeren Registry+ kart.",
+    adoptionStep3Title: "Varlığınızı yayınlayın",
+    adoptionStep3Body:
+      "Ücretsiz kart oluşturun, DNS TXT doğrulaması yapın; domain'inizi resolve eden her agent verified: true görsün.",
+    adoptionCtaPlayground: "Playground'u dene",
+    adoptionCtaRegister: "Kart oluştur",
+    adoptionCtaPilotResolve: "Pilot JSON",
     copy: "Kodu kopyala",
     copied: "Kopyalandı",
     backDocs: "← API dokümantasyonu",
