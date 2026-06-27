@@ -19,6 +19,17 @@ export type { SchemaOrgDocument } from './bridges.js';
 export { discoverCapabilities } from './capabilities.js';
 export type { DiscoveredCapabilities } from './capabilities.js';
 export {
+  discoverAccessPolicy,
+  isInteractionAllowed,
+  isInteractionDenied,
+  isTrainingDenied,
+  isGatewayOperational,
+} from './access-policy.js';
+export type {
+  AccessInteractionKind,
+  DiscoveredAccessPolicy,
+} from './access-policy.js';
+export {
   parseCapabilityScopes,
   discoverActCapabilities,
   buildIdempotencyKey,
@@ -57,6 +68,10 @@ export type {
   CardType,
   Contact,
   Description,
+  AccessPolicy,
+  AccessPolicyStance,
+  AccessPolicyState,
+  AccessPolicyTraining,
   DigitalCardClientOptions,
   JwsVerifyClientOption,
   Legal,

@@ -15,6 +15,7 @@ export const API_ERROR_CODES = {
   OFFERING_LIMIT: "offering_limit",
   SIGNATURES_NOT_ALLOWED: "signatures_not_allowed",
   CAPABILITIES_NOT_ALLOWED: "capabilities_not_allowed",
+  ACCESS_POLICY_NOT_ALLOWED: "access_policy_not_allowed",
   ENTERPRISE_ADDON_REQUIRED: "enterprise_addon_required",
 } as const;
 

@@ -47,6 +47,8 @@ export function mapDashboardApiError(
       return m.apiSignaturesNotAllowed;
     case "capabilities_not_allowed":
       return m.apiCapabilitiesNotAllowed;
+    case "access_policy_not_allowed":
+      return m.apiAccessPolicyNotAllowed;
     case "enterprise_addon_required":
       return m.apiEnterpriseAddonRequired;
     case "reserved_platform":

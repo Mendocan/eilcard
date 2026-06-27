@@ -34,6 +34,10 @@ export {
   capabilitiesSchema,
   capabilityActionMethodEnum,
   capabilityActionSchema,
+  accessPolicyStanceEnum,
+  accessPolicyTrainingEnum,
+  accessPolicyStateEnum,
+  accessPolicySchema,
 } from "./card";
 
 export type {
@@ -65,4 +69,8 @@ export type {
   Capabilities,
   CapabilityActionMethod,
   CapabilityAction,
+  AccessPolicyStance,
+  AccessPolicyTraining,
+  AccessPolicyState,
+  AccessPolicy,
 } from "./card";

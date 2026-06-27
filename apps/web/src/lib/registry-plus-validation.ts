@@ -5,14 +5,19 @@ export function isRegistryPlusEdition(edition: CardEdition): boolean {
 }
 
 export function patchHasRegistryPlusFields(patch: Record<string, unknown>): boolean {
-  return "signatures" in patch || "capabilities" in patch;
+  return (
+    "signatures" in patch || "capabilities" in patch || "access_policy" in patch
+  );
 }
 
 export type RegistryPlusFieldValidation =
   | { allowed: true }
   | {
       allowed: false;
-      reason: "signatures_not_allowed" | "capabilities_not_allowed";
+      reason:
+        | "signatures_not_allowed"
+        | "capabilities_not_allowed"
+        | "access_policy_not_allowed";
       edition: CardEdition;
     };
 
@@ -36,5 +41,22 @@ export function validateRegistryPlusFieldsForEdition(
     };
   }
 
+  if ("access_policy" in patch && !isRegistryPlusEdition(edition)) {
+    return {
+      allowed: false,
+      reason: "access_policy_not_allowed",
+      edition,
+    };
+  }
+
   return { allowed: true };
 }
+
+export const REGISTRY_PLUS_FIELD_ERRORS: Record<
+  Extract<RegistryPlusFieldValidation, { allowed: false }>["reason"],
+  string
+> = {
+  signatures_not_allowed: "JWS signatures require Registry+ edition",
+  capabilities_not_allowed: "Capabilities require Registry+ edition",
+  access_policy_not_allowed: "Access policy requires Registry+ edition",
+};

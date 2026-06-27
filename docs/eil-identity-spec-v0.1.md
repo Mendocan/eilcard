@@ -127,9 +127,9 @@ Registry+ cards MAY include:
 | `scopes` | Declared scope strings (max 20) — `read:`, `write:`, `act:` prefixes |
 | `actions` | Optional mutating operation manifest (E3-C) |
 
-**v0.1:** Field is accepted by API and exported on Registry+ public JSON. Read semantics: **EIL Access Spec** (E3-B). Write/act: **EIL Act Spec** (E3-C).
+**v0.1:** Field is accepted by API and exported on Registry+ public JSON. Read semantics: **EIL Access Spec** (E3-B). Write/act: **EIL Act Spec** (E3-C). Dynamic agent stance / state: **EIL Access Policy Spec** (`access_policy`).
 
-Core and Business editions MUST NOT send `capabilities`; public export strips the field.
+Core and Business editions MUST NOT send `capabilities` or `access_policy`; public export strips these fields.
 
 ---
 
@@ -159,6 +159,7 @@ Human card pages embed the same JSON-LD for crawlers and agents.
 | Card JSON schema | `schema/SCHEMA.md` |
 | Registry+ edition | `docs/registry-plus.md` |
 | **Access Spec (authorized read)** | `docs/eil-access-spec-v0.1.md` |
+| **Access Policy Spec (agent stance/state)** | `docs/eil-access-policy-spec-v0.1.md` |
 | Agent strategy | `docs/strateji-agent-cagi.md` |
 | MCP package | `packages/mcp/README.md` |
 | SDK | `packages/sdk/SDK.md` |

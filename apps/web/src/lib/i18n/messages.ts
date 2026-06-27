@@ -615,6 +615,8 @@ const en = {
       "JWS signatures require Registry+ edition. Upgrade the card edition first.",
     apiCapabilitiesNotAllowed:
       "Capabilities require Registry+ edition. Upgrade the card edition first.",
+    apiAccessPolicyNotAllowed:
+      "Access policy requires Registry+ edition. Upgrade the card edition first.",
     apiEnterpriseAddonRequired:
       "Registry+ edition requires a Pro plan and enterprise add-on. Contact support.",
     apiRegistryCardIdTaken: "This registry card ID is already in use.",
@@ -1566,6 +1568,8 @@ const tr: Messages = {
       "JWS imzaları Registry+ edition gerektirir. Önce kart edition'ını yükseltin.",
     apiCapabilitiesNotAllowed:
       "Capabilities alanı Registry+ edition gerektirir. Önce kart edition'ını yükseltin.",
+    apiAccessPolicyNotAllowed:
+      "Access policy alanı Registry+ edition gerektirir. Önce kart edition'ını yükseltin.",
     apiEnterpriseAddonRequired:
       "Registry+ edition için Pro plan ve enterprise eklenti gerekir. Destek ile iletişime geçin.",
     apiRegistryCardIdTaken: "Bu registry kart kimliği zaten kullanımda.",

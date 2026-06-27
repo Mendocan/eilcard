@@ -13,6 +13,13 @@ from eil_card.agent_tool import (
     invoke_eil_resolve,
     invoke_eil_resolve_async,
 )
+from eil_card.access_policy import (
+    discover_access_policy,
+    is_gateway_operational,
+    is_interaction_allowed,
+    is_interaction_denied,
+    is_training_denied,
+)
 from eil_card.capabilities import discover_capabilities
 from eil_card.client import DigitalCard, DigitalCardClient, normalize_domain
 from eil_card.errors import (
@@ -39,6 +46,11 @@ __all__ = [
     "normalize_domain",
     "discover_capabilities",
     "discover_act_capabilities",
+    "discover_access_policy",
+    "is_interaction_allowed",
+    "is_interaction_denied",
+    "is_training_denied",
+    "is_gateway_operational",
     "parse_capability_scopes",
     "build_idempotency_key",
     "build_agent_act_headers",
@@ -61,4 +73,4 @@ __all__ = [
     "verify_registry_jws",
 ]
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
