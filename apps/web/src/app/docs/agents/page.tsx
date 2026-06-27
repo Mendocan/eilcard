@@ -111,6 +111,39 @@ export default async function DocsAgentsPage() {
           </p>
         </section>
 
+        <section className="mt-12 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+          <h2 className="text-lg font-semibold">{a.accessPolicyTitle}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.accessPolicyBody}
+          </p>
+          <div className="mt-4 space-y-4">
+            <CodeSnippet
+              code={snippets.sdkAccessPolicy}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+            <CodeSnippet
+              code={snippets.pythonAccessPolicy}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+        </section>
+
+        <section className="mt-12 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+          <h2 className="text-lg font-semibold">{a.jwsTitle}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.jwsBody}
+          </p>
+          <div className="mt-4">
+            <CodeSnippet
+              code={snippets.sdkJwsVerify}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+        </section>
+
         <section className="mt-12">
           <h2 className="text-lg font-semibold">{a.systemPromptTitle}</h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
@@ -119,6 +152,25 @@ export default async function DocsAgentsPage() {
           <div className="mt-4">
             <CodeSnippet
               code={snippets.systemPrompt}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="text-xl font-semibold">{a.pipTitle}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            {a.pipBody}
+          </p>
+          <div className="mt-4 space-y-4">
+            <CodeSnippet
+              code={snippets.pythonPipInstall}
+              copyLabel={a.copy}
+              copiedLabel={a.copied}
+            />
+            <CodeSnippet
+              code={snippets.pythonEilCardResolve}
               copyLabel={a.copy}
               copiedLabel={a.copied}
             />

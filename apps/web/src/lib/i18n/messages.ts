@@ -384,6 +384,15 @@ const en = {
     actSpecTitle: "Authorized act (E3-C)",
     actSpecBody:
       "Mutating agent operations use write: and act: scopes plus Idempotency-Key headers on the platform gateway — not on EIL Card. See docs/eil-act-spec-v0.1.md and SDK discoverActCapabilities().",
+    accessPolicyTitle: "access_policy field (v1.2, Registry+)",
+    accessPolicyBody:
+      "Registry+ cards may export access_policy — a dynamic robots.txt for agents. Check discoverAccessPolicy() before gateway OAuth or training use. States: active, paused, maintenance. Stances: open, gateway, deny. See docs/eil-access-policy-spec-v0.1.md.",
+    jwsTitle: "JWS trust on resolve",
+    jwsBody:
+      "Registry+ cards may carry signatures.registry (compact JWS). Enable verifyJws on DigitalCard.resolve() in TypeScript, Python (eil-card[crypto]), or eil verify --jws. See docs/well-known-trust-model.md.",
+    pipTitle: "Python package (PyPI)",
+    pipBody:
+      "pip install eil-card — mirrors TypeScript SDK resolve, discoverCapabilities, discoverAccessPolicy, and optional LangChain/CrewAI/LlamaIndex integrations.",
     systemPromptTitle: "Recommended system prompt",
     systemPromptBody:
       "Add to Custom GPT, Claude project instructions, or your agent orchestrator. Tells the model to check EIL before scraping.",
@@ -670,6 +679,21 @@ const en = {
     capActionIdempotent: "Idempotent (recommended for POST)",
     addCapAction: "+ Add action",
     removeCapAction: "Remove action",
+    accessPolicy: "Agent access policy (Registry+)",
+    accessPolicyHint:
+      "Dynamic robots.txt for agents — declare whether automated read/act is allowed, paused, or denied. Syncs to resolve and well-known on save.",
+    apEnabled: "Publish access policy on this card",
+    apState: "Operational state",
+    apStateActive: "Active — gateway available",
+    apStatePaused: "Paused — defer new agent sessions",
+    apStateMaintenance: "Maintenance — planned downtime",
+    apDefault: "Default stance",
+    apStanceOpen: "Open (public surface only)",
+    apStanceGateway: "Gateway (OAuth / API key required)",
+    apStanceDeny: "Deny (no automated interaction)",
+    apTrainingDeny: "Deny model training on public card data",
+    apContact: "Agent contact (optional)",
+    apPolicyUrl: "Human-readable policy URL (optional)",
     editionCore: "Core (v1.0)",
     editionBusiness: "Business (v1.1)",
     editionRegistryPlus: "Registry+ (v1.2)",
@@ -780,6 +804,8 @@ const en = {
     cards: "Cards",
     verified: "Verified",
     resolvesToday: "Resolves today",
+    adoptionGoal: "Adoption goal (verified)",
+    adoptionGoalHint: "Target: 50 verified cards for indie agent dev traction",
     recentCards: "Recent cards",
     recentUsers: "Recent users",
     handle: "Handle",
@@ -1337,6 +1363,15 @@ const tr: Messages = {
     actSpecTitle: "Authorized act (E3-C)",
     actSpecBody:
       "Yazma/etkileşim işlemleri write: ve act: scope'ları ile platform gateway'de Idempotency-Key kullanır — EIL Card'da değil. Bkz. docs/eil-act-spec-v0.1.md ve SDK discoverActCapabilities().",
+    accessPolicyTitle: "access_policy alanı (v1.2, Registry+)",
+    accessPolicyBody:
+      "Registry+ kartları access_policy export edebilir — agent'lar için dinamik robots.txt. Gateway OAuth veya eğitim kullanımından önce discoverAccessPolicy() kontrol edin. Durumlar: active, paused, maintenance. Duruşlar: open, gateway, deny. Bkz. docs/eil-access-policy-spec-v0.1.md.",
+    jwsTitle: "Resolve sırasında JWS güveni",
+    jwsBody:
+      "Registry+ kartları signatures.registry (compact JWS) taşıyabilir. TypeScript, Python (eil-card[crypto]) veya eil verify --jws ile verifyJws açın. Bkz. docs/well-known-trust-model.md.",
+    pipTitle: "Python paketi (PyPI)",
+    pipBody:
+      "pip install eil-card — TypeScript SDK ile aynı resolve, discoverCapabilities, discoverAccessPolicy; isteğe bağlı LangChain/CrewAI/LlamaIndex entegrasyonları.",
     systemPromptTitle: "Önerilen sistem prompt'u",
     systemPromptBody:
       "Custom GPT, Claude proje talimatları veya agent orchestrator'a ekleyin. Modele EIL'i taramadan önce kontrol ettirir.",
@@ -1629,6 +1664,21 @@ const tr: Messages = {
     capActionIdempotent: "Idempotent (POST için önerilir)",
     addCapAction: "+ Aksiyon ekle",
     removeCapAction: "Aksiyonu kaldır",
+    accessPolicy: "Agent access policy (Registry+)",
+    accessPolicyHint:
+      "Agent'lar için dinamik robots.txt — otomatik okuma/etkileşimin izinli, duraklatılmış veya reddedildiğini bildirir. Kayıtta resolve ve well-known ile senkron olur.",
+    apEnabled: "Bu kartta access policy yayınla",
+    apState: "Operasyonel durum",
+    apStateActive: "Active — gateway kullanılabilir",
+    apStatePaused: "Paused — yeni agent oturumlarını ertele",
+    apStateMaintenance: "Maintenance — planlı bakım",
+    apDefault: "Varsayılan duruş",
+    apStanceOpen: "Open (yalnızca public yüzey)",
+    apStanceGateway: "Gateway (OAuth / API key gerekir)",
+    apStanceDeny: "Deny (otomatik etkileşim yok)",
+    apTrainingDeny: "Public kart verisinin model eğitiminde kullanılmasını reddet",
+    apContact: "Agent iletişim (opsiyonel)",
+    apPolicyUrl: "İnsan okunur policy URL (opsiyonel)",
     contentLocale: "İçerik dili",
     contentLocaleHint:
       "Kart metninin dili — public sayfa etiketleri için (EN/TR).",
@@ -1736,6 +1786,8 @@ const tr: Messages = {
     cards: "Kartlar",
     verified: "Doğrulanmış",
     resolvesToday: "Bugünkü resolve",
+    adoptionGoal: "Adoption hedefi (verified)",
+    adoptionGoalHint: "Hedef: bağımsız agent geliştiriciler için 50 verified kart",
     recentCards: "Son kartlar",
     recentUsers: "Son kullanıcılar",
     handle: "Handle",

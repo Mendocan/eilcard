@@ -270,6 +270,60 @@ index = VectorStoreIndex.from_documents(documents)
 query_engine = index.as_query_engine()
 response = query_engine.query("What does this organization offer?")
 print(response)`,
+
+    pythonPipInstall: `# PyPI package (mirrors TypeScript SDK)
+pip install eil-card
+
+# Optional: LangChain, CrewAI, LlamaIndex, crypto (JWS verify)
+pip install "eil-card[langchain,llamaindex,crypto]"`,
+
+    pythonEilCardResolve: `from eil_card import DigitalCard, discover_access_policy, discover_capabilities
+
+result = DigitalCard.resolve(domain="${PILOT_DOMAIN}")
+card = result["card"]
+print(card.get("verified"), card.get("name"))
+
+policy = discover_access_policy(card)
+if policy["read"] == "deny" or policy["state"] == "paused":
+    raise SystemExit("Entity paused or denied agent access")
+
+caps = discover_capabilities(card)
+if caps.get("available"):
+    print(caps["agent_gateway"], caps.get("scopes"))`,
+
+    pythonAccessPolicy: `from eil_card import DigitalCard, discover_access_policy, is_training_denied
+
+result = DigitalCard.resolve(domain="${PILOT_DOMAIN}")
+policy = discover_access_policy(result["card"])
+
+# {"declared": True, "read": "gateway", "state": "active", ...}
+if policy["state"] in ("paused", "maintenance"):
+    print("Defer gateway calls until state is active")
+
+if is_training_denied(result["card"]):
+    print("Do not use card JSON for model training")`,
+
+    sdkJwsVerify: `import { DigitalCard } from '@digitalcard/sdk'
+
+const { card, meta, trust } = await DigitalCard.resolve({
+  domain: '${PILOT_DOMAIN}',
+  verifyJws: true,
+})
+
+console.log(trust?.jws?.valid, meta.source)`,
+
+    sdkAccessPolicy: `import { DigitalCard, discoverAccessPolicy } from '@digitalcard/sdk'
+
+const { card } = await DigitalCard.resolve({ domain: '${PILOT_DOMAIN}' })
+const policy = discoverAccessPolicy(card)
+
+if (policy.state === 'paused' || policy.read === 'deny') {
+  throw new Error('Agent access not available')
+}
+
+if (policy.training === 'deny') {
+  // honor training opt-out
+}`,
   };
 }
 

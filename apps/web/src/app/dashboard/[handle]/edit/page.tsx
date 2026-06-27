@@ -133,6 +133,32 @@ export default async function EditCardPage({ params }: Props) {
     idempotent: action.idempotent ?? false,
   }));
 
+  const rawAccessPolicy = body.access_policy as
+    | {
+        default?: "open" | "gateway" | "deny";
+        state?: "active" | "paused" | "maintenance";
+        agents?: { training?: "allow" | "deny" };
+        contact?: string;
+        policy_url?: string;
+      }
+    | undefined;
+  const apEnabled = Boolean(rawAccessPolicy);
+  const apState: "active" | "paused" | "maintenance" =
+    rawAccessPolicy?.state === "paused" ||
+    rawAccessPolicy?.state === "maintenance"
+      ? rawAccessPolicy.state
+      : "active";
+  const apDefault: "open" | "gateway" | "deny" =
+    rawAccessPolicy?.default === "open" ||
+    rawAccessPolicy?.default === "deny"
+      ? rawAccessPolicy.default
+      : "gateway";
+  const apTrainingDeny = rawAccessPolicy
+    ? rawAccessPolicy.agents?.training !== "allow"
+    : true;
+  const apContact = rawAccessPolicy?.contact ?? "";
+  const apPolicyUrl = rawAccessPolicy?.policy_url ?? "";
+
   const initial =
     card.type === "organization"
       ? {
@@ -155,6 +181,12 @@ export default async function EditCardPage({ params }: Props) {
           capAuth,
           capScopesText,
           capActions,
+          apEnabled,
+          apState,
+          apDefault,
+          apTrainingDeny,
+          apContact,
+          apPolicyUrl,
           sameAsText: sameAs.join("\n"),
         }
       : {

@@ -38,6 +38,8 @@ export type CardListFilters = {
   type?: "all" | "organization" | "person";
 };
 
+export const ADOPTION_VERIFIED_GOAL = 50;
+
 export async function getAdminOverview() {
   await reconcileStaleVerifications();
 
@@ -82,6 +84,11 @@ export async function getAdminOverview() {
     users: userRow?.c ?? 0,
     cards: cardRow?.c ?? 0,
     verified: verifiedRow?.c ?? 0,
+    adoptionGoal: ADOPTION_VERIFIED_GOAL,
+    adoptionProgress: Math.min(
+      100,
+      Math.round(((verifiedRow?.c ?? 0) / ADOPTION_VERIFIED_GOAL) * 100)
+    ),
     resolvesToday: Number(resolveRow?.total ?? 0),
     pendingVerifications: pendingRow?.c ?? 0,
     recentCards,
