@@ -131,7 +131,7 @@ export default async function AdminCardDetailPage({ params }: Props) {
 
       <section className="mt-6 rounded-2xl border border-[var(--color-border)] p-5">
         <h3 className="mb-4 font-medium">{a.publicJson}</h3>
-        <pre className="max-h-[480px] overflow-auto rounded-lg bg-[var(--color-bg)] p-4 text-xs leading-relaxed">
+        <pre className="code-panel max-h-[480px] overflow-auto rounded-lg p-4 text-xs leading-relaxed">
           {JSON.stringify(card.publicJson, null, 2)}
         </pre>
       </section>

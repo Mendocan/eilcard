@@ -110,7 +110,7 @@ export default async function WhitepaperPage() {
           <p className="mt-6 text-sm font-medium text-[var(--color-text-muted)]">
             {w.discoveryCaption}
           </p>
-          <pre className="mt-3 overflow-x-auto rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] p-5 text-xs leading-relaxed">
+          <pre className="code-panel mt-3 overflow-x-auto rounded-2xl p-5 text-xs leading-relaxed">
             {whitepaperDiscoveryFlow}
           </pre>
         </section>

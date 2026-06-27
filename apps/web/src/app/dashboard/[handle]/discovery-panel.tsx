@@ -285,7 +285,7 @@ export function DiscoveryPanel({ handle, domain, entityName, appUrl, m }: Props)
             <p className="mb-3 text-sm text-[var(--color-text-muted)]">
               {m.discoveryProxyIntro}
             </p>
-            <pre className="overflow-x-auto rounded-lg bg-[var(--color-surface)] p-3 text-xs">
+            <pre className="code-panel overflow-x-auto rounded-lg p-3 text-xs">
               {proxySnippet}
             </pre>
             <button
@@ -307,7 +307,7 @@ export function DiscoveryPanel({ handle, domain, entityName, appUrl, m }: Props)
             <p className="mb-3 text-sm text-[var(--color-text-muted)]">
               {m.discoveryAgentCardProxyIntro}
             </p>
-            <pre className="overflow-x-auto rounded-lg bg-[var(--color-surface)] p-3 text-xs">
+            <pre className="code-panel overflow-x-auto rounded-lg p-3 text-xs">
               {agentCardProxySnippet}
             </pre>
             <button
@@ -330,7 +330,7 @@ export function DiscoveryPanel({ handle, domain, entityName, appUrl, m }: Props)
             <code className="mb-3 block rounded-lg bg-[var(--color-bg)] p-2 text-xs">
               {setup?.cpanel_path}
             </code>
-            <pre className="overflow-x-auto rounded-lg bg-[var(--color-bg)] p-3 text-xs">
+            <pre className="code-panel overflow-x-auto rounded-lg p-3 text-xs">
               {staticSnippet}
             </pre>
             <button
@@ -368,7 +368,7 @@ export function DiscoveryPanel({ handle, domain, entityName, appUrl, m }: Props)
               <p className="mb-2 text-xs text-[var(--color-text-muted)]">
                 {m.discoveryLlmsPatchPath.replace("{domain}", domain!)}
               </p>
-              <pre className="overflow-x-auto rounded-lg bg-[var(--color-surface)] p-3 text-xs whitespace-pre-wrap">
+              <pre className="code-panel overflow-x-auto rounded-lg p-3 text-xs whitespace-pre-wrap">
                 {llmsPatch}
               </pre>
               <button

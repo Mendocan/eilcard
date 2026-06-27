@@ -64,7 +64,7 @@ export function CodeSnippet({ code, copyLabel, copiedLabel, className }: Props) 
         onClick={onCopy}
         aria-label={copied ? copiedLabel : copyLabel}
         title={copied ? copiedLabel : copyLabel}
-        className="absolute right-3 top-3 rounded-md border border-[var(--color-border)] bg-[var(--color-surface)]/80 p-2 text-[var(--color-text-muted)] transition hover:border-[var(--color-border-strong)] hover:text-[var(--color-text)]"
+        className="absolute right-3 top-3 rounded-md border border-[var(--color-code-border)] bg-[var(--color-bg)]/75 p-2 text-[var(--color-text-muted)] backdrop-blur-sm transition hover:border-[var(--color-border-strong)] hover:text-[var(--color-text)]"
       >
         {copied ? (
           <CheckIcon className="h-4 w-4 text-[var(--color-success)]" />
@@ -72,7 +72,7 @@ export function CodeSnippet({ code, copyLabel, copiedLabel, className }: Props) 
           <CopyIcon className="h-4 w-4" />
         )}
       </button>
-      <pre className="w-full overflow-x-auto rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] p-5 pt-12 text-[13px] leading-relaxed">
+      <pre className="code-panel w-full overflow-x-auto rounded-2xl p-5 pt-12 text-[13px] leading-relaxed">
         <code>{code}</code>
       </pre>
     </div>

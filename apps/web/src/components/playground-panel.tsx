@@ -198,7 +198,7 @@ export function PlaygroundPanel({
             <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
               {m.rawJson}
             </p>
-            <pre className="mt-3 max-h-64 overflow-auto text-xs leading-relaxed">
+            <pre className="code-panel mt-3 max-h-64 overflow-auto rounded-lg p-4 text-xs leading-relaxed">
               {JSON.stringify(result, null, 2)}
             </pre>
           </div>
@@ -225,7 +225,7 @@ export function PlaygroundPanel({
             {wellKnown.contentType ? ` · ${wellKnown.contentType}` : ""}
           </p>
           {wellKnown.preview && (
-            <pre className="mt-2 overflow-x-auto text-xs text-[var(--color-text-muted)]">
+            <pre className="code-panel mt-2 overflow-x-auto rounded-lg p-3 text-xs text-[var(--color-text-muted)]">
               {wellKnown.preview}
             </pre>
           )}
