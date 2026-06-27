@@ -16,7 +16,10 @@ import {
   validateOfferingCount,
   countOfferingNodes,
 } from "@/lib/offering-validation";
-import { validateRegistryPlusFieldsForEdition } from "@/lib/registry-plus-validation";
+import {
+  REGISTRY_PLUS_FIELD_ERRORS,
+  validateRegistryPlusFieldsForEdition,
+} from "@/lib/registry-plus-validation";
 import {
   patchOrganizationCardSchema,
   patchPersonCardSchema,
@@ -205,16 +208,10 @@ export async function PATCH(
     updates as Record<string, unknown>
   );
   if (!registryPlusCheck.allowed) {
-    const isCapabilities =
-      registryPlusCheck.reason === "capabilities_not_allowed";
     return NextResponse.json(
       {
-        error: isCapabilities
-          ? "Capabilities require Registry+ edition"
-          : "JWS signatures require Registry+ edition",
-        code: isCapabilities
-          ? API_ERROR_CODES.CAPABILITIES_NOT_ALLOWED
-          : API_ERROR_CODES.SIGNATURES_NOT_ALLOWED,
+        error: REGISTRY_PLUS_FIELD_ERRORS[registryPlusCheck.reason],
+        code: registryPlusCheck.reason,
         edition: nextEdition,
       },
       { status: 403 }

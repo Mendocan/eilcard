@@ -79,6 +79,7 @@ export function buildCardJson(
   if (!isRegistryPlusEdition(row.edition)) {
     delete publicBody.signatures;
     delete publicBody.capabilities;
+    delete publicBody.access_policy;
   }
 
   const publicVerified =

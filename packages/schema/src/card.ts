@@ -71,6 +71,40 @@ export const capabilitiesSchema = z
   .optional();
 export type Capabilities = z.infer<typeof capabilitiesSchema>;
 
+export const accessPolicyStanceEnum = z.enum(["open", "gateway", "deny"]);
+export type AccessPolicyStance = z.infer<typeof accessPolicyStanceEnum>;
+
+export const accessPolicyTrainingEnum = z.enum(["allow", "deny"]);
+export type AccessPolicyTraining = z.infer<typeof accessPolicyTrainingEnum>;
+
+export const accessPolicyStateEnum = z.enum(["active", "paused", "maintenance"]);
+export type AccessPolicyState = z.infer<typeof accessPolicyStateEnum>;
+
+/**
+ * Reserved v1.2 field — dynamic agent access policy ("robots.txt for agents").
+ * @see docs/eil-access-policy-spec-v0.1.md
+ */
+export const accessPolicySchema = z
+  .object({
+    version: z.string().max(16).optional(),
+    default: accessPolicyStanceEnum.optional(),
+    agents: z
+      .object({
+        read: accessPolicyStanceEnum.optional(),
+        act: accessPolicyStanceEnum.optional(),
+        training: accessPolicyTrainingEnum.optional(),
+      })
+      .optional(),
+    state: accessPolicyStateEnum.optional(),
+    gateway: z.string().url().optional(),
+    contact: z.string().max(200).optional(),
+    policy_url: z.string().url().optional(),
+    updated_at: z.string().datetime().optional(),
+    expires_at: z.string().datetime().optional(),
+  })
+  .optional();
+export type AccessPolicy = z.infer<typeof accessPolicySchema>;
+
 export const cardTypeEnum = z.enum(["organization", "person"]);
 export type CardType = z.infer<typeof cardTypeEnum>;
 
@@ -221,6 +255,7 @@ const cardBaseFields = {
   registry_url: z.string().url().optional(),
   signatures: cardSignaturesSchema.optional(),
   capabilities: capabilitiesSchema,
+  access_policy: accessPolicySchema,
 };
 
 export const organizationCardSchema = z.object({
@@ -274,6 +309,7 @@ export const createOrganizationCardSchema = z.object({
   same_as: z.array(z.string().url()).optional(),
   signatures: cardSignaturesSchema.optional(),
   capabilities: capabilitiesSchema,
+  access_policy: accessPolicySchema,
   domain: z.string().max(253).optional(),
 });
 
@@ -295,6 +331,7 @@ export const createPersonCardSchema = z.object({
   same_as: z.array(z.string().url()).optional(),
   signatures: cardSignaturesSchema.optional(),
   capabilities: capabilitiesSchema,
+  access_policy: accessPolicySchema,
   domain: z.string().max(253).optional(),
 });
 
@@ -321,6 +358,7 @@ export const patchOrganizationCardSchema = z.object({
   same_as: z.array(z.string().url()).max(20).optional(),
   signatures: cardSignaturesSchema.nullable().optional(),
   capabilities: capabilitiesSchema.nullable().optional(),
+  access_policy: accessPolicySchema.nullable().optional(),
 });
 
 export const patchPersonCardSchema = z.object({
@@ -336,4 +374,5 @@ export const patchPersonCardSchema = z.object({
   same_as: z.array(z.string().url()).max(20).optional(),
   signatures: cardSignaturesSchema.nullable().optional(),
   capabilities: capabilitiesSchema.nullable().optional(),
+  access_policy: accessPolicySchema.nullable().optional(),
 });

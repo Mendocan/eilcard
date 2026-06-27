@@ -78,6 +78,24 @@ result = DigitalCard.resolve(
 )
 ```
 
+## Access policy ("robots.txt for agents")
+
+```python
+from eil_card import DigitalCard, discover_access_policy, is_training_denied
+
+result = DigitalCard.resolve(domain="sinyalle.com")
+policy = discover_access_policy(result["card"])
+# {"read": "gateway", "act": "gateway", "training": "deny", "state": "active", ...}
+
+if is_training_denied(result["card"]):
+    skip_for_training()
+
+if policy["read"] == "deny":
+    raise SystemExit("Entity opts out of agent access")
+```
+
+See [EIL Access Policy Spec](../../docs/eil-access-policy-spec-v0.1.md).
+
 ## Agent act headers (pilot gateway)
 
 ```python

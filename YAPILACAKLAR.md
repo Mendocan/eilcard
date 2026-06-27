@@ -32,7 +32,7 @@ Gemini yeniden değerlendirmesi (2026-06-25) + mevcut boşluklar. Öncelik sıra
 | **A** | **Pilot gateway `write:`/`act:`** | E3-C spec hazır; canlı consent + idempotent act yok | ✅ **Tamamlandı** (2026-06-26) — production E2E ALL PASSED |
 | **B** | **Python SDK (`pip install`)** | Agent ekosistemi Python ağırlıklı; örnekler var, paket yok | ✅ `packages/python` (`eil-card` 0.1.0) — **PyPI publish** kaldı |
 | **C** | **Resolve + trust zinciri** | JWS alanı var; agent otomatik doğrulamıyor | ✅ SDK/CLI/Python `verifyJws` — PyPI 0.1.1 publish kaldı |
-| **D** | **Identity state (well-known policy)** | “Robots.txt for agents” — anlık izin/engel durumu | Spec taslağı: `permissions` veya `access_policy` + dashboard → well-known sync |
+| **D** | **Identity state (well-known policy)** | “Robots.txt for agents” — anlık izin/engel durumu | ✅ Spec `docs/eil-access-policy-spec-v0.1.md` + şema `access_policy` (v1.2) + SDK/Python `discoverAccessPolicy` — dashboard UI sync kaldı |
 | **E** | **40–50 kart adoption** | Bottom-up: bağımsız agent dev’leri önce | Outreach, `/docs/agents`, CLI, pilot hikâyesi; metrik: kayıtlı + verified kart |
 
 **Pilot gateway kriterleri** (`docs/pilot-gateway.md` §6): ✅ tamamlandı (2026-06-26).
@@ -46,7 +46,7 @@ Gemini yeniden değerlendirmesi (2026-06-25) + mevcut boşluklar. Öncelik sıra
 | Discovery stack (Registry → well-known → DNS) | ✅ Canlı + trust model dokümanı | **C** otomatik JWS verify |
 | `capabilities` / yetkilendirme | ✅ Şema v1.2 + E3 Access/Act spec + pilot gateway | ✅ **A** production act |
 | `verified` arkasında dijital imza | ✅ `signatures.registry` (JWS) Registry+ | **C** agent tarafı doğrulama |
-| Well-known = “State of Identity” (agent policy) | Kısmen: static kart JSON; dinamik policy yok | **D** spec + tasarım |
+| Well-known = “State of Identity” (agent policy) | ✅ `access_policy` alanı + spec + SDK helper | **D** dashboard toggle UI |
 | 1000 indie dev → sonra büyük platformlar | Strateji ile uyumlu (`strateji-agent-cagi.md`) | **E** adoption metrikleri |
 
 ---
@@ -335,7 +335,7 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 
 - [x] **Python SDK paketi** — `packages/python`, LangChain/CrewAI/LlamaIndex (`eil-card` 0.1.0)
 - [ ] **Python SDK PyPI publish** — `twine upload` + `pip install eil-card` (**B** kalan)
-- [ ] **Identity state / agent access policy** — dinamik well-known policy spec (**Sıradaki dönem D**)
+- [x] **Identity state / agent access policy** — spec `docs/eil-access-policy-spec-v0.1.md` + şema `access_policy` + SDK/Python helper (**D**); dashboard toggle UI kaldı
 - [ ] IANA `/.well-known/digital-card` kaydı
 - [ ] Federated registry / mesh değerlendirmesi (taslak: `docs/registry-plus.md`)
 - [ ] Büyük AI sağlayıcılarına resmi entegrasyon başvurusu

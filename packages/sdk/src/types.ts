@@ -96,6 +96,26 @@ export interface CardMode {
   active_links?: string[];
 }
 
+export type AccessPolicyStance = 'open' | 'gateway' | 'deny';
+export type AccessPolicyTraining = 'allow' | 'deny';
+export type AccessPolicyState = 'active' | 'paused' | 'maintenance';
+
+export interface AccessPolicy {
+  version?: string;
+  default?: AccessPolicyStance;
+  agents?: {
+    read?: AccessPolicyStance;
+    act?: AccessPolicyStance;
+    training?: AccessPolicyTraining;
+  };
+  state?: AccessPolicyState;
+  gateway?: string;
+  contact?: string;
+  policy_url?: string;
+  updated_at?: string;
+  expires_at?: string;
+}
+
 export interface CardBase {
   schema_version: SchemaVersion;
   edition: CardEdition;
@@ -129,6 +149,7 @@ export interface CardBase {
       idempotent?: boolean;
     }>;
   };
+  access_policy?: AccessPolicy;
   updated_at: string;
   created_at?: string;
   human_url?: string;
