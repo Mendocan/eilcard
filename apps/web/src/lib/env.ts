@@ -6,6 +6,7 @@ const envSchema = z.object({
   BETTER_AUTH_URL: z.string().url(),
   RESEND_API_KEY: z.string().optional(),
   SUPPORT_EMAIL: z.string().email().optional(),
+  HELLO_EMAIL: z.string().email().optional(),
   BILLING_EMAIL: z.string().email().optional(),
   NEXT_PUBLIC_APP_URL: z.string().url(),
   ADMIN_PASSWORD: z.string().min(8).optional(),

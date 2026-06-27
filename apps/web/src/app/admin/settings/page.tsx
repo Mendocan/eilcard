@@ -116,6 +116,10 @@ export default async function AdminSettingsPage() {
           <p>{a.settingsContactBody}</p>
           <div className="space-y-2 rounded-xl border border-[var(--color-border)] p-4">
             <ConfigRow
+              label={a.settingsHelloEmail}
+              value={config.helloEmail ?? a.settingsNotConfigured}
+            />
+            <ConfigRow
               label={a.settingsSupportEmail}
               value={config.supportEmail ?? a.settingsNotConfigured}
             />

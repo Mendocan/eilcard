@@ -1,9 +1,15 @@
 import { getPlatformOperatorEmail } from "@/lib/platform-operator-env";
 
 export const DEFAULT_SUPPORT_EMAIL = "support@eilcard.com";
+export const DEFAULT_HELLO_EMAIL = "hello@eilcard.com";
 
 export function getPublicSupportEmail(): string {
   return process.env.SUPPORT_EMAIL?.trim() || DEFAULT_SUPPORT_EMAIL;
+}
+
+/** General contact inbox (Namecheap alias → support or shared mailbox). */
+export function getPublicHelloEmail(): string {
+  return process.env.HELLO_EMAIL?.trim() || DEFAULT_HELLO_EMAIL;
 }
 
 const DEFAULT_BILLING_EMAIL = "billing@eilcard.com";
@@ -24,6 +30,7 @@ export function getBillingFromEmail(): string {
 export type PlatformConfig = {
   appUrl: string;
   supportEmail: string | null;
+  helloEmail: string | null;
   billingEmail: string | null;
   platformOperatorEmail: string;
   resendConfigured: boolean;
@@ -36,6 +43,7 @@ export function getPlatformConfig(): PlatformConfig {
   return {
     appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://eilcard.com",
     supportEmail: process.env.SUPPORT_EMAIL?.trim() || DEFAULT_SUPPORT_EMAIL,
+    helloEmail: process.env.HELLO_EMAIL?.trim() || DEFAULT_HELLO_EMAIL,
     billingEmail: process.env.BILLING_EMAIL?.trim() || null,
     platformOperatorEmail: getPlatformOperatorEmail(),
     resendConfigured: Boolean(process.env.RESEND_API_KEY?.trim()),
