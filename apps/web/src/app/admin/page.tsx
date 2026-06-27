@@ -59,6 +59,33 @@ export default async function AdminOverviewPage() {
         })}
       </div>
 
+      <section className="mb-10 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/50 p-5">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-sm text-[var(--color-text-muted)]">{a.adoptionGoal}</p>
+            <p className="mt-2 text-3xl font-semibold tabular-nums">
+              {stats.verified}
+              <span className="text-lg font-normal text-[var(--color-text-muted)]">
+                {" "}
+                / {stats.adoptionGoal}
+              </span>
+            </p>
+            <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+              {a.adoptionGoalHint}
+            </p>
+          </div>
+          <p className="text-sm font-medium tabular-nums text-[var(--color-accent)]">
+            {stats.adoptionProgress}%
+          </p>
+        </div>
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-[var(--color-border)]">
+          <div
+            className="h-full rounded-full bg-[var(--color-accent)] transition-all"
+            style={{ width: `${stats.adoptionProgress}%` }}
+          />
+        </div>
+      </section>
+
       <div className="grid gap-8 lg:grid-cols-2">
         <section>
           <div className="mb-4 flex items-center justify-between">

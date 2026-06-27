@@ -71,6 +71,12 @@ type InitialOrg = {
   capAuth: "none" | "oauth2" | "api_key" | "";
   capScopesText: string;
   capActions: CapabilityActionRow[];
+  apEnabled: boolean;
+  apState: "active" | "paused" | "maintenance";
+  apDefault: "open" | "gateway" | "deny";
+  apTrainingDeny: boolean;
+  apContact: string;
+  apPolicyUrl: string;
   sameAsText: string;
 };
 
@@ -188,6 +194,33 @@ function serializeCapabilities(input: {
   };
 }
 
+function serializeAccessPolicy(input: {
+  enabled: boolean;
+  state: "active" | "paused" | "maintenance";
+  defaultStance: "open" | "gateway" | "deny";
+  trainingDeny: boolean;
+  contact: string;
+  policyUrl: string;
+  gatewayUrl: string;
+}) {
+  if (!input.enabled) return null;
+
+  return {
+    version: "0.1",
+    default: input.defaultStance,
+    agents: {
+      read: input.defaultStance,
+      act: input.defaultStance,
+      training: input.trainingDeny ? ("deny" as const) : ("allow" as const),
+    },
+    state: input.state,
+    ...(input.gatewayUrl.trim() ? { gateway: input.gatewayUrl.trim() } : {}),
+    ...(input.contact.trim() ? { contact: input.contact.trim() } : {}),
+    ...(input.policyUrl.trim() ? { policy_url: input.policyUrl.trim() } : {}),
+    updated_at: new Date().toISOString(),
+  };
+}
+
 export function EditCardForm({
   handle,
   initial,
@@ -248,6 +281,24 @@ export function EditCardForm({
   );
   const [capActions, setCapActions] = useState<CapabilityActionRow[]>(
     initial.type === "organization" ? initial.capActions : []
+  );
+  const [apEnabled, setApEnabled] = useState(
+    initial.type === "organization" ? initial.apEnabled : false
+  );
+  const [apState, setApState] = useState<
+    "active" | "paused" | "maintenance"
+  >(initial.type === "organization" ? initial.apState : "active");
+  const [apDefault, setApDefault] = useState<"open" | "gateway" | "deny">(
+    initial.type === "organization" ? initial.apDefault : "gateway"
+  );
+  const [apTrainingDeny, setApTrainingDeny] = useState(
+    initial.type === "organization" ? initial.apTrainingDeny : true
+  );
+  const [apContact, setApContact] = useState(
+    initial.type === "organization" ? initial.apContact : ""
+  );
+  const [apPolicyUrl, setApPolicyUrl] = useState(
+    initial.type === "organization" ? initial.apPolicyUrl : ""
   );
   const [links, setLinks] = useState<LinkRow[]>(
     initial.type === "person" ? initial.links : []
@@ -465,6 +516,15 @@ export function EditCardForm({
           auth: capAuth,
           scopesText: capScopesText,
           actions: capActions,
+        });
+        body.access_policy = serializeAccessPolicy({
+          enabled: apEnabled,
+          state: apState,
+          defaultStance: apDefault,
+          trainingDeny: apTrainingDeny,
+          contact: apContact,
+          policyUrl: apPolicyUrl,
+          gatewayUrl: capAgentGateway,
         });
       }
     } else {
@@ -980,6 +1040,97 @@ export function EditCardForm({
                 </button>
               )}
             </div>
+          </div>
+        )}
+
+        {initial.type === "organization" && cardEdition === "registry_plus" && (
+          <div className="space-y-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]/80 p-4">
+            <div>
+              <p className="text-sm font-medium">{m.accessPolicy}</p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+                {m.accessPolicyHint}
+              </p>
+            </div>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={apEnabled}
+                onChange={(e) => setApEnabled(e.target.checked)}
+              />
+              {m.apEnabled}
+            </label>
+            {apEnabled && (
+              <>
+                <div>
+                  <label className="mb-1 block text-sm font-medium">
+                    {m.apState}
+                  </label>
+                  <select
+                    value={apState}
+                    onChange={(e) =>
+                      setApState(
+                        e.target.value as "active" | "paused" | "maintenance"
+                      )
+                    }
+                    className={inputClass}
+                  >
+                    <option value="active">{m.apStateActive}</option>
+                    <option value="paused">{m.apStatePaused}</option>
+                    <option value="maintenance">{m.apStateMaintenance}</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium">
+                    {m.apDefault}
+                  </label>
+                  <select
+                    value={apDefault}
+                    onChange={(e) =>
+                      setApDefault(
+                        e.target.value as "open" | "gateway" | "deny"
+                      )
+                    }
+                    className={inputClass}
+                  >
+                    <option value="gateway">{m.apStanceGateway}</option>
+                    <option value="open">{m.apStanceOpen}</option>
+                    <option value="deny">{m.apStanceDeny}</option>
+                  </select>
+                </div>
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={apTrainingDeny}
+                    onChange={(e) => setApTrainingDeny(e.target.checked)}
+                  />
+                  {m.apTrainingDeny}
+                </label>
+                <div>
+                  <label className="mb-1 block text-sm font-medium">
+                    {m.apContact}
+                  </label>
+                  <input
+                    type="text"
+                    value={apContact}
+                    onChange={(e) => setApContact(e.target.value)}
+                    placeholder="agents@example.com"
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium">
+                    {m.apPolicyUrl}
+                  </label>
+                  <input
+                    type="url"
+                    value={apPolicyUrl}
+                    onChange={(e) => setApPolicyUrl(e.target.value)}
+                    placeholder="https://example.com/agent-policy"
+                    className={inputClass}
+                  />
+                </div>
+              </>
+            )}
           </div>
         )}
 
