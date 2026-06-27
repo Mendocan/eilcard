@@ -55,12 +55,9 @@ export async function GET(request: NextRequest) {
     });
   } catch (err) {
     console.error("[polar] checkout.create failed", err);
-    const message =
-      err instanceof Error ? err.message : "Polar checkout failed";
     return NextResponse.json(
       {
         error: "Checkout could not be started. Check Polar payout setup and product IDs.",
-        detail: message,
       },
       { status: 502 }
     );
