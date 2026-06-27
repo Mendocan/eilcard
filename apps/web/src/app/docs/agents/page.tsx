@@ -345,6 +345,52 @@ export default async function DocsAgentsPage() {
           </div>
         </section>
 
+        <section className="mt-12 rounded-2xl border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/5 p-6 sm:p-8">
+          <h2 className="text-xl font-semibold">{a.adoptionFunnelTitle}</h2>
+          <ol className="mt-6 space-y-6">
+            <li className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)]/40 p-5">
+              <p className="font-medium">{a.adoptionStep1Title}</p>
+              <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+                {a.adoptionStep1Body}
+              </p>
+            </li>
+            <li className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)]/40 p-5">
+              <p className="font-medium">{a.adoptionStep2Title}</p>
+              <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+                {a.adoptionStep2Body}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Link
+                  href="/playground"
+                  className="inline-flex rounded-lg bg-[var(--color-text)] px-4 py-2 text-sm font-medium text-[var(--color-bg)] transition hover:opacity-90"
+                >
+                  {a.adoptionCtaPlayground}
+                </Link>
+                <a
+                  href={`${BASE_URL}/api/v1/resolve?domain=sinyalle.com`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex rounded-lg border border-[var(--color-border)] px-4 py-2 text-sm font-medium transition hover:border-[var(--color-border-strong)]"
+                >
+                  {a.adoptionCtaPilotResolve}
+                </a>
+              </div>
+            </li>
+            <li className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)]/40 p-5">
+              <p className="font-medium">{a.adoptionStep3Title}</p>
+              <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+                {a.adoptionStep3Body}
+              </p>
+              <Link
+                href="/register"
+                className="mt-4 inline-flex rounded-lg bg-[var(--color-text)] px-4 py-2 text-sm font-medium text-[var(--color-bg)] transition hover:opacity-90"
+              >
+                {a.adoptionCtaRegister}
+              </Link>
+            </li>
+          </ol>
+        </section>
+
         <p className="mt-12 leading-relaxed text-[var(--color-text-muted)]">
           {a.adoptionOutro}
         </p>

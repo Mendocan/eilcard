@@ -92,6 +92,12 @@ export function LandingPage({ locale, m }: Props) {
                   <GitHubIcon className="h-4 w-4" />
                   {m.hero.ctaSecondary}
                 </a>
+                <Link
+                  href="/docs/agents"
+                  className="inline-flex items-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]/50 px-5 py-3 text-sm font-medium transition hover:border-[var(--color-border-strong)]"
+                >
+                  {m.hero.ctaAgents}
+                </Link>
               </div>
             </div>
 

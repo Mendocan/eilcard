@@ -57,6 +57,7 @@ Defer enterprise platform outreach until 50 verified cards and stable DevX (SDK,
 
 ## Weekly checklist
 
+- [ ] Share the **3-step funnel** on `/docs/agents` (install → pilot → publish) in one agent-dev thread
 - [ ] Post one concrete snippet (resolve timing, access_policy, or JWS verify) with link to `/docs/agents`
 - [ ] Reply in 3 agent-dev threads with resolve example (not generic pitch)
 - [ ] Invite 2 teams to create a card + DNS verify
