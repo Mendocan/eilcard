@@ -4,7 +4,11 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-header";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
-import { getPublicSupportEmail } from "@/lib/platform-config";
+import {
+  getBillingFromEmail,
+  getPublicHelloEmail,
+  getPublicSupportEmail,
+} from "@/lib/platform-config";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -18,7 +22,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const locale = await getLocale();
   const m = t(locale);
+  const helloEmail = getPublicHelloEmail();
   const supportEmail = getPublicSupportEmail();
+  const billingEmail = getBillingFromEmail();
 
   return (
     <div className="min-h-screen">
@@ -67,12 +73,41 @@ export default async function AboutPage() {
           <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
             {m.about.contactBodyWithEmail}
           </p>
-          <a
-            href={`mailto:${supportEmail}`}
-            className="mt-4 inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
-          >
-            {supportEmail}
-          </a>
+          <ul className="mt-4 space-y-2 text-sm">
+            <li>
+              <span className="text-[var(--color-text-muted)]">
+                {m.about.contactHelloRole}:{" "}
+              </span>
+              <a
+                href={`mailto:${helloEmail}`}
+                className="font-medium text-[var(--color-accent)] transition hover:opacity-80"
+              >
+                {helloEmail}
+              </a>
+            </li>
+            <li>
+              <span className="text-[var(--color-text-muted)]">
+                {m.about.contactSupportRole}:{" "}
+              </span>
+              <a
+                href={`mailto:${supportEmail}`}
+                className="font-medium text-[var(--color-accent)] transition hover:opacity-80"
+              >
+                {supportEmail}
+              </a>
+            </li>
+            <li>
+              <span className="text-[var(--color-text-muted)]">
+                {m.about.contactBillingRole}:{" "}
+              </span>
+              <a
+                href={`mailto:${billingEmail}`}
+                className="font-medium text-[var(--color-accent)] transition hover:opacity-80"
+              >
+                {billingEmail}
+              </a>
+            </li>
+          </ul>
           <Link
             href="/"
             className="mt-6 inline-flex text-sm font-medium text-[var(--color-accent)] transition hover:opacity-80"
@@ -82,7 +117,11 @@ export default async function AboutPage() {
         </section>
       </main>
 
-      <SiteFooter m={m.footer} />
+      <SiteFooter
+        m={m.footer}
+        helloEmail={helloEmail}
+        supportEmail={supportEmail}
+      />
     </div>
   );
 }

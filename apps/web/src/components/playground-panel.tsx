@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import type { Messages } from "@/lib/i18n/messages";
+import type {
+  ComplianceCheck,
+  ComplianceGrade,
+  ComplianceReport,
+} from "@/lib/eil-compliance";
 
 type ResolvePayload = {
   card?: Record<string, unknown>;
@@ -15,6 +20,69 @@ type Props = {
   defaultHandle?: string;
 };
 
+const CHECK_LABELS: Record<
+  ComplianceCheck["id"],
+  keyof Messages["playground"]
+> = {
+  registry_card: "complianceCheckRegistry",
+  card_id_binding: "complianceCheckCardId",
+  domain_verified: "complianceCheckVerified",
+  well_known: "complianceCheckWellKnown",
+  well_known_sync: "complianceCheckWellKnownSync",
+  registry_plus_jws: "complianceCheckJws",
+  access_policy: "complianceCheckAccessPolicy",
+  capabilities: "complianceCheckCapabilities",
+};
+
+const LEVEL_LABELS: Record<
+  ComplianceCheck["level"],
+  keyof Messages["playground"]
+> = {
+  pass: "complianceLevelPass",
+  warn: "complianceLevelWarn",
+  fail: "complianceLevelFail",
+  info: "complianceLevelInfo",
+  skip: "complianceLevelSkip",
+};
+
+const GRADE_LABELS: Record<
+  ComplianceGrade,
+  keyof Messages["playground"]
+> = {
+  excellent: "complianceGradeExcellent",
+  good: "complianceGradeGood",
+  partial: "complianceGradePartial",
+  none: "complianceGradeNone",
+};
+
+function levelColor(level: ComplianceCheck["level"]): string {
+  switch (level) {
+    case "pass":
+      return "text-green-700 dark:text-green-300";
+    case "warn":
+      return "text-amber-700 dark:text-amber-300";
+    case "fail":
+      return "text-red-700 dark:text-red-300";
+    case "info":
+      return "text-[var(--color-accent)]";
+    default:
+      return "text-[var(--color-text-muted)]";
+  }
+}
+
+function gradeBorder(grade: ComplianceGrade): string {
+  switch (grade) {
+    case "excellent":
+      return "border-green-500/40 bg-green-50/40 dark:bg-green-950/20";
+    case "good":
+      return "border-[var(--color-accent)]/40 bg-[var(--color-surface)]/60";
+    case "partial":
+      return "border-amber-500/40 bg-amber-50/40 dark:bg-amber-950/20";
+    default:
+      return "border-[var(--color-border)] bg-[var(--color-surface)]/40";
+  }
+}
+
 export function PlaygroundPanel({
   m,
   defaultDomain = "sinyalle.com",
@@ -26,17 +94,12 @@ export function PlaygroundPanel({
   const [loading, setLoading] = useState(false);
   const [elapsedMs, setElapsedMs] = useState<number | null>(null);
   const [result, setResult] = useState<ResolvePayload | null>(null);
-  const [wellKnown, setWellKnown] = useState<{
-    ok: boolean;
-    status?: number;
-    contentType?: string;
-    preview?: string;
-  } | null>(null);
+  const [compliance, setCompliance] = useState<ComplianceReport | null>(null);
 
   async function runResolve() {
     setLoading(true);
     setResult(null);
-    setWellKnown(null);
+    setCompliance(null);
     const started = performance.now();
 
     const query =
@@ -45,40 +108,22 @@ export function PlaygroundPanel({
         : `handle=${encodeURIComponent(handle.trim())}`;
 
     try {
-      const res = await fetch(`/api/v1/resolve?${query}`);
+      const [res, compRes] = await Promise.all([
+        fetch(`/api/v1/resolve?${query}`),
+        fetch(`/api/v1/playground/compliance?${query}`),
+      ]);
+
       const data = (await res.json()) as ResolvePayload;
       setElapsedMs(Math.round(performance.now() - started));
+
       if (!res.ok) {
         setResult({ error: data.error ?? `HTTP ${res.status}` });
       } else {
         setResult(data);
       }
 
-      if (mode === "domain" && domain.trim()) {
-        const normalized = domain
-          .trim()
-          .toLowerCase()
-          .replace(/^https?:\/\//, "")
-          .replace(/\/.*$/, "");
-        try {
-          const wkRes = await fetch(
-            `/api/v1/playground/well-known?domain=${encodeURIComponent(normalized)}`
-          );
-          const wkData = (await wkRes.json()) as {
-            ok: boolean;
-            status: number;
-            content_type: string;
-            preview?: string;
-          };
-          setWellKnown({
-            ok: wkData.ok,
-            status: wkData.status,
-            contentType: wkData.content_type,
-            preview: wkData.preview,
-          });
-        } catch {
-          setWellKnown({ ok: false });
-        }
+      if (compRes.ok) {
+        setCompliance((await compRes.json()) as ComplianceReport);
       }
     } catch {
       setElapsedMs(Math.round(performance.now() - started));
@@ -160,6 +205,65 @@ export function PlaygroundPanel({
         </div>
       )}
 
+      {compliance && (
+        <div
+          className={`rounded-xl border p-5 ${gradeBorder(compliance.grade)}`}
+        >
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)]">
+                {m.complianceTitle}
+              </p>
+              <p className="mt-2 text-lg font-semibold">
+                {m[GRADE_LABELS[compliance.grade]]}
+              </p>
+              {compliance.handle && (
+                <p className="mt-1 font-mono text-xs text-[var(--color-text-muted)]">
+                  @{compliance.handle}
+                  {compliance.edition ? ` · ${compliance.edition}` : ""}
+                </p>
+              )}
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-[var(--color-text-muted)]">
+                {m.complianceScore}
+              </p>
+              <p className="font-mono text-2xl font-semibold">
+                {compliance.score.passed}/{compliance.score.total}
+              </p>
+              <p className="text-xs text-[var(--color-text-muted)]">
+                {compliance.score.percentage}%
+              </p>
+            </div>
+          </div>
+
+          <ul className="mt-4 space-y-2">
+            {compliance.checks.map((check) => (
+              <li
+                key={check.id}
+                className="flex flex-wrap items-baseline justify-between gap-2 rounded-lg border border-[var(--color-border)]/60 bg-[var(--color-bg)]/50 px-3 py-2 text-sm"
+              >
+                <span>{m[CHECK_LABELS[check.id]]}</span>
+                <span className={`font-medium ${levelColor(check.level)}`}>
+                  {m[LEVEL_LABELS[check.level]]}
+                  {check.detail ? (
+                    <span className="ml-2 font-normal text-[var(--color-text-muted)]">
+                      — {check.detail}
+                    </span>
+                  ) : null}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          {compliance.well_known && (
+            <p className="mt-3 font-mono text-xs text-[var(--color-text-muted)]">
+              {compliance.well_known.url}
+            </p>
+          )}
+        </div>
+      )}
+
       {card && (
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]/50 p-4">
@@ -202,33 +306,6 @@ export function PlaygroundPanel({
               {JSON.stringify(result, null, 2)}
             </pre>
           </div>
-        </div>
-      )}
-
-      {wellKnown && mode === "domain" && (
-        <div className="rounded-xl border border-[var(--color-border)] p-4 text-sm">
-          <p className="font-medium">{m.wellKnownTitle}</p>
-          <p className="mt-1 font-mono text-xs text-[var(--color-text-muted)]">
-            https://
-            {domain
-              .trim()
-              .toLowerCase()
-              .replace(/^https?:\/\//, "")
-              .replace(/\/.*$/, "")}
-            /.well-known/digital-card
-          </p>
-          <p
-            className={`mt-2 text-sm ${wellKnown.ok ? "text-green-700 dark:text-green-300" : "text-[var(--color-text-muted)]"}`}
-          >
-            {wellKnown.ok ? m.wellKnownOk : m.wellKnownFail}
-            {wellKnown.status ? ` (HTTP ${wellKnown.status})` : ""}
-            {wellKnown.contentType ? ` · ${wellKnown.contentType}` : ""}
-          </p>
-          {wellKnown.preview && (
-            <pre className="code-panel mt-2 overflow-x-auto rounded-lg p-3 text-xs text-[var(--color-text-muted)]">
-              {wellKnown.preview}
-            </pre>
-          )}
         </div>
       )}
     </div>

@@ -1,6 +1,9 @@
 import Link from "next/link";
 import type { Messages } from "@/lib/i18n/messages";
-import { DEFAULT_SUPPORT_EMAIL } from "@/lib/platform-config";
+import {
+  DEFAULT_HELLO_EMAIL,
+  DEFAULT_SUPPORT_EMAIL,
+} from "@/lib/platform-config";
 import { GitHubIcon } from "@/components/icons/github-icon";
 
 const GITHUB_URL =
@@ -8,6 +11,7 @@ const GITHUB_URL =
 
 type Props = {
   m: Messages["footer"];
+  helloEmail?: string;
   supportEmail?: string;
 };
 
@@ -15,9 +19,23 @@ function Dot() {
   return <span className="hidden text-[var(--color-border)] sm:inline">·</span>;
 }
 
-export function SiteFooter({ m, supportEmail = DEFAULT_SUPPORT_EMAIL }: Props) {
-  const navLink =
-    "transition hover:text-[var(--color-text)]";
+function MailLink({ email }: { email: string }) {
+  return (
+    <a
+      href={`mailto:${email}`}
+      className="text-[var(--color-text)] transition hover:text-[var(--color-accent)]"
+    >
+      {email}
+    </a>
+  );
+}
+
+export function SiteFooter({
+  m,
+  helloEmail = DEFAULT_HELLO_EMAIL,
+  supportEmail = DEFAULT_SUPPORT_EMAIL,
+}: Props) {
+  const navLink = "transition hover:text-[var(--color-text)]";
 
   return (
     <footer className="border-t border-[var(--color-border)]">
@@ -76,13 +94,9 @@ export function SiteFooter({ m, supportEmail = DEFAULT_SUPPORT_EMAIL }: Props) {
           <span>{m.tagline}</span>
           <Dot />
           <span>
-            {m.contact}:{" "}
-            <a
-              href={`mailto:${supportEmail}`}
-              className="text-[var(--color-text)] transition hover:text-[var(--color-accent)]"
-            >
-              {supportEmail}
-            </a>
+            {m.contact}: <MailLink email={helloEmail} />
+            <span className="mx-1.5 text-[var(--color-border)]">·</span>
+            {m.contactSupport}: <MailLink email={supportEmail} />
           </span>
         </div>
         <p className="text-center text-xs">{m.copyright}</p>

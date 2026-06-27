@@ -1,7 +1,62 @@
 # YAPILACAKLAR
 
 > EIL Card — öncelikli iş listesi  
-> Son güncelleme: 2026-06-25 (Sıradaki 5 tamamlandı; Gemini değerlendirmesi işlendi)
+> Son güncelleme: 2026-06-27 (öncelik: **site hazırlığı**; adoption outreach ertelendi)
+
+---
+
+## Öncelik (şu an)
+
+**Siteyi tam hazır hale getirmek.** Teknik adoption / GitHub outreach / 40–50 kart hedefi **şimdilik yapılmıyor** — altyapı hazır kalsın, dağıtım sonra.
+
+Proje başlangıç fikrinden genişledi; ürün olgunlaştıkça orijinal vizyonla hizalanabilir. Bu liste **iş planı** gibi kullanılır: `+` yapılanlar, `−` kalanlar.
+
+---
+
+## Site durumu özeti
+
+### + Hazır (canlı veya kodda tamam)
+
+| Alan | Ne var |
+|------|--------|
+| **Ana site** | Landing, fiyatlandırma, hakkında, demo kart (`/example`) |
+| **Yasal** | Kullanım, gizlilik, iade — footer linkleri |
+| **Kayıt / giriş** | E-posta doğrulama, şifre sıfırlama |
+| **Ödeme** | Polar checkout, abonelik, fatura portalı, churn/grace |
+| **Dashboard** | Kart oluştur/düzenle, DNS doğrulama, keşif paneli, billing |
+| **Public kart** | `/kart/[handle]`, resolve API, well-known mirror |
+| **Admin** | Kartlar, kuyruk, ekip, audit, adoption sayacı (metrik only) |
+| **Dokümantasyon** | `/docs`, `/docs/agents`, whitepaper, OpenAPI |
+| **Agent araçları** | Compliance checker, SDK, CLI, MCP, Python (PyPI 0.2.0) |
+| **Pilot** | Sinyalle kartı + gateway canlı referans |
+| **Ödeme testi** | ✅ Sinyalle Verified checkout E2E (2026-06-27) |
+| **E-posta (gelen)** | Cloudflare MX → Private Email; alias: hello@, billing@, platform@ ✅ (2026-06-27 test) |
+| **Deploy** | VPS, Docker, prod deploy script, cron |
+
+### − Site için kalan (öncelikli)
+
+| # | Madde | Not |
+|---|--------|-----|
+| 1 | **Deploy** | `bash scripts/prod-deploy-eilcard.sh` — compliance checker + footer/hello@ UI |
+| 2 | **Deploy sonrası doğrulama** | `/playground`, compliance API 200 |
+
+**DNS hafıza kartı:** Domain Namecheap · **DNS Cloudflare** · VPS DigitalOcean · Gelen posta Namecheap Private Email · Giden sistem maili Resend.
+
+### + Bu oturumda tamamlanan
+
+- [x] Metin tutarlılığı — footer, about, docs, landing: “Compliance / Uyumluluk”
+- [x] `hello@` site + alias + Cloudflare MX düzeltmesi — Gmail → hello@ test OK (2026-06-27)
+- [x] Ödeme smoke testi — Sinyalle Verified checkout E2E
+
+### − Bilinçli olarak ertelenen (site dışı / sonra)
+
+| Madde | Neden ertelendi |
+|--------|------------------|
+| 40–50 verified kart outreach | Öncelik site; teknik dağıtım kanalı net değil |
+| GitHub / forum / DM adoption sprint | Kullanıcı kararı: şimdi yapılmayacak |
+| IANA well-known kaydı | Standart/ecosystem; site MVP sonrası |
+| Büyük platform entegrasyon başvuruları | Adoption sonrası |
+| Federated registry | Uzun vade |
 
 ---
 
@@ -23,17 +78,17 @@
 
 ---
 
-## Sıradaki dönem — Adoption & granularity
+## Sıradaki dönem — Teknik sprint (tamamlandı; adoption ertelendi)
 
-Gemini yeniden değerlendirmesi (2026-06-25) + mevcut boşluklar. Öncelik sırası.
+Gemini yeniden değerlendirmesi (2026-06-25) + mevcut boşluklar. **A–D tamamlandı; E altyapı hazır, outreach ertelendi.**
 
 | # | İş | Neden | Çıktı |
 |---|-----|--------|--------|
 | **A** | **Pilot gateway `write:`/`act:`** | E3-C spec hazır; canlı consent + idempotent act yok | ✅ **Tamamlandı** (2026-06-26) — production E2E ALL PASSED |
-| **B** | **Python SDK (`pip install`)** | Agent ekosistemi Python ağırlıklı; örnekler var, paket yok | ✅ `packages/python` (`eil-card` 0.1.0) — **PyPI publish** kaldı |
-| **C** | **Resolve + trust zinciri** | JWS alanı var; agent otomatik doğrulamıyor | ✅ SDK/CLI/Python `verifyJws` — PyPI 0.1.1 publish kaldı |
-| **D** | **Identity state (well-known policy)** | “Robots.txt for agents” — anlık izin/engel durumu | ✅ Spec + şema + SDK + **dashboard toggle UI** |
-| **E** | **40–50 kart adoption** | Bottom-up: bağımsız agent dev’leri önce | ✅ `docs/adoption-playbook.md` + `/docs/agents` güncellendi + admin adoption counter — outreach devam |
+| **B** | **Python SDK (`pip install`)** | Agent ekosistemi Python ağırlıklı | ✅ PyPI `eil-card` 0.2.0 |
+| **C** | **Resolve + trust zinciri** | JWS alanı var; agent otomatik doğrulamıyor | ✅ SDK/CLI/Python `verifyJws` |
+| **D** | **Identity state (well-known policy)** | “Robots.txt for agents” | ✅ Spec + şema + SDK + dashboard toggle UI |
+| **E** | **40–50 kart adoption** | Bottom-up traction | ⏸ Altyapı: playbook + admin counter — **outreach ertelendi** (site önceliği) |
 
 **Pilot gateway kriterleri** (`docs/pilot-gateway.md` §6): ✅ tamamlandı (2026-06-26).
 
@@ -47,7 +102,7 @@ Gemini yeniden değerlendirmesi (2026-06-25) + mevcut boşluklar. Öncelik sıra
 | `capabilities` / yetkilendirme | ✅ Şema v1.2 + E3 Access/Act spec + pilot gateway | ✅ **A** production act |
 | `verified` arkasında dijital imza | ✅ `signatures.registry` (JWS) Registry+ | **C** agent tarafı doğrulama |
 | Well-known = “State of Identity” (agent policy) | ✅ spec + SDK + dashboard toggle | — |
-| 1000 indie dev → sonra büyük platformlar | ✅ adoption playbook + admin metrik | **E** outreach (50 verified hedef) |
+| 1000 indie dev → sonra büyük platformlar | ✅ playbook + admin metrik | ⏸ outreach ertelendi |
 
 ---
 
@@ -264,7 +319,7 @@ Entegrasyon rehberi (`/docs/agents`) — **yayında** (kısa vade maddeleri tama
 - [x] **Admin → Ayarlar** — iletişim env durumu, güvenlik notu, ekip yol haritası
 - [x] **E-posta doğrulama** — kayıt sonrası Resend + `/verify-email` + dashboard banner
 - [x] **Resend** — şifre sıfırlama + plan/fatura bildirim şablonları (`billing@` gönderici)
-- [ ] **`hello@` alias** (opsiyonel)
+- [x] **`hello@` alias** — Cloudflare MX + Private Email alias; Gmail test OK (2026-06-27)
 - [x] Polar checkout + fatura bildirimlerinde **`billing@`** gönderici
 
 ### Admin panel (kalan)
@@ -316,7 +371,8 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 |------|--------|----------|
 | **LlamaIndex EILReader** | Yayında | — |
 | **EIL CLI** | `@digitalcard/cli` (`eil-card init`, `verify`, `export well-known`) | **#4 tamamlandı** |
-| **Playground** | Yayında | — |
+| **Playground / EIL Compliance Checker** | ✅ `/playground` + `GET /api/v1/playground/compliance` | — |
+| **Canonicalization teknik notu** | ✅ `docs/canonicalization.md` | — |
 | **Kart demo** | Yayında | `/example` (statik; registry değil) |
 | **Entegrasyon rehberi** | Yayında | `/docs/agents` |
 | **Whitepaper** | Yayında | `/insights/eil-whitepaper` EN/TR |
@@ -336,7 +392,8 @@ Odak: **AI ekosistemine entegre edilebilirlik ve adaptasyon hızı.**
 - [x] **Python SDK paketi** — `packages/python`, LangChain/CrewAI/LlamaIndex (`eil-card` 0.2.0)
 - [ ] **Python SDK PyPI 0.2.0 publish** — `access_policy` helper dahil
 - [x] **Identity state / agent access policy** — spec + şema + SDK + dashboard toggle UI (**D**)
-- [x] **Adoption playbook + /docs/agents + admin counter** (**E** altyapı); outreach: 50 verified hedef
+- [x] **Adoption playbook + /docs/agents + admin counter** (**E** altyapı)
+- [ ] **Adoption outreach (50 verified)** — ⏸ ertelendi; site hazır olduktan sonra
 - [ ] IANA `/.well-known/digital-card` kaydı
 - [ ] Federated registry / mesh değerlendirmesi (taslak: `docs/registry-plus.md`)
 - [ ] Büyük AI sağlayıcılarına resmi entegrasyon başvurusu
