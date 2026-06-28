@@ -1,11 +1,28 @@
 # EIL Card
+
 Entity Identity Layer — verified org/person JSON for AI agents.
 
-- Website: https://eilcard.com
-- Docs: https://eilcard.com/docs
-- Pricing: https://eilcard.com/pricing
-- npm: `@digitalcard/sdk`
-- Core edition: [`docs/core-edition.md`](docs/core-edition.md)
+## EIL Card nedir?
+
+AI agent'lar bir şirketi veya kişiyi tanımak istediğinde çoğu zaman web sayfasını tarar — yavaş, kırılgan, bazen yanlış.
+
+**EIL Card**, domain'inize bağlı **doğrulanmış bir kimlik kaydı** sunar:
+
+- Agent tek çağrıda okur: `GET /api/v1/resolve?domain=example.com`
+- DNS ile doğrulanmış `verified: true` sinyali
+- İsteğe bağlı `/.well-known/digital-card` ile domain üzerinde yayın
+
+**Ödeme kartı veya kullanıcı girişi değildir.** SSL bağlantıyı güvenli kılar; EIL **anlamı** doğrular — resmi ad, iletişim, ürünler.
+
+| | |
+|---|---|
+| Site | https://eilcard.com |
+| Agent rehberi | https://eilcard.com/docs/agents |
+| Uyumluluk testi | https://eilcard.com/playground |
+| TypeScript SDK | `@digitalcard/sdk` |
+| Python SDK | `pip install eil-card` |
+
+Edition özeti: [`docs/core-edition.md`](docs/core-edition.md)
 
 ## Live examples (Core edition)
 
