@@ -2,27 +2,27 @@
 
 Entity Identity Layer — verified org/person JSON for AI agents.
 
-## EIL Card nedir?
+## What is EIL Card?
 
-AI agent'lar bir şirketi veya kişiyi tanımak istediğinde çoğu zaman web sayfasını tarar — yavaş, kırılgan, bazen yanlış.
+When AI agents need to identify a company or person, they often scrape web pages — slow, fragile, and sometimes wrong.
 
-**EIL Card**, domain'inize bağlı **doğrulanmış bir kimlik kaydı** sunar:
+**EIL Card** provides a **verified identity record** bound to your domain:
 
-- Agent tek çağrıda okur: `GET /api/v1/resolve?domain=example.com`
-- DNS ile doğrulanmış `verified: true` sinyali
-- İsteğe bağlı `/.well-known/digital-card` ile domain üzerinde yayın
+- Agents read it in one call: `GET /api/v1/resolve?domain=example.com`
+- DNS-backed `verified: true` trust signal
+- Optional publish at `/.well-known/digital-card` on your domain
 
-**Ödeme kartı veya kullanıcı girişi değildir.** SSL bağlantıyı güvenli kılar; EIL **anlamı** doğrular — resmi ad, iletişim, ürünler.
+**It is not a payment card or user login.** SSL secures the connection; EIL certifies **meaning** — official name, contact, products.
 
 | | |
 |---|---|
-| Site | https://eilcard.com |
-| Agent rehberi | https://eilcard.com/docs/agents |
-| Uyumluluk testi | https://eilcard.com/playground |
+| Website | https://eilcard.com |
+| Agent integration | https://eilcard.com/docs/agents |
+| Compliance checker | https://eilcard.com/playground |
 | TypeScript SDK | `@digitalcard/sdk` |
 | Python SDK | `pip install eil-card` |
 
-Edition özeti: [`docs/core-edition.md`](docs/core-edition.md)
+Edition overview: [`docs/core-edition.md`](docs/core-edition.md)
 
 ## Live examples (Core edition)
 
@@ -38,4 +38,4 @@ Edition özeti: [`docs/core-edition.md`](docs/core-edition.md)
 
 ## Roadmap
 
-Internal planning and edition roadmap (Eksen 2): [`YAPILACAKLAR.md`](YAPILACAKLAR.md)
+Internal planning and edition roadmap: [`YAPILACAKLAR.md`](YAPILACAKLAR.md)
