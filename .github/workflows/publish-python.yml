@@ -1,3 +1,4 @@
+# Disabled during infrastructure shutdown (2026-06-30). Do not publish.
 name: Publish Python SDK
 
 on:
@@ -10,6 +11,7 @@ on:
 
 jobs:
   publish:
+    if: false # infrastructure shutdown — workflow kept for history only
     name: publish-eil-card
     runs-on: ubuntu-latest
     defaults:
