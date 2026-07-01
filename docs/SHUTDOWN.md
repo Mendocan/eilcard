@@ -1,6 +1,6 @@
 # EIL Card — Altyapı kapatma planı
 
-> **Durum:** Faz 1 devam ediyor (2026-06-30)  
+> **Durum:** Faz 1 tamam — Faz 2 (VPS) sırada (2026-06-30)  
 > **Hedef:** Yalnızca yerel kod + GitHub repo kalsın; canlı ağ hizmetleri kapatılsın.  
 > **Faz 3:** **Seçenek A** — Cloudflare zone tamamen kaldır → Namecheap BasicDNS.
 
@@ -11,11 +11,11 @@
 | Faz | Madde | Durum |
 |-----|--------|--------|
 | 0 | Postgres / `.env.prod` yedeği (opsiyonel) | [ ] |
-| 1 | Polar webhook + ürünler arşiv | [ ] **← şimdi** |
-| 1 | Resend `eilcard.com` domain kaldır | [ ] **← şimdi** |
-| 1 | GitHub Actions disable (push) + secrets sil (UI) | [ ] kısmen |
+| 1 | Polar webhook + ürünler arşiv | [x] 2026-06-30 |
+| 1 | Resend `eilcard.com` domain kaldır | [x] 2026-06-30 |
+| 1 | GitHub Actions disable + secrets sil | [x] 2026-06-30 |
 | 1 | PyPI — yeni publish yok | [x] workflow `if: false` |
-| 2 | DigitalOcean Droplet destroy (`209.38.35.151`) | [ ] |
+| 2 | DigitalOcean Droplet destroy (`209.38.35.151`) | [ ] **← şimdi** |
 | 3A | Cloudflare: `eilcard.com` zone **Remove** | [ ] (Seçenek A) |
 | 4 | Namecheap Private Email iptal | [ ] |
 | 4 | Namecheap nameserver → BasicDNS | [ ] |
